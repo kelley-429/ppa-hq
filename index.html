@@ -459,25 +459,55 @@ const MARKETING_FOCUS = {
 // ============================================================
 // GOALS — update these to match your actual targets
 // ============================================================
+// Summary goals by month — ES/RV split based on provider location assignments
+// June: ES=$235,250 (Emma+Kate+Melanie+Reanna+Jackie+Taylor), RV=$26,500 (Arlene+Brittany)
+// July: ES=$235,000 (Emma+Kate+Melanie+Reanna+Jackie+Taylor), RV=$27,750 (Arlene+Brittany)
 const GOALS = {
-  weekly:  { total: 70000, es: 50000, rv: 20000, service: 58000, retail: 8000, appts: 110 },
-  monthly: { total: 280000, es: 200000, rv: 80000, service: 232000, retail: 32000, appts: 440 }
+  weekly:  {
+    'June 2026': { total: 65438, es: 58813, rv: 6625,  service: 54000, retail: 9800, appts: 110 },
+    'July 2026': { total: 65688, es: 58750, rv: 6938,  service: 54000, retail: 9800, appts: 110 },
+  },
+  monthly: {
+    'June 2026': { total: 261750, es: 235250, rv: 26500, service: 216000, retail: 39000, appts: 440 },
+    'July 2026': { total: 262750, es: 235000, rv: 27750, service: 217000, retail: 39000, appts: 440 },
+  }
 };
 
 // ============================================================
 // PROVIDER CONFIG
 // ============================================================
 const PROVIDERS = [
-  { name: 'Arlene Milam',     initials: 'AM', loc: 'RV', goal: 7500,  apptGoal: 14 },
-  { name: "Emma O'Malley",    initials: 'EO', loc: 'ES', goal: 7000,  apptGoal: 12 },
+  { name: 'Arlene Milam',     initials: 'AM', loc: 'RV', apptGoal: 14 },
+  { name: "Emma O'Malley",    initials: 'EO', loc: 'ES', apptGoal: 12 },
   // Shannon Wyly — maternity leave through September 2026; re-add when she returns
-  { name: 'Kate Cunningham',  initials: 'KC', loc: 'ES', goal: 30000, apptGoal: 40 },
-  { name: 'Melanie Lolmaugh', initials: 'ML', loc: 'ES', goal: 10000, apptGoal: 14 },
-  { name: 'Jackie Garcia',    initials: 'JG', loc: 'ES', goal: 6000,  apptGoal: 16 },
-  { name: 'Reanna Mich',      initials: 'RM', loc: 'ES', goal: 14000, apptGoal: 18 },
-  { name: 'Brittany Winblad', initials: 'BW', loc: 'RV', goal: 500,   apptGoal: 2  },
-  { name: 'Taylor Raney',     initials: 'TR', loc: 'ES', goal: 3000,  apptGoal: 10 }
+  { name: 'Kate Cunningham',  initials: 'KC', loc: 'ES', apptGoal: 40 },
+  { name: 'Melanie Lolmaugh', initials: 'ML', loc: 'ES', apptGoal: 14 },
+  { name: 'Jackie Garcia',    initials: 'JG', loc: 'ES', apptGoal: 16 },
+  { name: 'Reanna Mich',      initials: 'RM', loc: 'ES', apptGoal: 18 },
+  { name: 'Brittany Winblad', initials: 'BW', loc: 'RV', apptGoal: 2  },
+  { name: 'Taylor Raney',     initials: 'TR', loc: 'ES', apptGoal: 10 }
 ];
+
+// Monthly goals per provider from 2026 Goal Sheet (set by Kate Cunningham)
+// Weekly goal = monthly / 4
+const PROVIDER_MONTHLY_GOALS = {
+  'Arlene Milam':     { 'June 2026': 24000,  'July 2026': 25000  },
+  "Emma O'Malley":    { 'June 2026': 17000,  'July 2026': 17000  },
+  'Kate Cunningham':  { 'June 2026': 116000, 'July 2026': 115000 },
+  'Melanie Lolmaugh': { 'June 2026': 25000,  'July 2026': 25000  },
+  'Jackie Garcia':    { 'June 2026': 22250,  'July 2026': 22500  },
+  'Reanna Mich':      { 'June 2026': 43500,  'July 2026': 43500  },
+  'Brittany Winblad': { 'June 2026': 2500,   'July 2026': 2750   },
+  'Taylor Raney':     { 'June 2026': 11500,  'July 2026': 12000  },
+};
+
+// Which month each week belongs to (for goal lookups)
+const WEEK_MONTH = {
+  '6/7':  'June 2026', '6/14': 'June 2026',
+  '6/21': 'June 2026', '6/28': 'June 2026',
+  '7/5':  'July 2026', '7/12': 'July 2026',
+  '7/19': 'July 2026', '7/26': 'July 2026',
+};
 
 // ============================================================
 // REAL DATA — parsed from Zenoti exports Jun 7 – Jul 26, 2026
@@ -565,18 +595,23 @@ function getCurrentData() {
   return MONTHS[monthKey].summary;
 }
 function getCurrentGoals() {
-  return viewMode === 'weekly' ? GOALS.weekly : GOALS.monthly;
+  const mkey = viewMode === 'weekly' ? (WEEK_MONTH[WEEKS[weekIdx].key] || monthKey) : monthKey;
+  return viewMode === 'weekly' ? GOALS.weekly[mkey] : GOALS.monthly[mkey];
 }
 function getCurrentProviderData(providerName) {
   if (viewMode === 'weekly') return WEEKS[weekIdx].providers[providerName] || {};
   return MONTHS[monthKey].providers[providerName] || {};
 }
+function getProviderMonthlyGoal(p, mkey) {
+  return PROVIDER_MONTHLY_GOALS[p.name]?.[mkey] || 0;
+}
 function getProviderGoal(p, isMonth) {
-  const mult = isMonth ? 4 : 1;
-  return p.goal * mult;
+  const mkey = isMonth ? monthKey : (WEEK_MONTH[WEEKS[weekIdx].key] || monthKey);
+  const monthly = getProviderMonthlyGoal(p, mkey);
+  return isMonth ? monthly : Math.round(monthly / 4);
 }
 function getProviderRetailGoal(p, isMonth) {
-  return Math.round(p.goal * 0.15 * (isMonth ? 4 : 1));
+  return Math.round(getProviderGoal(p, isMonth) * 0.15);
 }
 function getProviderApptGoal(p, isMonth) {
   return p.apptGoal * (isMonth ? 4 : 1);
