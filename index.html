@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pretty Please Aesthetics | Pretty Please HQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+:root {
+  --maroon: #541a09; --terra: #af492c; --rose: #e28078;
+  --amber: #d2894e; --cream: #f3e9d6; --ink: #080808;
+  --card: #fffdf9; --border: rgba(84,26,9,0.10);
+  --sh: 0 2px 14px rgba(84,26,9,0.07); --sh2: 0 8px 32px rgba(84,26,9,0.14);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+/* HEADER */
+.header { background: var(--maroon); padding: 16px 32px 0; position: sticky; top: 0; z-index: 200; box-shadow: 0 4px 24px rgba(8,8,8,0.28); }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.brand-lockup { display: flex; align-items: center; gap: 14px; }
+.brand-logo { height: 44px; width: auto; object-fit: contain; filter: brightness(0) invert(1); }
+.brand-logo-fallback { font-size: 19px; font-weight: 800; color: var(--cream); letter-spacing: 0.04em; text-transform: uppercase; display: none; }
+.brand-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rose); padding-left: 14px; border-left: 1px solid rgba(226,128,120,0.3); }
+.header-meta { text-align: right; }
+.meta-label { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(226,128,120,0.65); margin-bottom: 2px; }
+.meta-value { font-size: 13px; font-weight: 700; color: var(--cream); }
+
+/* NAV BAR */
+.nav-bar { display: flex; align-items: stretch; border-top: 1px solid rgba(243,233,214,0.1); }
+.nav-group { display: flex; }
+.nav-sep { width: 1px; background: rgba(243,233,214,0.12); margin: 6px 16px; }
+.ntab { padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(243,233,214,0.42); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: color .18s, border-color .18s; }
+.ntab:hover { color: rgba(243,233,214,0.8); }
+.ntab.active { color: var(--amber); border-bottom-color: var(--amber); }
+.ntab.view-tab { font-size: 12px; letter-spacing: 0.12em; }
+.ntab.view-tab.active { color: #fff; border-bottom-color: #fff; }
+
+/* WEEK SELECTOR */
+.week-selector { display: flex; align-items: center; gap: 8px; padding: 10px 16px; }
+.week-nav-btn { background: rgba(243,233,214,0.12); border: 1px solid rgba(243,233,214,0.2); color: var(--cream); width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+.week-nav-btn:hover { background: rgba(243,233,214,0.25); }
+.week-nav-btn:disabled { opacity: 0.3; cursor: default; }
+.week-label-display { font-size: 11px; font-weight: 700; color: var(--cream); min-width: 90px; text-align: center; }
+
+/* MAIN */
+.main { padding: 24px 32px 52px; max-width: 1440px; margin: 0 auto; }
+.slabel { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terra); margin-bottom: 10px; margin-top: 28px; }
+.slabel:first-child { margin-top: 0; }
+
+/* KPI CARDS */
+.kpi-row { display: grid; grid-template-columns: repeat(5,1fr); gap: 13px; }
+.kcard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px 16px; box-shadow: var(--sh); position: relative; overflow: hidden; transition: box-shadow .2s, transform .2s; }
+.kcard::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--maroon) 0%, var(--terra) 55%, var(--amber) 100%); }
+.kcard:hover { box-shadow: var(--sh2); transform: translateY(-2px); }
+.kcard-lbl { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terra); margin-bottom: 8px; }
+.kcard-val { font-size: 28px; font-weight: 800; color: var(--maroon); line-height: 1; margin-bottom: 6px; }
+.kbadge { display: inline-flex; align-items: center; gap: 2px; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+.kbadge.up { background: #e6f4ec; color: #246e3e; }
+.kbadge.down { background: #fbeaea; color: #b02020; }
+.kbadge.flat { background: rgba(84,26,9,0.07); color: var(--terra); }
+.kcard-sub { font-size: 10px; color: #b0a090; margin-top: 4px; }
+
+/* CHARTS */
+.charts-row { display: grid; grid-template-columns: 3fr 2fr; gap: 13px; }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px 18px; box-shadow: var(--sh); }
+.chart-title { font-size: 15px; font-weight: 800; color: var(--maroon); margin-bottom: 2px; }
+.chart-sub { font-size: 10px; color: #bbb; margin-bottom: 14px; }
+.chart-wrap { position: relative; height: 205px; }
+
+/* GOAL BARS */
+.goals-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.gcard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-shadow: var(--sh); }
+.gcard-title { font-size: 15px; font-weight: 800; color: var(--maroon); margin-bottom: 16px; }
+.goal-row { margin-bottom: 15px; }
+.goal-row:last-child { margin-bottom: 0; }
+.goal-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
+.goal-name { font-size: 12px; font-weight: 700; color: var(--ink); }
+.goal-pct { font-size: 17px; font-weight: 800; color: var(--maroon); }
+.goal-vals { font-size: 10px; color: #bbb; margin-bottom: 5px; }
+.gtrack { height: 6px; background: rgba(84,26,9,0.07); border-radius: 100px; overflow: hidden; }
+.gfill { height: 100%; border-radius: 100px; transition: width .9s cubic-bezier(.4,0,.2,1); }
+.gfill.hit { background: linear-gradient(90deg, var(--terra), var(--amber)); }
+.gfill.near { background: linear-gradient(90deg, var(--maroon), var(--terra)); }
+.gfill.under { background: linear-gradient(90deg, #b02020, #d43a3a); }
+
+/* PROVIDER SCORECARDS */
+.providers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 13px; }
+.pcard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px 16px; box-shadow: var(--sh); cursor: pointer; transition: box-shadow .2s, transform .2s, border-color .2s; }
+.pcard:hover { box-shadow: var(--sh2); transform: translateY(-3px); border-color: rgba(175,73,44,0.3); }
+.pcard:hover .pcard-click-hint { opacity: 1; }
+.pcard-click-hint { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terra); opacity: 0; transition: opacity .2s; text-align: right; margin-bottom: 6px; }
+.pcard-head { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 11px; }
+.pavatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--maroon) 0%, var(--terra) 100%); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.pinfo { flex: 1; min-width: 0; }
+.pname { font-size: 13px; font-weight: 800; color: var(--maroon); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ploc { font-size: 9px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terra); margin-top: 2px; }
+.prank { font-size: 24px; font-weight: 900; color: rgba(84,26,9,0.1); line-height: 1; flex-shrink: 0; }
+.prank.gold { color: var(--amber); } .prank.silver { color: #b5b5b5; } .prank.bronze { color: #c07a3a; }
+.prev { font-size: 26px; font-weight: 900; color: var(--ink); line-height: 1; margin-bottom: 3px; }
+.pgoal-line { font-size: 11px; color: #aaa; margin-bottom: 8px; }
+.pgoal-line strong { font-weight: 800; }
+.pbar { height: 5px; background: rgba(84,26,9,0.07); border-radius: 100px; overflow: hidden; margin-bottom: 11px; }
+.pbar-fill { height: 100%; border-radius: 100px; }
+.putil-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.putil-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terra); }
+.putil-val { font-size: 13px; font-weight: 800; color: var(--maroon); }
+.putil-track { flex: 1; height: 4px; background: rgba(84,26,9,0.07); border-radius: 100px; overflow: hidden; margin: 0 10px; }
+.putil-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--terra), var(--amber)); }
+.pcard-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 11px; }
+.pstats { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+.pstat { text-align: center; padding: 7px 4px; background: rgba(84,26,9,0.03); border-radius: 8px; }
+.pstat-lbl { font-size: 8px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terra); margin-bottom: 2px; }
+.pstat-val { font-size: 12px; font-weight: 800; color: var(--maroon); }
+
+/* LEADERBOARD */
+.lb-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-shadow: var(--sh); overflow: auto; }
+.lb-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.lb-hint { font-size: 10px; color: #bbb; }
+.lb-table { width: 100%; border-collapse: collapse; min-width: 680px; }
+.lb-table th { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terra); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; white-space: nowrap; }
+.lb-table th:hover { color: var(--maroon); }
+.lb-table th.sorted { color: var(--maroon); }
+.lb-table th.sorted::after { content: ' ↓'; }
+.lb-table th.sorted.asc::after { content: ' ↑'; }
+.lb-table td { padding: 11px 12px; font-size: 13px; font-weight: 600; border-bottom: 1px solid rgba(84,26,9,0.04); white-space: nowrap; }
+.lb-table tr:last-child td { border-bottom: none; }
+.lb-table tr:hover td { background: rgba(84,26,9,0.025); }
+.rbadge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-size: 11px; font-weight: 800; }
+.r1 { background: var(--amber); color: #fff; } .r2 { background: #b5b5b5; color: #fff; } .r3 { background: #c07a3a; color: #fff; } .rn { background: rgba(84,26,9,0.07); color: var(--maroon); }
+.loc-tag { display: inline-block; padding: 2px 9px; border-radius: 100px; font-size: 9px; font-weight: 800; letter-spacing: 0.08em; }
+.loc-es { background: rgba(84,26,9,0.1); color: var(--maroon); }
+.loc-rv { background: rgba(175,73,44,0.1); color: var(--terra); }
+.gpill { display: inline-block; padding: 2px 9px; border-radius: 100px; font-size: 10px; font-weight: 700; }
+.g-hi { background: #e6f4ec; color: #246e3e; } .g-mid { background: #fef9e7; color: #b8860b; } .g-lo { background: #fbeaea; color: #b02020; }
+
+/* MONTH COMPARISON CARD */
+.month-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.mcompare-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-shadow: var(--sh); }
+.mcompare-title { font-size: 15px; font-weight: 800; color: var(--maroon); margin-bottom: 14px; }
+.mstat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.mstat-row:last-child { border-bottom: none; }
+.mstat-label { font-size: 12px; font-weight: 600; color: #888; }
+.mstat-val { font-size: 15px; font-weight: 800; color: var(--maroon); }
+
+/* FOOTER */
+.footer { background: var(--maroon); color: rgba(243,233,214,0.38); text-align: center; padding: 16px 32px; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; }
+.footer span { color: rgba(226,128,120,0.55); }
+
+/* NOTE BANNER */
+.note-banner { background: rgba(210,137,78,0.12); border: 1px solid rgba(210,137,78,0.25); border-radius: 10px; padding: 10px 14px; font-size: 11px; font-weight: 600; color: #7a4a10; margin-bottom: 16px; line-height: 1.5; }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(8,8,8,0.55); backdrop-filter: blur(4px); overflow-y: auto; }
+.modal-overlay.open { display: block; }
+.modal { background: var(--cream); min-height: 100vh; max-width: 860px; margin: 0 auto; padding: 0 0 60px; box-shadow: 0 0 60px rgba(8,8,8,0.2); }
+.modal-topbar { background: var(--maroon); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+.modal-back { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(243,233,214,0.65); background: none; border: none; cursor: pointer; transition: color .15s; }
+.modal-back:hover { color: var(--cream); }
+.modal-back svg { width: 14px; height: 14px; }
+.modal-print-btn { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cream); background: rgba(243,233,214,0.12); border: 1px solid rgba(243,233,214,0.2); padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: background .15s; }
+.modal-print-btn:hover { background: rgba(243,233,214,0.2); }
+.modal-print-btn svg { width: 14px; height: 14px; }
+.modal-hero { background: linear-gradient(135deg, var(--maroon) 0%, #7a2a12 100%); padding: 28px 32px 22px; color: var(--cream); }
+.modal-provider-row { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+.modal-avatar { width: 60px; height: 60px; border-radius: 50%; background: rgba(243,233,214,0.15); border: 2px solid rgba(243,233,214,0.25); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: var(--cream); flex-shrink: 0; }
+.modal-name { font-size: 22px; font-weight: 900; line-height: 1.1; }
+.modal-loc-tag { display: inline-block; margin-top: 4px; font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rose); padding: 2px 10px; background: rgba(226,128,120,0.12); border-radius: 100px; }
+.modal-rank-badge { margin-left: auto; font-size: 40px; font-weight: 900; color: rgba(243,233,214,0.2); line-height: 1; }
+.modal-rank-badge.gold { color: var(--amber); } .modal-rank-badge.silver { color: rgba(181,181,181,0.7); } .modal-rank-badge.bronze { color: rgba(192,122,58,0.7); }
+.modal-period-tabs { display: flex; gap: 0; border-bottom: 1px solid rgba(243,233,214,0.15); }
+.modal-ptab { padding: 9px 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(243,233,214,0.45); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: color .15s, border-color .15s; }
+.modal-ptab:hover { color: rgba(243,233,214,0.8); }
+.modal-ptab.active { color: var(--amber); border-bottom-color: var(--amber); }
+.modal-body { padding: 24px 28px; }
+.modal-kpi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 22px; }
+.mkcard { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--sh); }
+.mkcard-lbl { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terra); margin-bottom: 6px; }
+.mkcard-val { font-size: 22px; font-weight: 900; color: var(--maroon); }
+.mkcard-sub { font-size: 10px; color: #bbb; margin-top: 2px; }
+.modal-section-title { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terra); margin-bottom: 12px; }
+.modal-goals { margin-bottom: 22px; }
+.mgcard { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; box-shadow: var(--sh); }
+.modal-recs { margin-bottom: 22px; }
+.rec-list { display: flex; flex-direction: column; gap: 10px; }
+.rec-item { display: flex; gap: 12px; align-items: flex-start; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--sh); }
+.rec-icon { font-size: 18px; flex-shrink: 0; line-height: 1.3; }
+.rec-text { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.55; }
+.rec-item.success { border-color: rgba(36,110,62,0.2); background: #f0faf4; }
+.rec-item.alert { border-color: rgba(175,73,44,0.2); background: #fdf8f5; }
+.rec-item.retail { border-color: rgba(210,137,78,0.25); background: #fef9f3; }
+.rec-item.tip { border-color: rgba(84,26,9,0.15); }
+.modal-notes { margin-bottom: 10px; }
+.notes-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; box-shadow: var(--sh); }
+.notes-textarea { width: 100%; min-height: 110px; resize: vertical; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; line-height: 1.6; color: var(--ink); background: rgba(84,26,9,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; outline: none; transition: border-color .15s; }
+.notes-textarea:focus { border-color: var(--terra); background: #fff; }
+.notes-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+.notes-saved-msg { font-size: 10px; font-weight: 700; color: #246e3e; opacity: 0; transition: opacity .3s; }
+.notes-saved-msg.show { opacity: 1; }
+.save-btn { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: var(--terra); border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; transition: background .15s; }
+.save-btn:hover { background: var(--maroon); }
+
+/* PRINT */
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .header, .main, .footer, .modal-overlay { display: none !important; }
+  .print-doc { display: block !important; }
+}
+.print-doc { display: none; }
+@page { margin: 0.75in; }
+
+/* RESPONSIVE */
+@media (max-width: 1200px) { .kpi-row { grid-template-columns: repeat(3,1fr); } .charts-row { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .providers-grid { grid-template-columns: repeat(2,1fr); } .goals-row { grid-template-columns: 1fr; } .modal-kpi-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 680px) { .header { padding: 12px 16px 0; } .main { padding: 14px 14px 36px; } .kpi-row { grid-template-columns: repeat(2,1fr); } .providers-grid { grid-template-columns: 1fr; } .brand-tag { display: none; } .modal-body { padding: 16px; } }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div class="brand-lockup">
+      <img class="brand-logo" src="https://drive.google.com/thumbnail?id=1yxn292eNxAPASpFRWGIO4SgbWkOUr7Ux&sz=h88" alt="Pretty Please Aesthetics" onerror="this.style.display='none'; document.querySelector('.brand-logo-fallback').style.display='block';">
+      <span class="brand-logo-fallback">Pretty Please Aesthetics</span>
+      <span class="brand-tag">Pretty Please HQ</span>
+    </div>
+    <div class="header-meta">
+      <div class="meta-label" id="metaLabel">Week Ending</div>
+      <div class="meta-value" id="metaValue">Sunday, July 26, 2026</div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <div class="nav-group">
+      <button class="ntab view-tab active" data-view="weekly">Weekly</button>
+      <button class="ntab view-tab" data-view="monthly">Monthly</button>
+    </div>
+    <div class="nav-sep"></div>
+    <div class="nav-group">
+      <button class="ntab active" data-f="loc" data-v="all">All Locations</button>
+      <button class="ntab" data-f="loc" data-v="ES">East Sacramento</button>
+      <button class="ntab" data-f="loc" data-v="RV">Roseville</button>
+    </div>
+    <div class="nav-sep"></div>
+    <!-- Weekly: week prev/next -->
+    <div class="week-selector" id="weekSelector">
+      <button class="week-nav-btn" id="weekPrev">&#8249;</button>
+      <span class="week-label-display" id="weekLabelDisplay">Jul 26</span>
+      <button class="week-nav-btn" id="weekNext" disabled>&#8250;</button>
+    </div>
+    <!-- Monthly: month tabs (hidden by default) -->
+    <div class="nav-group" id="monthSelector" style="display:none">
+      <button class="ntab active" data-f="month" data-v="June 2026">June 2026</button>
+      <button class="ntab" data-f="month" data-v="July 2026">July 2026</button>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="note-banner" id="noteBanner">
+    ⚡ <strong>Live data loaded</strong> — Jun 7 through Jul 26, 2026 (8 weeks). Shannon Wyly is excluded (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected. Provider goals are placeholders; update them in the GOALS config to match your actual targets.
+  </div>
+
+  <div class="slabel">Key Performance Indicators</div>
+  <div class="kpi-row">
+    <div class="kcard"><div class="kcard-lbl">Total Revenue</div><div class="kcard-val" id="kRevenue">—</div><div><span class="kbadge flat" id="kRevChange">—</span></div></div>
+    <div class="kcard"><div class="kcard-lbl">East Sacramento</div><div class="kcard-val" id="kES">—</div><div class="kcard-sub" id="kESSub">—</div></div>
+    <div class="kcard"><div class="kcard-lbl">Roseville</div><div class="kcard-val" id="kRV">—</div><div class="kcard-sub" id="kRVSub">—</div></div>
+    <div class="kcard"><div class="kcard-lbl">Product Sales</div><div class="kcard-val" id="kRetail">—</div><div><span class="kbadge flat" id="kRetailBadge">—</span></div></div>
+    <div class="kcard"><div class="kcard-lbl">Avg Invoice</div><div class="kcard-val" id="kAvgInvoice">—</div><div class="kcard-sub" id="kAvgSub">—</div></div>
+  </div>
+
+  <div class="slabel" style="margin-top:24px">Revenue Trends</div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title" id="trendTitle">8-Week Revenue Trend</div>
+      <div class="chart-sub">Monday–Sunday reporting weeks · East Sacramento vs. Roseville</div>
+      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Location Breakdown</div>
+      <div class="chart-sub">Service revenue vs. product sales by location</div>
+      <div class="chart-wrap"><canvas id="locChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="slabel">Goal Progress</div>
+  <div class="goals-row">
+    <div class="gcard">
+      <div class="gcard-title">Revenue Goals</div>
+      <div class="goal-row"><div class="goal-top"><span class="goal-name">Total Revenue</span><span class="goal-pct" id="gpTotalPct">—</span></div><div class="goal-vals" id="gpTotalVals">—</div><div class="gtrack"><div class="gfill near" id="gpTotalFill" style="width:0%"></div></div></div>
+      <div class="goal-row"><div class="goal-top"><span class="goal-name">East Sacramento</span><span class="goal-pct" id="gpESPct">—</span></div><div class="goal-vals" id="gpESVals">—</div><div class="gtrack"><div class="gfill hit" id="gpESFill" style="width:0%"></div></div></div>
+      <div class="goal-row"><div class="goal-top"><span class="goal-name">Roseville</span><span class="goal-pct" id="gpRVPct">—</span></div><div class="goal-vals" id="gpRVVals">—</div><div class="gtrack"><div class="gfill near" id="gpRVFill" style="width:0%"></div></div></div>
+    </div>
+    <div class="gcard">
+      <div class="gcard-title">Sales Goals</div>
+      <div class="goal-row"><div class="goal-top"><span class="goal-name">Product Sales</span><span class="goal-pct" id="gpRetailPct">—</span></div><div class="goal-vals" id="gpRetailVals">—</div><div class="gtrack"><div class="gfill near" id="gpRetailFill" style="width:0%"></div></div></div>
+      <div class="goal-row"><div class="goal-top"><span class="goal-name">Service Revenue</span><span class="goal-pct" id="gpServicePct">—</span></div><div class="goal-vals" id="gpServiceVals">—</div><div class="gtrack"><div class="gfill near" id="gpServiceFill" style="width:0%"></div></div></div>
+      <div class="goal-row"><div class="goal-top"><span class="goal-name">Appointments</span><span class="goal-pct" id="gpApptsPct">—</span></div><div class="goal-vals" id="gpApptsVals">—</div><div class="gtrack"><div class="gfill near" id="gpApptsFill" style="width:0%"></div></div></div>
+    </div>
+  </div>
+
+  <!-- Monthly comparison (only shown in monthly view) -->
+  <div id="monthCompare" style="display:none">
+    <div class="slabel">Month-over-Month Comparison</div>
+    <div class="month-compare">
+      <div class="mcompare-card">
+        <div class="mcompare-title">June 2026</div>
+        <div class="mstat-row"><span class="mstat-label">Total Revenue</span><span class="mstat-val" id="mc-june-rev">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">East Sacramento</span><span class="mstat-val" id="mc-june-es">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">Roseville</span><span class="mstat-val" id="mc-june-rv">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">Product Sales</span><span class="mstat-val" id="mc-june-retail">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">Total Appointments</span><span class="mstat-val" id="mc-june-appts">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">Avg Invoice</span><span class="mstat-val" id="mc-june-avg">—</span></div>
+      </div>
+      <div class="mcompare-card">
+        <div class="mcompare-title">July 2026 <span style="font-size:11px;font-weight:600;color:#888">(4 weeks to date)</span></div>
+        <div class="mstat-row"><span class="mstat-label">Total Revenue</span><span class="mstat-val" id="mc-july-rev">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">East Sacramento</span><span class="mstat-val" id="mc-july-es">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">Roseville</span><span class="mstat-val" id="mc-july-rv">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">Product Sales</span><span class="mstat-val" id="mc-july-retail">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">Total Appointments</span><span class="mstat-val" id="mc-july-appts">—</span></div>
+        <div class="mstat-row"><span class="mstat-label">Avg Invoice</span><span class="mstat-val" id="mc-july-avg">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slabel">Provider Scorecards <span style="font-weight:400;opacity:.6;letter-spacing:0">— click any card to open 1:1 review</span></div>
+  <div class="providers-grid" id="providerGrid"></div>
+
+  <div class="slabel">Provider Leaderboard</div>
+  <div class="lb-card">
+    <div class="lb-header"><div class="chart-title">All Providers</div><div class="lb-hint">Click any column header to sort</div></div>
+    <table class="lb-table">
+      <thead><tr>
+        <th data-col="rank" class="sorted">Rank</th>
+        <th data-col="name">Provider</th>
+        <th data-col="location">Location</th>
+        <th data-col="revenue">Revenue</th>
+        <th data-col="goalPct">Goal %</th>
+        <th data-col="avgInvoice">Avg Invoice</th>
+        <th data-col="appts">Appts</th>
+        <th data-col="service">Service</th>
+        <th data-col="retail">Product Sales</th>
+      </tr></thead>
+      <tbody id="lbBody"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer class="footer">
+  Pretty Please Aesthetics &nbsp;&middot;&nbsp; Pretty Please HQ &nbsp;&middot;&nbsp;
+  Data: Zenoti &nbsp;&middot;&nbsp; <span id="genStamp"></span>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-topbar">
+      <button class="modal-back" id="modalBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Dashboard</button>
+      <button class="modal-print-btn" id="modalPrintBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>Download / Print</button>
+    </div>
+    <div class="modal-hero">
+      <div class="modal-provider-row">
+        <div class="modal-avatar" id="modalAvatar">AM</div>
+        <div><div class="modal-name" id="modalName">Provider</div><span class="modal-loc-tag" id="modalLoc">Location</span></div>
+        <div class="modal-rank-badge" id="modalRank">#1</div>
+      </div>
+      <div class="modal-period-tabs">
+        <button class="modal-ptab active" data-mp="week">This Week</button>
+        <button class="modal-ptab" data-mp="month">This Month</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-kpi-grid">
+        <div class="mkcard"><div class="mkcard-lbl">Revenue</div><div class="mkcard-val" id="mk-revenue">—</div><div class="mkcard-sub" id="mk-revenue-sub">—</div></div>
+        <div class="mkcard"><div class="mkcard-lbl">Goal %</div><div class="mkcard-val" id="mk-goalpct">—</div><div class="mkcard-sub" id="mk-goal-sub">—</div></div>
+        <div class="mkcard"><div class="mkcard-lbl">Appointments</div><div class="mkcard-val" id="mk-appts">—</div><div class="mkcard-sub" id="mk-appts-sub">—</div></div>
+        <div class="mkcard"><div class="mkcard-lbl">Avg Invoice</div><div class="mkcard-val" id="mk-avginvoice">—</div><div class="mkcard-sub" id="mk-avginvoice-sub">—</div></div>
+        <div class="mkcard"><div class="mkcard-lbl">Service Sales</div><div class="mkcard-val" id="mk-service">—</div><div class="mkcard-sub" id="mk-service-sub">—</div></div>
+        <div class="mkcard"><div class="mkcard-lbl">Product Sales</div><div class="mkcard-val" id="mk-retail">—</div><div class="mkcard-sub" id="mk-retail-sub">—</div></div>
+        <div class="mkcard" style="grid-column:1/-1"><div class="mkcard-lbl">Utilization</div><div style="display:flex;align-items:center;gap:12px;margin-top:6px"><div class="mkcard-val" id="mk-util">—</div><div style="flex:1;height:6px;background:rgba(84,26,9,0.07);border-radius:100px;overflow:hidden"><div id="mk-util-fill" style="height:100%;border-radius:100px;background:linear-gradient(90deg,#af492c,#d2894e);width:0%;transition:width .9s"></div></div></div><div class="mkcard-sub" id="mk-util-sub">—</div></div>
+      </div>
+      <div class="modal-goals">
+        <div class="modal-section-title">Goal Progress</div>
+        <div class="mgcard">
+          <div class="goal-row"><div class="goal-top"><span class="goal-name">Total Revenue</span><span class="goal-pct" id="mg-rev-pct">—</span></div><div class="goal-vals" id="mg-rev-vals">—</div><div class="gtrack"><div class="gfill hit" id="mg-rev-fill" style="width:0%"></div></div></div>
+          <div class="goal-row"><div class="goal-top"><span class="goal-name">Product Sales</span><span class="goal-pct" id="mg-retail-pct">—</span></div><div class="goal-vals" id="mg-retail-vals">—</div><div class="gtrack"><div class="gfill near" id="mg-retail-fill" style="width:0%"></div></div></div>
+          <div class="goal-row" style="margin-bottom:0"><div class="goal-top"><span class="goal-name">Appointments</span><span class="goal-pct" id="mg-appts-pct">—</span></div><div class="goal-vals" id="mg-appts-vals">—</div><div class="gtrack"><div class="gfill near" id="mg-appts-fill" style="width:0%"></div></div></div>
+        </div>
+      </div>
+      <div class="modal-recs"><div class="modal-section-title">Smart Recommendations</div><div class="rec-list" id="recList"></div></div>
+      <div class="modal-notes">
+        <div class="modal-section-title">Manager Notes</div>
+        <div class="notes-card">
+          <textarea class="notes-textarea" id="notesArea" placeholder="Add notes for this provider's 1:1 review..."></textarea>
+          <div class="notes-footer"><span class="notes-saved-msg" id="notesSavedMsg">&#10003; Notes saved</span><button class="save-btn" id="saveNotesBtn">Save Notes</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT DOC -->
+<div class="print-doc" id="printDoc">
+  <style>
+    .print-doc { font-family: 'Nunito', sans-serif; color: #080808; max-width: 100%; }
+    .pd-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #541a09; padding-bottom: 12px; margin-bottom: 20px; }
+    .pd-brand { font-size: 16px; font-weight: 900; color: #541a09; letter-spacing: 0.04em; text-transform: uppercase; }
+    .pd-date { font-size: 11px; color: #888; font-weight: 600; }
+    .pd-title { font-size: 22px; font-weight: 900; color: #541a09; margin-bottom: 4px; }
+    .pd-sub { font-size: 12px; color: #af492c; font-weight: 700; margin-bottom: 18px; }
+    .pd-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
+    .pd-kcard { border: 1px solid #e8d8c4; border-radius: 8px; padding: 10px 12px; }
+    .pd-klbl { font-size: 8px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #af492c; margin-bottom: 4px; }
+    .pd-kval { font-size: 20px; font-weight: 900; color: #541a09; }
+    .pd-section { font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #af492c; margin-bottom: 8px; margin-top: 18px; }
+    .pd-bar-row { margin-bottom: 8px; }
+    .pd-bar-top { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; margin-bottom: 3px; }
+    .pd-bar-track { height: 5px; background: #f0e0cc; border-radius: 100px; }
+    .pd-bar-fill { height: 100%; background: #af492c; border-radius: 100px; }
+    .pd-rec { background: #fdf8f5; border-left: 3px solid #af492c; padding: 8px 12px; margin-bottom: 8px; font-size: 12px; font-weight: 600; line-height: 1.5; border-radius: 0 6px 6px 0; }
+    .pd-notes { border: 1px solid #e8d8c4; border-radius: 8px; padding: 12px; min-height: 80px; font-size: 12px; font-weight: 600; white-space: pre-wrap; line-height: 1.6; }
+    .pd-footer { margin-top: 30px; padding-top: 10px; border-top: 1px solid #e8d8c4; font-size: 9px; color: #bbb; font-weight: 700; display: flex; justify-content: space-between; }
+  </style>
+  <div class="pd-header"><div class="pd-brand">Pretty Please Aesthetics</div><div class="pd-date" id="pd-date"></div></div>
+  <div class="pd-title" id="pd-name">Provider 1:1 Review</div>
+  <div class="pd-sub" id="pd-sub"></div>
+  <div class="pd-section">Performance Snapshot</div>
+  <div class="pd-grid" id="pd-grid"></div>
+  <div class="pd-section">Goal Progress</div>
+  <div id="pd-bars"></div>
+  <div class="pd-section">Recommendations</div>
+  <div id="pd-recs"></div>
+  <div class="pd-section">Manager Notes</div>
+  <div class="pd-notes" id="pd-notes"></div>
+  <div class="pd-footer"><span>Confidential · Pretty Please Aesthetics</span><span id="pd-stamp"></span></div>
+</div>
+
+<script>
+// ============================================================
+// MARKETING FOCUS — update monthly
+// ============================================================
+const MARKETING_FOCUS = {
+  month: 'July 2026',
+  theme: 'Hyperpigmentation & Melasma Awareness Month',
+  products: [
+    { name: 'Revision C+ Correcting Lotion', promo: 'Featured Brightener of the Month', price: 110,
+      pitch: 'Ask every client: "Are you protecting your results at home? Our Revision C+ is our featured brightener right now — 30% THD Ascorbate, the most stable form of vitamin C, targeting the hyperpigmentation we\'re treating in-office."' },
+    { name: 'Alastin A-Luminate Brightening Serum', promo: 'Featured Brightener of the Month', price: 150,
+      pitch: '"We\'re spotlighting A-Luminate this month — tranexamic acid and niacinamide together work beautifully to fade hyperpigmentation between treatments."' }
+  ],
+  note: 'July: Hyperpigmentation & Melasma Awareness. Sun spots, uneven tone, melasma — every client is a Brightener conversation. Tox Parties: $11/unit Dysport or Xeomin (40u min) + 15% off skincare. Member special: Curated Complexion Series (Aerolase + Mesoneedling x3, $2,400).'
+};
+
+// ============================================================
+// GOALS — update these to match your actual targets
+// ============================================================
+const GOALS = {
+  weekly:  { total: 70000, es: 50000, rv: 20000, service: 58000, retail: 8000, appts: 110 },
+  monthly: { total: 280000, es: 200000, rv: 80000, service: 232000, retail: 32000, appts: 440 }
+};
+
+// ============================================================
+// PROVIDER CONFIG
+// ============================================================
+const PROVIDERS = [
+  { name: 'Arlene Milam',     initials: 'AM', loc: 'RV', goal: 7500,  apptGoal: 14 },
+  { name: "Emma O'Malley",    initials: 'EO', loc: 'ES', goal: 7000,  apptGoal: 12 },
+  // Shannon Wyly — maternity leave through September 2026; re-add when she returns
+  { name: 'Kate Cunningham',  initials: 'KC', loc: 'ES', goal: 30000, apptGoal: 40 },
+  { name: 'Melanie Lolmaugh', initials: 'ML', loc: 'ES', goal: 10000, apptGoal: 14 },
+  { name: 'Jackie Garcia',    initials: 'JG', loc: 'ES', goal: 6000,  apptGoal: 16 },
+  { name: 'Reanna Mich',      initials: 'RM', loc: 'ES', goal: 14000, apptGoal: 18 },
+  { name: 'Brittany Winblad', initials: 'BW', loc: 'RV', goal: 500,   apptGoal: 2  },
+  { name: 'Taylor Raney',     initials: 'TR', loc: 'ES', goal: 3000,  apptGoal: 10 }
+];
+
+// ============================================================
+// REAL DATA — parsed from Zenoti exports Jun 7 – Jul 26, 2026
+// ============================================================
+const WEEKS = [
+  { key:'6/7',  label:'Jun 7',  weekEnding:'Sunday, June 7, 2026',
+    summary:{ total:75680, es:65260, rv:10420, service:59471, retail:5801, appts:120 },
+    providers:{ 'Arlene Milam':{revenue:8283,service:7254,retail:1030,appts:11}, "Emma O'Malley":{revenue:0,service:0,retail:0,appts:0}, 'Shannon Wyly':{revenue:1075,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:35463,service:34364,retail:649,appts:59}, 'Melanie Lolmaugh':{revenue:0,service:0,retail:0,appts:0}, 'Jackie Garcia':{revenue:6113,service:3018,retail:2945,appts:16}, 'Reanna Mich':{revenue:21136,service:20176,retail:60,appts:21}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0}, 'Taylor Raney':{revenue:3610,service:2492,retail:1118,appts:13} }},
+  { key:'6/14', label:'Jun 14', weekEnding:'Sunday, June 14, 2026',
+    summary:{ total:67376, es:59412, rv:7964, service:57366, retail:2885, appts:118 },
+    providers:{ 'Arlene Milam':{revenue:6454,service:4601,retail:68,appts:8}, "Emma O'Malley":{revenue:2836,service:2836,retail:0,appts:6}, 'Shannon Wyly':{revenue:325,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:34718,service:33403,retail:1165,appts:55}, 'Melanie Lolmaugh':{revenue:0,service:0,retail:0,appts:0}, 'Jackie Garcia':{revenue:4847,service:3286,retail:1086,appts:18}, 'Reanna Mich':{revenue:15952,service:13244,retail:348,appts:21}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0}, 'Taylor Raney':{revenue:2244,service:2028,retail:217,appts:10} }},
+  { key:'6/21', label:'Jun 21', weekEnding:'Sunday, June 21, 2026',
+    summary:{ total:55465, es:40603, rv:14862, service:48365, retail:2464, appts:100 },
+    providers:{ 'Arlene Milam':{revenue:12803,service:12338,retail:136,appts:18}, "Emma O'Malley":{revenue:6711,service:6711,retail:0,appts:9}, 'Shannon Wyly':{revenue:1400,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:5544,service:3070,retail:104,appts:11}, 'Melanie Lolmaugh':{revenue:10812,service:10793,retail:19,appts:16}, 'Jackie Garcia':{revenue:5199,service:3955,retail:1094,appts:18}, 'Reanna Mich':{revenue:10155,service:9705,retail:0,appts:16}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:2}, 'Taylor Raney':{revenue:2841,service:1730,retail:1110,appts:10} }},
+  { key:'6/28', label:'Jun 28', weekEnding:'Sunday, June 28, 2026',
+    summary:{ total:70975, es:65765, rv:5209, service:62085, retail:3222, appts:92 },
+    providers:{ 'Arlene Milam':{revenue:4130,service:3590,retail:290,appts:6}, "Emma O'Malley":{revenue:417,service:417,retail:0,appts:4}, 'Shannon Wyly':{revenue:600,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:45865,service:44860,retail:365,appts:41}, 'Melanie Lolmaugh':{revenue:150,service:0,retail:0,appts:0}, 'Jackie Garcia':{revenue:3556,service:2630,retail:911,appts:13}, 'Reanna Mich':{revenue:12730,service:11191,retail:364,appts:20}, 'Brittany Winblad':{revenue:285,service:225,retail:60,appts:1}, 'Taylor Raney':{revenue:3241,service:2010,retail:1232,appts:7} }},
+  { key:'7/5',  label:'Jul 5',  weekEnding:'Sunday, July 5, 2026',
+    summary:{ total:75324, es:57168, rv:18156, service:65911, retail:2963, appts:123 },
+    providers:{ 'Arlene Milam':{revenue:8392,service:7562,retail:405,appts:12,util:38.2}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:47.1}, 'Shannon Wyly':{revenue:1050,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:41820,service:37766,retail:829,appts:57,util:74.3}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:3,util:16.7}, 'Jackie Garcia':{revenue:4230,service:2846,retail:1234,appts:17,util:75.9}, 'Reanna Mich':{revenue:12334,service:11446,retail:288,appts:15,util:60.7}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0}, 'Taylor Raney':{revenue:1566,service:1372,retail:195,appts:7,util:14.6} }},
+  { key:'7/12', label:'Jul 12', weekEnding:'Sunday, July 12, 2026',
+    summary:{ total:43854, es:41423, rv:2431, service:32247, retail:3046, appts:76 },
+    providers:{ 'Arlene Milam':{revenue:325,service:0,retail:0,appts:0}, "Emma O'Malley":{revenue:0,service:0,retail:0,appts:0}, 'Shannon Wyly':{revenue:800,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:10818,service:9075,retail:593,appts:30}, 'Melanie Lolmaugh':{revenue:12294,service:7894,retail:0,appts:9}, 'Jackie Garcia':{revenue:4923,service:3078,retail:1160,appts:15}, 'Reanna Mich':{revenue:11848,service:10469,retail:178,appts:14}, 'Brittany Winblad':{revenue:125,service:125,retail:0,appts:1}, 'Taylor Raney':{revenue:2721,service:1606,retail:1115,appts:7} }},
+  { key:'7/19', label:'Jul 19', weekEnding:'Sunday, July 19, 2026',
+    summary:{ total:80722, es:60581, rv:20141, service:70200, retail:2246, appts:109 },
+    providers:{ 'Arlene Milam':{revenue:325,service:0,retail:0,appts:0}, "Emma O'Malley":{revenue:5656,service:5656,retail:0,appts:8}, 'Shannon Wyly':{revenue:925,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:44882,service:43514,retail:68,appts:49}, 'Melanie Lolmaugh':{revenue:10451,service:7804,retail:147,appts:13}, 'Jackie Garcia':{revenue:4754,service:3168,retail:961,appts:15}, 'Reanna Mich':{revenue:10684,service:10065,retail:19,appts:13}, 'Brittany Winblad':{revenue:440,service:440,retail:0,appts:2}, 'Taylor Raney':{revenue:2604,service:1553,retail:1051,appts:9} }},
+  { key:'7/26', label:'Jul 26', weekEnding:'Sunday, July 26, 2026',
+    summary:{ total:63381, es:40799, rv:22582, service:52853, retail:4151, appts:106 },
+    providers:{ 'Arlene Milam':{revenue:19835,service:15215,retail:1395,appts:17}, "Emma O'Malley":{revenue:6043,service:6043,retail:0,appts:7}, 'Shannon Wyly':{revenue:775,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:15989,service:15074,retail:445,appts:29}, 'Melanie Lolmaugh':{revenue:2004,service:1957,retail:47,appts:4}, 'Jackie Garcia':{revenue:4742,service:3597,retail:1144,appts:15}, 'Reanna Mich':{revenue:8991,service:7706,retail:60,appts:19}, 'Brittany Winblad':{revenue:331,service:331,retail:0,appts:2}, 'Taylor Raney':{revenue:4671,service:2927,retail:1060,appts:13} }}
+];
+
+const MONTHS = {
+  'June 2026': {
+    summary: { total:269496, es:231040, rv:38455, service:227287, retail:14372, appts:430 },
+    providers: {}
+  },
+  'July 2026': {
+    summary: { total:263281, es:199971, rv:63310, service:221211, retail:12406, appts:414 },
+    providers: {}
+  }
+};
+// Build monthly provider aggregates
+['June 2026','July 2026'].forEach(mkey => {
+  const wks = mkey.startsWith('June') ? WEEKS.slice(0,4) : WEEKS.slice(4);
+  PROVIDERS.forEach(p => {
+    const agg = { revenue:0, service:0, retail:0, appts:0 };
+    wks.forEach(w => {
+      const d = w.providers[p.name] || {};
+      agg.revenue += d.revenue||0; agg.service += d.service||0;
+      agg.retail  += d.retail||0;  agg.appts   += d.appts||0;
+    });
+    MONTHS[mkey].providers[p.name] = agg;
+  });
+});
+
+// ============================================================
+// STATE
+// ============================================================
+let viewMode  = 'weekly';
+let weekIdx   = WEEKS.length - 1;
+let monthKey  = 'July 2026';
+let locFilter = 'all';
+let mModalPeriod = 'week';
+let activeProviderIdx = 0;
+let sortCol = 'rank', sortAsc = true;
+let trendChart, locChart;
+
+// ============================================================
+// UTILS
+// ============================================================
+const $  = id  => document.getElementById(id);
+const $$ = sel => document.querySelectorAll(sel);
+function cur(n) {
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
+  if (n >= 1000)    return '$' + (n/1000).toFixed(1) + 'K';
+  return '$' + Math.round(n).toLocaleString();
+}
+function curFull(n) { return '$' + Math.round(n).toLocaleString(); }
+function pct(a, b)  { return b > 0 ? Math.round((a/b)*1000)/10 : 0; }
+function goalClass(p) { return p >= 90 ? 'hit' : p >= 72 ? 'near' : 'under'; }
+function gpillClass(p) { return p >= 90 ? 'g-hi' : p >= 72 ? 'g-mid' : 'g-lo'; }
+
+function getCurrentData() {
+  if (viewMode === 'weekly') return WEEKS[weekIdx].summary;
+  return MONTHS[monthKey].summary;
+}
+function getCurrentGoals() {
+  return viewMode === 'weekly' ? GOALS.weekly : GOALS.monthly;
+}
+function getCurrentProviderData(providerName) {
+  if (viewMode === 'weekly') return WEEKS[weekIdx].providers[providerName] || {};
+  return MONTHS[monthKey].providers[providerName] || {};
+}
+function getProviderGoal(p, isMonth) {
+  const mult = isMonth ? 4 : 1;
+  return p.goal * mult;
+}
+function getProviderRetailGoal(p, isMonth) {
+  return Math.round(p.goal * 0.15 * (isMonth ? 4 : 1));
+}
+function getProviderApptGoal(p, isMonth) {
+  return p.apptGoal * (isMonth ? 4 : 1);
+}
+
+function filteredProviders() {
+  if (locFilter === 'all') return PROVIDERS;
+  return PROVIDERS.filter(p => p.loc === locFilter);
+}
+function rankedProviders() {
+  const fps = filteredProviders();
+  return [...fps].sort((a, b) => {
+    const ra = getCurrentProviderData(a.name).revenue || 0;
+    const rb = getCurrentProviderData(b.name).revenue || 0;
+    return rb - ra;
+  });
+}
+
+// ============================================================
+// HEADER META
+// ============================================================
+function updateMeta() {
+  if (viewMode === 'weekly') {
+    $('metaLabel').textContent = 'Week Ending';
+    $('metaValue').textContent = WEEKS[weekIdx].weekEnding;
+  } else {
+    $('metaLabel').textContent = 'Viewing';
+    $('metaValue').textContent = monthKey;
+  }
+}
+
+// ============================================================
+// KPI CARDS
+// ============================================================
+function updateCards() {
+  const s = getCurrentData();
+  const g = getCurrentGoals();
+  const rev = locFilter === 'ES' ? s.es : locFilter === 'RV' ? s.rv : s.total;
+  const revGoal = locFilter === 'ES' ? g.es : locFilter === 'RV' ? g.rv : g.total;
+
+  $('kRevenue').textContent = curFull(rev);
+  $('kES').textContent = curFull(s.es);
+  $('kESSub').textContent = pct(s.es, g.es) + '% of ' + cur(g.es) + ' goal';
+  $('kRV').textContent = curFull(s.rv);
+  $('kRVSub').textContent = pct(s.rv, g.rv) + '% of ' + cur(g.rv) + ' goal';
+  $('kRetail').textContent = curFull(s.retail);
+  const rtp = pct(s.retail, g.retail);
+  $('kRetailBadge').textContent = rtp + '% of ' + cur(g.retail) + ' goal';
+  $('kRetailBadge').className = 'kbadge ' + (rtp >= 90 ? 'up' : rtp >= 70 ? 'flat' : 'down');
+
+  const avgInv = s.appts > 0 ? Math.round(rev / s.appts) : 0;
+  $('kAvgInvoice').textContent = curFull(avgInv);
+  $('kAvgSub').textContent = s.appts + ' appointments';
+
+  // Week-on-week change
+  if (viewMode === 'weekly' && weekIdx > 0) {
+    const prev = WEEKS[weekIdx - 1].summary;
+    const prevRev = locFilter === 'ES' ? prev.es : locFilter === 'RV' ? prev.rv : prev.total;
+    const chg = prevRev > 0 ? Math.round(((rev - prevRev) / prevRev) * 1000) / 10 : 0;
+    $('kRevChange').innerHTML = (chg >= 0 ? '&#8593; ' : '&#8595; ') + Math.abs(chg) + '% vs prev week';
+    $('kRevChange').className = 'kbadge ' + (chg >= 0 ? 'up' : 'down');
+  } else if (viewMode === 'monthly') {
+    const rp = pct(rev, revGoal);
+    $('kRevChange').textContent = rp + '% of goal';
+    $('kRevChange').className = 'kbadge ' + (rp >= 90 ? 'up' : rp >= 70 ? 'flat' : 'down');
+  } else {
+    $('kRevChange').textContent = 'First week on record';
+    $('kRevChange').className = 'kbadge flat';
+  }
+}
+
+// ============================================================
+// GOAL BARS
+// ============================================================
+function setBar(pctId, valsId, fillId, actual, goal, suffix) {
+  const p = pct(actual, goal);
+  $(pctId).textContent = p + '%';
+  $(valsId).textContent = (suffix ? actual + suffix : curFull(actual)) + ' of ' + (suffix ? goal + suffix : curFull(goal)) + ' goal';
+  $(fillId).style.width = Math.min(p, 100) + '%';
+  $(fillId).className = 'gfill ' + goalClass(p);
+}
+function updateGoalBars() {
+  const s = getCurrentData();
+  const g = getCurrentGoals();
+  const rev = locFilter === 'ES' ? s.es : locFilter === 'RV' ? s.rv : s.total;
+  const revGoal = locFilter === 'ES' ? g.es : locFilter === 'RV' ? g.rv : g.total;
+  setBar('gpTotalPct', 'gpTotalVals', 'gpTotalFill', rev, revGoal, '');
+  setBar('gpESPct', 'gpESVals', 'gpESFill', s.es, g.es, '');
+  setBar('gpRVPct', 'gpRVVals', 'gpRVFill', s.rv, g.rv, '');
+  setBar('gpRetailPct', 'gpRetailVals', 'gpRetailFill', s.retail, g.retail, '');
+  setBar('gpServicePct', 'gpServiceVals', 'gpServiceFill', s.service, g.service, '');
+  setBar('gpApptsPct', 'gpApptsVals', 'gpApptsFill', s.appts, g.appts, '');
+}
+
+// ============================================================
+// CHARTS
+// ============================================================
+const CC = { maroon: '#541a09', terra: '#af492c', amber: '#d2894e' };
+const chartFont = { family: 'Nunito', size: 11, weight: '700' };
+
+function initCharts() {
+  trendChart = new Chart($('trendChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: WEEKS.map(w => w.label),
+      datasets: [
+        { label: 'East Sac', data: WEEKS.map(w => w.summary.es), borderColor: CC.maroon, borderWidth: 2.5, pointBackgroundColor: CC.maroon, pointRadius: 4, pointHoverRadius: 7, tension: 0.35, fill: false },
+        { label: 'Roseville', data: WEEKS.map(w => w.summary.rv), borderColor: CC.terra, borderWidth: 2.5, pointBackgroundColor: CC.terra, pointRadius: 4, pointHoverRadius: 7, tension: 0.35, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', align: 'end', labels: { font: chartFont, color: CC.maroon, usePointStyle: true, pointStyleWidth: 10, boxHeight: 8 } },
+        tooltip: { backgroundColor: CC.maroon, bodyFont: chartFont, titleFont: { family: 'Nunito', size: 13, weight: '800' }, callbacks: { label: c => ' ' + c.dataset.label + ': ' + curFull(c.parsed.y) } }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(84,26,9,0.06)' }, ticks: { font: chartFont, color: '#c0a898' } },
+        y: { grid: { color: 'rgba(84,26,9,0.06)' }, ticks: { font: chartFont, color: '#c0a898', callback: v => '$' + (v / 1000).toFixed(0) + 'K' } }
+      }
+    }
+  });
+  locChart = new Chart($('locChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Service', 'Product', 'Total'],
+      datasets: [
+        { label: 'East Sac', data: [0, 0, 0], backgroundColor: CC.maroon, borderRadius: 6 },
+        { label: 'Roseville', data: [0, 0, 0], backgroundColor: CC.terra, borderRadius: 6 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', align: 'end', labels: { font: chartFont, color: CC.maroon, usePointStyle: true, pointStyleWidth: 10, boxHeight: 8 } },
+        tooltip: { backgroundColor: CC.maroon, bodyFont: chartFont, callbacks: { label: c => ' ' + c.dataset.label + ': ' + curFull(c.parsed.y) } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: chartFont, color: '#c0a898' } },
+        y: { grid: { color: 'rgba(84,26,9,0.06)' }, ticks: { font: chartFont, color: '#c0a898', callback: v => '$' + (v / 1000).toFixed(0) + 'K' } }
+      }
+    }
+  });
+  updateLocChart();
+  highlightCurrentWeek();
+}
+
+function updateLocChart() {
+  const s = getCurrentData();
+  const esP = PROVIDERS.filter(p => p.loc === 'ES');
+  const rvP = PROVIDERS.filter(p => p.loc === 'RV');
+  const sumF = (arr, key) => arr.reduce((t, p) => t + (getCurrentProviderData(p.name)[key] || 0), 0);
+  locChart.data.datasets[0].data = [sumF(esP, 'service'), sumF(esP, 'retail'), s.es];
+  locChart.data.datasets[1].data = [sumF(rvP, 'service'), sumF(rvP, 'retail'), s.rv];
+  locChart.update('active');
+}
+
+function highlightCurrentWeek() {
+  if (!trendChart) return;
+  if (viewMode === 'weekly') {
+    trendChart.data.datasets[0].pointRadius = WEEKS.map((_, i) => i === weekIdx ? 8 : 4);
+    trendChart.data.datasets[1].pointRadius = WEEKS.map((_, i) => i === weekIdx ? 8 : 4);
+    trendChart.data.datasets[0].pointBackgroundColor = WEEKS.map((_, i) => i === weekIdx ? CC.amber : CC.maroon);
+    trendChart.data.datasets[1].pointBackgroundColor = WEEKS.map((_, i) => i === weekIdx ? CC.amber : CC.terra);
+  } else {
+    trendChart.data.datasets[0].pointRadius = WEEKS.map(() => 4);
+    trendChart.data.datasets[1].pointRadius = WEEKS.map(() => 4);
+    trendChart.data.datasets[0].pointBackgroundColor = WEEKS.map(() => CC.maroon);
+    trendChart.data.datasets[1].pointBackgroundColor = WEEKS.map(() => CC.terra);
+  }
+  trendChart.update('active');
+}
+
+// ============================================================
+// MONTH COMPARISON
+// ============================================================
+function updateMonthCompare() {
+  const jun = MONTHS['June 2026'].summary;
+  const jul = MONTHS['July 2026'].summary;
+  $('mc-june-rev').textContent = curFull(jun.total);
+  $('mc-june-es').textContent  = curFull(jun.es);
+  $('mc-june-rv').textContent  = curFull(jun.rv);
+  $('mc-june-retail').textContent = curFull(jun.retail);
+  $('mc-june-appts').textContent = jun.appts;
+  $('mc-june-avg').textContent = jun.appts > 0 ? curFull(Math.round(jun.total / jun.appts)) : '—';
+  $('mc-july-rev').textContent = curFull(jul.total);
+  $('mc-july-es').textContent  = curFull(jul.es);
+  $('mc-july-rv').textContent  = curFull(jul.rv);
+  $('mc-july-retail').textContent = curFull(jul.retail);
+  $('mc-july-appts').textContent = jul.appts;
+  $('mc-july-avg').textContent = jul.appts > 0 ? curFull(Math.round(jul.total / jul.appts)) : '—';
+}
+
+// ============================================================
+// PROVIDER SCORECARDS
+// ============================================================
+function renderProviders() {
+  const ranked = rankedProviders();
+  $('providerGrid').innerHTML = ranked.map((p, i) => {
+    const d = getCurrentProviderData(p.name);
+    const isMonth = viewMode === 'monthly';
+    const g  = getProviderGoal(p, isMonth);
+    const gp = pct(d.revenue || 0, g);
+    const avgInv = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
+    const rClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    const barBg = gp >= 90 ? 'linear-gradient(90deg,#af492c,#d2894e)' : gp >= 72 ? 'linear-gradient(90deg,#541a09,#af492c)' : 'linear-gradient(90deg,#b02020,#d43a3a)';
+    const pctColor = gp >= 90 ? '#246e3e' : gp >= 72 ? '#b8860b' : '#b02020';
+    const locLabel = p.loc === 'ES' ? 'East Sacramento' : 'Roseville';
+    const globalIdx = PROVIDERS.indexOf(p);
+    const util = d.util != null ? d.util : null;
+    const utilDisplay = util != null ? util + '%' : '—';
+    const utilWidth = util != null ? Math.min(util, 100) : 0;
+    return `
+      <div class="pcard" onclick="openModal(${globalIdx})">
+        <div class="pcard-click-hint">View 1:1 Review ↗</div>
+        <div class="pcard-head">
+          <div class="pavatar">${p.initials}</div>
+          <div class="pinfo"><div class="pname" title="${p.name}">${p.name}</div><div class="ploc">${locLabel}</div></div>
+          <div class="prank ${rClass}">#${i + 1}</div>
+        </div>
+        <div class="prev">${curFull(d.revenue || 0)}</div>
+        <div class="pgoal-line"><strong style="color:${pctColor}">${gp}%</strong> of ${curFull(g)} goal</div>
+        <div class="pbar"><div class="pbar-fill" style="width:${Math.min(gp, 100)}%;background:${barBg}"></div></div>
+        <div class="putil-row">
+          <span class="putil-label">Utilization</span>
+          <div class="putil-track"><div class="putil-fill" style="width:${utilWidth}%"></div></div>
+          <span class="putil-val">${utilDisplay}</span>
+        </div>
+        <hr class="pcard-divider">
+        <div class="pstats">
+          <div class="pstat"><div class="pstat-lbl">Avg Invoice</div><div class="pstat-val">${avgInv > 0 ? curFull(avgInv) : '—'}</div></div>
+          <div class="pstat"><div class="pstat-lbl">Service</div><div class="pstat-val">${cur(d.service || 0)}</div></div>
+          <div class="pstat"><div class="pstat-lbl">Product</div><div class="pstat-val">${cur(d.retail || 0)}</div></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// LEADERBOARD
+// ============================================================
+function renderLeaderboard() {
+  const fps = filteredProviders();
+  const sorted = [...fps].sort((a, b) => {
+    const da = getCurrentProviderData(a.name);
+    const db = getCurrentProviderData(b.name);
+    const isMonth = viewMode === 'monthly';
+    const v = (p, d) => {
+      if (sortCol === 'rank' || sortCol === 'revenue') return d.revenue || 0;
+      if (sortCol === 'goalPct') return pct(d.revenue || 0, getProviderGoal(p, isMonth));
+      if (sortCol === 'avgInvoice') return (d.appts || 0) > 0 ? (d.revenue || 0) / d.appts : 0;
+      if (sortCol === 'appts')   return d.appts || 0;
+      if (sortCol === 'service') return d.service || 0;
+      if (sortCol === 'retail')  return d.retail || 0;
+      return d.revenue || 0;
+    };
+    if (sortCol === 'name')     return sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+    if (sortCol === 'location') return sortAsc ? a.loc.localeCompare(b.loc) : b.loc.localeCompare(a.loc);
+    return sortAsc ? v(b, db) - v(a, da) : v(a, da) - v(b, db);
+  });
+  const isMonth = viewMode === 'monthly';
+  $('lbBody').innerHTML = sorted.map((p, i) => {
+    const d = getCurrentProviderData(p.name);
+    const g = getProviderGoal(p, isMonth);
+    const gp = pct(d.revenue || 0, g);
+    const avgInv = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
+    const rClass = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+    const globalIdx = PROVIDERS.indexOf(p);
+    return `<tr onclick="openModal(${globalIdx})" style="cursor:pointer">
+      <td><span class="rbadge ${rClass}">${i + 1}</span></td>
+      <td><strong>${p.name}</strong></td>
+      <td><span class="loc-tag loc-${p.loc.toLowerCase()}">${p.loc}</span></td>
+      <td><strong>${curFull(d.revenue || 0)}</strong></td>
+      <td><span class="gpill ${gpillClass(gp)}">${gp}%</span></td>
+      <td>${avgInv > 0 ? curFull(avgInv) : '—'}</td>
+      <td>${d.appts || 0}</td>
+      <td>${curFull(d.service || 0)}</td>
+      <td>${curFull(d.retail || 0)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function initLeaderboardSort() {
+  $$('.lb-table th').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.col;
+      if (sortCol === col) sortAsc = !sortAsc;
+      else { sortCol = col; sortAsc = true; }
+      $$('.lb-table th').forEach(h => h.classList.remove('sorted', 'asc'));
+      th.classList.add('sorted');
+      if (!sortAsc) th.classList.add('asc');
+      renderLeaderboard();
+    });
+  });
+}
+
+// ============================================================
+// RECOMMENDATIONS
+// ============================================================
+function generateRecs(p, d, isMonth) {
+  const g  = getProviderGoal(p, isMonth);
+  const rg = getProviderRetailGoal(p, isMonth);
+  const ag = getProviderApptGoal(p, isMonth);
+  const recs = [];
+  const lbl = isMonth ? 'monthly' : 'weekly';
+  const rev = d.revenue || 0;
+  const revPct = pct(rev, g);
+  const revenueGap = g - rev;
+  const retailGap  = rg - (d.retail || 0);
+
+  if (revPct >= 100) {
+    recs.push({ type: 'success', icon: '🌟', text: `Goal achieved at ${revPct}% — outstanding. Can you close at ${Math.round(revPct * 1.05)}%? That's ${curFull(Math.round(rev * 1.05 - rev))} more.` });
+  } else if (revenueGap > 0 && revenueGap <= g * 0.25) {
+    const feat = MARKETING_FOCUS.products[0];
+    const tip = feat ? ` ${feat.name} is this month's featured product at $${feat.price} — recommending it to ${Math.ceil(revenueGap / feat.price)} more client(s) could close the gap.` : '';
+    recs.push({ type: 'tip', icon: '💡', text: `${curFull(Math.round(revenueGap))} away from ${lbl} goal.${tip}` });
+  } else if (revPct < 75 && rev > 0) {
+    recs.push({ type: 'alert', icon: '📋', text: `Revenue at ${revPct}% of goal. Reach out to 3–5 lapsed clients with a personal check-in — reactivated clients book fast.` });
+  } else if (rev === 0) {
+    recs.push({ type: 'tip', icon: '📋', text: `No revenue recorded this period — provider may have been out. Verify Zenoti data or check schedule.` });
+  }
+
+  if (retailGap > 0 && (d.retail || 0) >= 0) {
+    const feat = MARKETING_FOCUS.products[0];
+    if (feat && d.appts > 0) {
+      const units = Math.max(1, Math.ceil(retailGap / feat.price));
+      recs.push({ type: 'retail', icon: '🛍', text: `Product sales ${curFull(Math.round(retailGap))} from goal. ${feat.pitch} Closing ${units} sale(s) at $${feat.price} hits the target.` });
+    }
+  } else if ((d.retail || 0) > 0) {
+    recs.push({ type: 'success', icon: '🎉', text: `Product goal hit at ${pct(d.retail, rg)}%! Great retail conversation this ${lbl}.` });
+  }
+
+  if ((d.appts || 0) > 0 && (d.appts || 0) < ag * 0.75) {
+    recs.push({ type: 'tip', icon: '📅', text: `Appointments (${d.appts}) are below pace for the ${lbl}. One or two add-on bookings or re-activations would help close the gap.` });
+  }
+
+  if (MARKETING_FOCUS.note) {
+    recs.push({ type: 'tip', icon: '📌', text: `This Month: ${MARKETING_FOCUS.note}` });
+  }
+  return recs;
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openModal(providerIdx) {
+  activeProviderIdx = providerIdx;
+  mModalPeriod = viewMode === 'weekly' ? 'week' : 'month';
+  $('modalOverlay').classList.add('open');
+  $('modalOverlay').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  $$('.modal-ptab').forEach(t => t.classList.toggle('active', t.dataset.mp === mModalPeriod));
+  refreshModal();
+  loadNotes();
+}
+function closeModal() {
+  $('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function getModalData() {
+  const p = PROVIDERS[activeProviderIdx];
+  if (mModalPeriod === 'week') return { data: WEEKS[weekIdx].providers[p.name] || {}, isMonth: false, label: WEEKS[weekIdx].weekEnding };
+  return { data: MONTHS[monthKey].providers[p.name] || {}, isMonth: true, label: monthKey };
+}
+
+function refreshModal() {
+  const p = PROVIDERS[activeProviderIdx];
+  const { data: d, isMonth, label } = getModalData();
+  const g  = getProviderGoal(p, isMonth);
+  const rg = getProviderRetailGoal(p, isMonth);
+  const ag = getProviderApptGoal(p, isMonth);
+  const gp = pct(d.revenue || 0, g);
+  const avgInv = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
+  const locLabel = p.loc === 'ES' ? 'East Sacramento' : 'Roseville';
+
+  const allP = [...PROVIDERS].sort((a, b) => ((getModalData().isMonth ? MONTHS[monthKey].providers : WEEKS[weekIdx].providers)[b.name]?.revenue || 0) - ((getModalData().isMonth ? MONTHS[monthKey].providers : WEEKS[weekIdx].providers)[a.name]?.revenue || 0));
+  const rank = allP.findIndex(pr => pr.name === p.name) + 1;
+  const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+
+  $('modalAvatar').textContent = p.initials;
+  $('modalName').textContent   = p.name;
+  $('modalLoc').textContent    = locLabel;
+  $('modalRank').textContent   = '#' + rank;
+  $('modalRank').className     = 'modal-rank-badge ' + rankClass;
+
+  $('mk-revenue').textContent      = curFull(d.revenue || 0);
+  $('mk-revenue-sub').textContent  = gp + '% of goal';
+  $('mk-goalpct').textContent      = gp + '%';
+  $('mk-goal-sub').textContent     = 'Goal: ' + curFull(g);
+  $('mk-appts').textContent        = d.appts || 0;
+  $('mk-appts-sub').textContent    = 'Goal: ' + ag + ' appointments';
+  $('mk-avginvoice').textContent   = avgInv > 0 ? curFull(avgInv) : '—';
+  $('mk-avginvoice-sub').textContent = avgInv > 0 ? 'per appointment' : 'no appointments';
+  $('mk-service').textContent      = curFull(d.service || 0);
+  $('mk-service-sub').textContent  = pct(d.service || 0, (d.revenue || 0) * 0.9) + '% of revenue';
+  $('mk-retail').textContent       = curFull(d.retail || 0);
+  $('mk-retail-sub').textContent   = pct(d.retail || 0, rg) + '% of ' + curFull(rg) + ' goal';
+  const util = d.util != null ? d.util : null;
+  $('mk-util').textContent     = util != null ? util + '%' : '—';
+  $('mk-util-fill').style.width = util != null ? Math.min(util, 100) + '%' : '0%';
+  $('mk-util-sub').textContent = util != null
+    ? (util >= 75 ? 'Strong — keep the book full' : util >= 50 ? 'Moderate — room to grow' : 'Low — prioritize booking')
+    : 'Not available for this period — upload Master Employee Metrics report';
+
+  const setMG = (pId, vId, fId, a, g2, suf) => {
+    const p2 = pct(a, g2);
+    $(pId).textContent = p2 + '%';
+    $(vId).textContent = (suf ? a + suf : curFull(a)) + ' of ' + (suf ? g2 + suf : curFull(g2)) + ' goal';
+    $(fId).style.width = Math.min(p2, 100) + '%';
+    $(fId).className   = 'gfill ' + goalClass(p2);
+  };
+  setMG('mg-rev-pct',    'mg-rev-vals',    'mg-rev-fill',    d.revenue || 0, g,  '');
+  setMG('mg-retail-pct', 'mg-retail-vals', 'mg-retail-fill', d.retail  || 0, rg, '');
+  setMG('mg-appts-pct',  'mg-appts-vals',  'mg-appts-fill',  d.appts   || 0, ag, '');
+
+  const recs = generateRecs(p, d, isMonth);
+  $('recList').innerHTML = recs.map(r =>
+    `<div class="rec-item ${r.type}"><div class="rec-icon">${r.icon}</div><div class="rec-text">${r.text}</div></div>`
+  ).join('');
+}
+
+function notesKey(name) { return 'ppa_notes_' + name.replace(/\s+/g, '_'); }
+function loadNotes() { $('notesArea').value = localStorage.getItem(notesKey(PROVIDERS[activeProviderIdx].name)) || ''; }
+function saveNotes() {
+  localStorage.setItem(notesKey(PROVIDERS[activeProviderIdx].name), $('notesArea').value);
+  const msg = $('notesSavedMsg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2000);
+}
+let noteTimer;
+$('notesArea').addEventListener('input', () => { clearTimeout(noteTimer); noteTimer = setTimeout(saveNotes, 1200); });
+
+// ============================================================
+// PRINT
+// ============================================================
+function buildPrintDoc() {
+  const p = PROVIDERS[activeProviderIdx];
+  const { data: d, isMonth, label } = getModalData();
+  const g  = getProviderGoal(p, isMonth);
+  const rg = getProviderRetailGoal(p, isMonth);
+  const ag = getProviderApptGoal(p, isMonth);
+  const avgInv = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
+  const locLabel = p.loc === 'ES' ? 'East Sacramento' : 'Roseville';
+  const now = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const recs = generateRecs(p, d, isMonth);
+
+  $('pd-date').textContent  = now;
+  $('pd-name').textContent  = p.name + ' — 1:1 Performance Review';
+  $('pd-sub').textContent   = locLabel + '  ·  ' + label;
+  $('pd-stamp').textContent = 'Generated ' + now + '  ·  ' + MARKETING_FOCUS.month;
+
+  $('pd-grid').innerHTML = [
+    { lbl: 'Revenue',      val: curFull(d.revenue || 0), sub: gp => gp + '% of goal' },
+    { lbl: 'Goal',         val: curFull(g),               sub: () => isMonth ? 'Monthly target' : 'Weekly target' },
+    { lbl: 'Appointments', val: String(d.appts || 0),     sub: () => 'Goal: ' + ag },
+    { lbl: 'Avg Invoice',  val: avgInv > 0 ? curFull(avgInv) : '—', sub: () => '' },
+    { lbl: 'Service Sales',val: curFull(d.service || 0),  sub: () => '' },
+    { lbl: 'Product Sales',val: curFull(d.retail || 0),   sub: () => pct(d.retail || 0, rg) + '% of ' + curFull(rg) + ' goal' }
+  ].map(k => `<div class="pd-kcard"><div class="pd-klbl">${k.lbl}</div><div class="pd-kval">${k.val}</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">${typeof k.sub === 'function' ? k.sub(pct(d.revenue || 0, g)) : ''}</div></div>`).join('');
+
+  $('pd-bars').innerHTML = [
+    { name: 'Total Revenue', a: d.revenue || 0, g: g, s: '' },
+    { name: 'Product Sales', a: d.retail || 0, g: rg, s: '' },
+    { name: 'Appointments',  a: d.appts || 0, g: ag, s: '' }
+  ].map(b => {
+    const p2 = Math.min(pct(b.a, b.g), 100);
+    const disp = b.s ? b.a + b.s + ' of ' + b.g + b.s : curFull(b.a) + ' of ' + curFull(b.g);
+    return `<div class="pd-bar-row"><div class="pd-bar-top"><span>${b.name}</span><span>${pct(b.a, b.g)}% (${disp})</span></div><div class="pd-bar-track"><div class="pd-bar-fill" style="width:${p2}%"></div></div></div>`;
+  }).join('');
+
+  $('pd-recs').innerHTML = recs.map(r => `<div class="pd-rec">${r.icon}  ${r.text}</div>`).join('');
+  $('pd-notes').textContent = $('notesArea').value || '(No notes added)';
+}
+
+$('modalPrintBtn').addEventListener('click', () => { saveNotes(); buildPrintDoc(); setTimeout(() => window.print(), 100); });
+$$('.modal-ptab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    mModalPeriod = tab.dataset.mp;
+    $$('.modal-ptab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    refreshModal();
+  });
+});
+$('modalBack').addEventListener('click', closeModal);
+$('saveNotesBtn').addEventListener('click', saveNotes);
+$('modalOverlay').addEventListener('click', e => { if (e.target === $('modalOverlay')) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ============================================================
+// VIEW MODE SWITCHING
+// ============================================================
+function setViewMode(mode) {
+  viewMode = mode;
+  $$('[data-view]').forEach(t => t.classList.toggle('active', t.dataset.view === mode));
+  $('weekSelector').style.display  = mode === 'weekly'  ? 'flex' : 'none';
+  $('monthSelector').style.display = mode === 'monthly' ? 'flex' : 'none';
+  $('monthCompare').style.display  = mode === 'monthly' ? 'block' : 'none';
+  if (mode === 'monthly') updateMonthCompare();
+  refresh();
+}
+
+$$('[data-view]').forEach(btn => {
+  btn.addEventListener('click', () => setViewMode(btn.dataset.view));
+});
+
+// Week prev/next
+$('weekPrev').addEventListener('click', () => {
+  if (weekIdx > 0) { weekIdx--; updateWeekNav(); refresh(); }
+});
+$('weekNext').addEventListener('click', () => {
+  if (weekIdx < WEEKS.length - 1) { weekIdx++; updateWeekNav(); refresh(); }
+});
+function updateWeekNav() {
+  $('weekLabelDisplay').textContent = WEEKS[weekIdx].label;
+  $('weekPrev').disabled = weekIdx === 0;
+  $('weekNext').disabled = weekIdx === WEEKS.length - 1;
+}
+
+// Month selector
+$$('[data-f="month"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    monthKey = btn.dataset.v;
+    $$('[data-f="month"]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    refresh();
+  });
+});
+
+// Location filter
+$$('[data-f="loc"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    locFilter = btn.dataset.v;
+    $$('[data-f="loc"]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    refresh();
+  });
+});
+
+// ============================================================
+// FULL REFRESH
+// ============================================================
+function refresh() {
+  updateMeta();
+  updateCards();
+  updateGoalBars();
+  updateLocChart();
+  highlightCurrentWeek();
+  renderProviders();
+  renderLeaderboard();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  $('genStamp').textContent = 'Updated ' + new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  updateWeekNav();
+  initLeaderboardSort();
+  initCharts();
+  refresh();
+});
+</script>
+</body>
+</html>
