@@ -255,6 +255,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
     <div class="nav-group" id="monthSelector" style="display:none">
       <button class="ntab active" data-f="month" data-v="June 2026">June 2026</button>
       <button class="ntab" data-f="month" data-v="July 2026">July 2026</button>
+      <button class="ntab" data-f="month" data-v="August 2026">August 2026</button>
     </div>
   </div>
 </header>
@@ -464,12 +465,14 @@ const MARKETING_FOCUS = {
 // July: ES=$235,000 (Emma+Kate+Melanie+Reanna+Jackie+Taylor), RV=$27,750 (Arlene+Brittany)
 const GOALS = {
   weekly:  {
-    'June 2026': { total: 65438, es: 58813, rv: 6625,  service: 54000, retail: 9800, appts: 110 },
-    'July 2026': { total: 65688, es: 58750, rv: 6938,  service: 54000, retail: 9800, appts: 110 },
+    'June 2026':   { total: 65438, es: 58813, rv: 6625,  service: 54000, retail: 9800, appts: 110 },
+    'July 2026':   { total: 65688, es: 58750, rv: 6938,  service: 54000, retail: 9800, appts: 110 },
+    'August 2026': { total: 65688, es: 58750, rv: 6938,  service: 54000, retail: 9800, appts: 110 },
   },
   monthly: {
-    'June 2026': { total: 261750, es: 235250, rv: 26500, service: 216000, retail: 39000, appts: 440 },
-    'July 2026': { total: 262750, es: 235000, rv: 27750, service: 217000, retail: 39000, appts: 440 },
+    'June 2026':   { total: 261750, es: 235250, rv: 26500, service: 216000, retail: 39000, appts: 440 },
+    'July 2026':   { total: 262750, es: 235000, rv: 27750, service: 217000, retail: 39000, appts: 440 },
+    'August 2026': { total: 262750, es: 235000, rv: 27750, service: 217000, retail: 39000, appts: 440 },
   }
 };
 
@@ -507,6 +510,7 @@ const WEEK_MONTH = {
   '6/21': 'June 2026', '6/28': 'June 2026',
   '7/5':  'July 2026', '7/12': 'July 2026',
   '7/19': 'July 2026', '7/26': 'July 2026',
+  '8/2':  'August 2026',
 };
 
 // ============================================================
@@ -536,7 +540,10 @@ const WEEKS = [
     providers:{ 'Arlene Milam':{revenue:325,service:0,retail:0,appts:0,util:null}, "Emma O'Malley":{revenue:5656,service:5656,retail:0,appts:8,util:50.0}, 'Shannon Wyly':{revenue:925,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:44882,service:43514,retail:68,appts:49,util:56.8}, 'Melanie Lolmaugh':{revenue:10451,service:7804,retail:147,appts:13,util:83.3}, 'Jackie Garcia':{revenue:4754,service:3168,retail:961,appts:15,util:61.4}, 'Reanna Mich':{revenue:10684,service:10065,retail:19,appts:13,util:54.2}, 'Brittany Winblad':{revenue:440,service:440,retail:0,appts:2,util:33.3}, 'Taylor Raney':{revenue:2604,service:1553,retail:1051,appts:9,util:25.7} }},
   { key:'7/26', label:'Jul 26', weekEnding:'Sunday, July 26, 2026',
     summary:{ total:63381, es:40799, rv:22582, service:52853, retail:4151, appts:106 },
-    providers:{ 'Arlene Milam':{revenue:19835,service:15215,retail:1395,appts:17,util:61.1}, "Emma O'Malley":{revenue:6043,service:6043,retail:0,appts:7,util:64.7}, 'Shannon Wyly':{revenue:775,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:15989,service:15074,retail:445,appts:29,util:47.8}, 'Melanie Lolmaugh':{revenue:2004,service:1957,retail:47,appts:4,util:16.7}, 'Jackie Garcia':{revenue:4742,service:3597,retail:1144,appts:15,util:56.4}, 'Reanna Mich':{revenue:8991,service:7706,retail:60,appts:19,util:55.8}, 'Brittany Winblad':{revenue:331,service:331,retail:0,appts:2,util:18.2}, 'Taylor Raney':{revenue:4671,service:2927,retail:1060,appts:13,util:42.2} }}
+    providers:{ 'Arlene Milam':{revenue:19835,service:15215,retail:1395,appts:17,util:61.1}, "Emma O'Malley":{revenue:6043,service:6043,retail:0,appts:7,util:64.7}, 'Shannon Wyly':{revenue:775,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:15989,service:15074,retail:445,appts:29,util:47.8}, 'Melanie Lolmaugh':{revenue:2004,service:1957,retail:47,appts:4,util:16.7}, 'Jackie Garcia':{revenue:4742,service:3597,retail:1144,appts:15,util:56.4}, 'Reanna Mich':{revenue:8991,service:7706,retail:60,appts:19,util:55.8}, 'Brittany Winblad':{revenue:331,service:331,retail:0,appts:2,util:18.2}, 'Taylor Raney':{revenue:4671,service:2927,retail:1060,appts:13,util:42.2} }},
+  { key:'8/2',  label:'Aug 2',  weekEnding:'Sunday, August 2, 2026',
+    summary:{ total:74250, es:64709, rv:9541, service:65954, retail:2846, appts:140 },
+    providers:{ 'Arlene Milam':{revenue:8392,service:7562,retail:405,appts:15,util:59.6}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:2.9}, 'Shannon Wyly':{revenue:1050,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:41820,service:37766,retail:829,appts:68,util:59.4}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:4,util:70.4}, 'Jackie Garcia':{revenue:4231,service:2847,retail:1234,appts:21,util:63.6}, 'Reanna Mich':{revenue:12334,service:11446,retail:288,appts:18,util:29.2}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0}, 'Taylor Raney':{revenue:492,service:414,retail:78,appts:2,util:7.6} }}
 ];
 
 const MONTHS = {
@@ -547,11 +554,17 @@ const MONTHS = {
   'July 2026': {
     summary: { total:263281, es:199971, rv:63310, service:221211, retail:12406, appts:414 },
     providers: {}
+  },
+  'August 2026': {
+    summary: { total:74250, es:64709, rv:9541, service:65954, retail:2846, appts:140 },
+    providers: {}
   }
 };
 // Build monthly provider aggregates
-['June 2026','July 2026'].forEach(mkey => {
-  const wks = mkey.startsWith('June') ? WEEKS.slice(0,4) : WEEKS.slice(4);
+const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,9] };
+['June 2026','July 2026','August 2026'].forEach(mkey => {
+  const [s,e] = MONTH_WEEK_RANGES[mkey];
+  const wks = WEEKS.slice(s,e);
   PROVIDERS.forEach(p => {
     const agg = { revenue:0, service:0, retail:0, appts:0 };
     wks.forEach(w => {
