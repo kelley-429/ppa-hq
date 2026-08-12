@@ -249,7 +249,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
     </div>
     <div class="header-meta">
       <div class="meta-label" id="metaLabel">Week Ending</div>
-      <div class="meta-value" id="metaValue">Sunday, July 26, 2026</div>
+      <div class="meta-value" id="metaValue">Sunday, August 2, 2026</div>
     </div>
   </div>
   <div class="nav-bar">
@@ -267,7 +267,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
     <!-- Weekly: week prev/next -->
     <div class="week-selector" id="weekSelector">
       <button class="week-nav-btn" id="weekPrev">&#8249;</button>
-      <span class="week-label-display" id="weekLabelDisplay">Jul 26</span>
+      <span class="week-label-display" id="weekLabelDisplay">Aug 2</span>
       <button class="week-nav-btn" id="weekNext" disabled>&#8250;</button>
     </div>
     <!-- Monthly: month tabs (hidden by default) -->
@@ -281,7 +281,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 
 <main class="main">
   <div class="note-banner" id="noteBanner">
-    ⚡ <strong>Live data loaded</strong> — Jun 7 through Jul 26, 2026 (8 weeks). Shannon Wyly is excluded (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected. Provider goals are placeholders; update them in the GOALS config to match your actual targets.
+    ⚡ <strong>Live data loaded</strong> — Jun 7 through Aug 2, 2026 (9 weeks). Shannon Wyly is excluded (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected. Provider goals are placeholders; update them in the GOALS config to match your actual targets.
   </div>
 
   <div class="slabel">Key Performance Indicators</div>
@@ -1202,8 +1202,8 @@ function refreshModal() {
     const wd = w.providers[p.name] || {};
     const rev = wd.revenue || 0;
     const wp  = pct(rev, wkGoal);
-    const isCur = wi === weekIdx;
-    const isFut = wi > weekIdx;
+    const isCur = wi === weekIndex;
+    const isFut = wi > weekIndex;
     return `<div class="period-breakdown-row${isCur ? ' pbr-current' : isFut ? ' pbr-future' : ''}">
       <div class="pbr-label">${w.label}</div>
       <div class="pbr-bar-wrap"><div class="pbr-bar-fill" style="width:${isFut ? 0 : Math.min(wp, 100)}%"></div></div>
@@ -1225,12 +1225,12 @@ function refreshModal() {
     const mkWeeks = getWeeksForMonth(mk);
     if (!mkWeeks.length) return '';
     const firstWi = WEEKS.indexOf(mkWeeks[0]);
-    if (firstWi > weekIdx) return '';  // no data yet
+    if (firstWi > weekIndex) return '';  // no data yet
     const mkCum  = getMonthCumulativeUpTo(p.name, mk);
     const mkGoal = getProviderMonthlyGoal(p, mk);
     const mkPct  = pct(mkCum.revenue, mkGoal);
     const shortM = mk.replace(' 2026', '');
-    const weeksInM = mkWeeks.filter(w => WEEKS.indexOf(w) <= weekIdx).length;
+    const weeksInM = mkWeeks.filter(w => WEEKS.indexOf(w) <= weekIndex).length;
     const partial = weeksInM < mkWeeks.length ? ` (${weeksInM}/${mkWeeks.length} wks)` : '';
     return `<div class="period-breakdown-row">
       <div class="pbr-label">${shortM}</div>
@@ -1380,4 +1380,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 </body>
-</html>
