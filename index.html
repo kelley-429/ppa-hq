@@ -249,7 +249,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
     </div>
     <div class="header-meta">
       <div class="meta-label" id="metaLabel">Week Ending</div>
-      <div class="meta-value" id="metaValue">Sunday, August 2, 2026</div>
+      <div class="meta-value" id="metaValue">Sunday, July 26, 2026</div>
     </div>
   </div>
   <div class="nav-bar">
@@ -267,7 +267,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
     <!-- Weekly: week prev/next -->
     <div class="week-selector" id="weekSelector">
       <button class="week-nav-btn" id="weekPrev">&#8249;</button>
-      <span class="week-label-display" id="weekLabelDisplay">Aug 2</span>
+      <span class="week-label-display" id="weekLabelDisplay">Jul 26</span>
       <button class="week-nav-btn" id="weekNext" disabled>&#8250;</button>
     </div>
     <!-- Monthly: month tabs (hidden by default) -->
@@ -281,7 +281,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 
 <main class="main">
   <div class="note-banner" id="noteBanner">
-    ⚡ <strong>Live data loaded</strong> — Jun 7 through Aug 2, 2026 (9 weeks). Shannon Wyly is excluded (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected. Provider goals are placeholders; update them in the GOALS config to match your actual targets.
+    ⚡ <strong>Live data loaded</strong> — Jun 7 through Jul 26, 2026 (8 weeks). Shannon Wyly is excluded (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected. Provider goals are placeholders; update them in the GOALS config to match your actual targets.
   </div>
 
   <div class="slabel">Key Performance Indicators</div>
@@ -622,6 +622,7 @@ const WEEK_MONTH = {
   '7/5':  'July 2026', '7/12': 'July 2026',
   '7/19': 'July 2026', '7/26': 'July 2026',
   '8/2':  'August 2026',
+  '8/9':  'August 2026',
 };
 
 // ============================================================
@@ -654,7 +655,10 @@ const WEEKS = [
     providers:{ 'Arlene Milam':{revenue:19835,service:15215,retail:1395,appts:17,util:61.1}, "Emma O'Malley":{revenue:6043,service:6043,retail:0,appts:7,util:64.7}, 'Shannon Wyly':{revenue:775,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:15989,service:15074,retail:445,appts:29,util:47.8}, 'Melanie Lolmaugh':{revenue:2004,service:1957,retail:47,appts:4,util:16.7}, 'Jackie Garcia':{revenue:4742,service:3597,retail:1144,appts:15,util:56.4}, 'Reanna Mich':{revenue:8991,service:7706,retail:60,appts:19,util:55.8}, 'Brittany Winblad':{revenue:331,service:331,retail:0,appts:2,util:18.2}, 'Taylor Raney':{revenue:4671,service:2927,retail:1060,appts:13,util:42.2} }},
   { key:'8/2',  label:'Aug 2',  weekEnding:'Sunday, August 2, 2026',
     summary:{ total:74250, es:64709, rv:9541, service:65954, retail:2846, appts:140 },
-    providers:{ 'Arlene Milam':{revenue:8392,service:7562,retail:405,appts:15,util:59.6}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:2.9}, 'Shannon Wyly':{revenue:1050,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:41820,service:37766,retail:829,appts:68,util:59.4}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:4,util:70.4}, 'Jackie Garcia':{revenue:4231,service:2847,retail:1234,appts:21,util:63.6}, 'Reanna Mich':{revenue:12334,service:11446,retail:288,appts:18,util:29.2}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0}, 'Taylor Raney':{revenue:492,service:414,retail:78,appts:2,util:7.6} }}
+    providers:{ 'Arlene Milam':{revenue:8392,service:7562,retail:405,appts:15,util:59.6}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:2.9}, 'Shannon Wyly':{revenue:1050,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:41820,service:37766,retail:829,appts:68,util:59.4}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:4,util:70.4}, 'Jackie Garcia':{revenue:4231,service:2847,retail:1234,appts:21,util:63.6}, 'Reanna Mich':{revenue:12334,service:11446,retail:288,appts:18,util:29.2}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0}, 'Taylor Raney':{revenue:492,service:414,retail:78,appts:2,util:7.6} }},
+  { key:'8/9',  label:'Aug 9',  weekEnding:'Sunday, August 9, 2026',
+    summary:{ total:75484, es:55073, rv:20411, service:66819, retail:5090, appts:117 },
+    providers:{ 'Arlene Milam':{revenue:18196,service:17953,retail:243,appts:22,util:66.7}, "Emma O'Malley":{revenue:1961,service:1748,retail:213,appts:3,util:20.6}, 'Shannon Wyly':{revenue:1318,service:0,retail:393,appts:0,util:null}, 'Kate Cunningham':{revenue:32131,service:29488,retail:1193,appts:39,util:64.6}, 'Melanie Lolmaugh':{revenue:1418,service:1418,retail:0,appts:5,util:25.0}, 'Jackie Garcia':{revenue:5809,service:3972,retail:1687,appts:16,util:71.0}, 'Reanna Mich':{revenue:10841,service:9588,retail:203,appts:19,util:85.7}, 'Brittany Winblad':{revenue:774,service:696,retail:78,appts:3,util:28.0}, 'Taylor Raney':{revenue:3036,service:1956,retail:1080,appts:10,util:38.9} }}
 ];
 
 const MONTHS = {
@@ -667,12 +671,12 @@ const MONTHS = {
     providers: {}
   },
   'August 2026': {
-    summary: { total:74250, es:64709, rv:9541, service:65954, retail:2846, appts:140 },
+    summary: { total:149734, es:119782, rv:29952, service:132773, retail:7936, appts:257 },
     providers: {}
   }
 };
 // Build monthly provider aggregates
-const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,9] };
+const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,10] };
 ['June 2026','July 2026','August 2026'].forEach(mkey => {
   const [s,e] = MONTH_WEEK_RANGES[mkey];
   const wks = WEEKS.slice(s,e);
@@ -1202,8 +1206,8 @@ function refreshModal() {
     const wd = w.providers[p.name] || {};
     const rev = wd.revenue || 0;
     const wp  = pct(rev, wkGoal);
-    const isCur = wi === weekIndex;
-    const isFut = wi > weekIndex;
+    const isCur = wi === weekIdx;
+    const isFut = wi > weekIdx;
     return `<div class="period-breakdown-row${isCur ? ' pbr-current' : isFut ? ' pbr-future' : ''}">
       <div class="pbr-label">${w.label}</div>
       <div class="pbr-bar-wrap"><div class="pbr-bar-fill" style="width:${isFut ? 0 : Math.min(wp, 100)}%"></div></div>
@@ -1225,12 +1229,12 @@ function refreshModal() {
     const mkWeeks = getWeeksForMonth(mk);
     if (!mkWeeks.length) return '';
     const firstWi = WEEKS.indexOf(mkWeeks[0]);
-    if (firstWi > weekIndex) return '';  // no data yet
+    if (firstWi > weekIdx) return '';  // no data yet
     const mkCum  = getMonthCumulativeUpTo(p.name, mk);
     const mkGoal = getProviderMonthlyGoal(p, mk);
     const mkPct  = pct(mkCum.revenue, mkGoal);
     const shortM = mk.replace(' 2026', '');
-    const weeksInM = mkWeeks.filter(w => WEEKS.indexOf(w) <= weekIndex).length;
+    const weeksInM = mkWeeks.filter(w => WEEKS.indexOf(w) <= weekIdx).length;
     const partial = weeksInM < mkWeeks.length ? ` (${weeksInM}/${mkWeeks.length} wks)` : '';
     return `<div class="period-breakdown-row">
       <div class="pbr-label">${shortM}</div>
@@ -1380,3 +1384,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 </body>
+</html>
