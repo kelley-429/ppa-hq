@@ -237,11 +237,11 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 /* PRINT */
 @media print {
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .header, .main, .footer, .modal-overlay { display: none !important; }
-  .print-doc { display: block !important; }
+  body > *:not(#printDoc) { display: none !important; }
+  #printDoc { display: block !important; }
 }
 .print-doc { display: none; }
-@page { margin: 0.75in; }
+@page { margin: 0.7in; }
 
 /* RESPONSIVE */
 @media (max-width: 1200px) { .kpi-row { grid-template-columns: repeat(3,1fr); } .charts-row { grid-template-columns: 1fr; } }
@@ -1396,43 +1396,29 @@ function buildPrintDoc() {
 $('modalPrintBtn').addEventListener('click', () => {
   saveNotes();
   buildPrintDoc();
-  const p = PROVIDERS[activeProviderIdx];
-  const printContent = $('printDoc').innerHTML;
-  const win = window.open('', '_blank');
-  if (!win) {
-    alert('Please allow pop-ups for this site, then click Download / Print again.');
-    return;
+
+  // Hide everything except the print doc, print, then restore
+  const overlay  = $('modalOverlay');
+  const printDoc = $('printDoc');
+  const body     = document.body;
+
+  overlay.style.display  = 'none';
+  printDoc.style.display = 'block';
+  body.style.overflow    = '';
+
+  // Restore after print dialog closes (works in all browsers)
+  function restore() {
+    overlay.style.display  = '';
+    printDoc.style.display = '';
+    body.style.overflow    = 'hidden';
+    window.removeEventListener('afterprint', restore);
   }
-  win.document.write(`<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>${p.name} — 1:1 Review · Pretty Please Aesthetics</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    body { margin: 0; padding: 44px 52px; background: #fff; }
-    .print-doc { display: block !important; }
-    @page { margin: 0.65in; }
-    @media print {
-      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      body { padding: 0; }
-    }
-  </style>
-</head>
-<body>
-  <div class="print-doc">${printContent}</div>
-  <script>
-    // Print once fonts finish loading so layout is correct
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(function() { window.print(); });
-    } else {
-      setTimeout(function() { window.print(); }, 800);
-    }
-  <\/script>
-</body>
-</html>`);
-  win.document.close();
-  win.focus();
+  window.addEventListener('afterprint', restore);
+
+  window.print();
+
+  // Fallback restore in case afterprint doesn't fire (older browsers)
+  setTimeout(restore, 2000);
 });
 $('modalBack').addEventListener('click', closeModal);
 $('saveNotesBtn').addEventListener('click', saveNotes);
