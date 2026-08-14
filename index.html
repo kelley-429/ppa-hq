@@ -142,6 +142,8 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 .pcard-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 11px; }
 .pstats { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
 .pstat { text-align: center; padding: 7px 4px; background: rgba(84,26,9,0.03); border-radius: 8px; }
+.pcard-ytd-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.pcard-ytd-proj { font-size: 10px; color: #b0a090; flex: 1; }
 .pstat-lbl { font-size: 8px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terra); margin-bottom: 2px; }
 .pstat-val { font-size: 12px; font-weight: 800; color: var(--maroon); }
 
@@ -971,10 +973,35 @@ function updateMonthCompare() {
 // ============================================================
 // PROVIDER SCORECARDS
 // ============================================================
+function calcYTDTrend(p) {
+  const ytdData = getYTDCumulative(p.name);
+  const ytdGoal = getYTDGoal(p.name);
+  if (ytdGoal <= 0) return null;
+  let periodGoal = 0;
+  ALL_MONTHS_ORDER.forEach(mk => {
+    const mkWeeks = getWeeksForMonth(mk);
+    if (!mkWeeks.length) return;
+    if (WEEKS.indexOf(mkWeeks[0]) > weekIdx) return;
+    const weeksWithData = mkWeeks.filter(w => WEEKS.indexOf(w) <= weekIdx).length;
+    periodGoal += getProviderMonthlyGoal(p, mk) * (weeksWithData / mkWeeks.length);
+  });
+  if (periodGoal <= 0) return null;
+  const pace = ytdData.revenue / periodGoal;
+  const projectedEOY = Math.round(ytdGoal * pace);
+  const projectedPct = pct(projectedEOY, ytdGoal);
+  const gap = projectedEOY - ytdGoal;
+  const gapStr = curFull(Math.abs(gap));
+  let label, cls;
+  if (pace >= 1.05)      { label = 'Ahead of Pace';   cls = 'trend-ahead'; }
+  else if (pace >= 0.97) { label = 'On Track';         cls = 'trend-on'; }
+  else if (pace >= 0.88) { label = 'Slightly Behind';  cls = 'trend-slight'; }
+  else                   { label = 'Behind Pace';       cls = 'trend-behind'; }
+  return { label, cls, projectedPct, projectedEOY, gap, gapStr, ytdData, ytdGoal };
+}
+
 function renderProviders() {
   const ranked = rankedProviders();
   $('providerGrid').innerHTML = ranked.map((p, i) => {
-    // Cards always show the current week's data and weekly goal
     const d = WEEKS[weekIdx].providers[p.name] || {};
     const g  = getProviderGoal(p, false);
     const gp = pct(d.revenue || 0, g);
@@ -987,6 +1014,15 @@ function renderProviders() {
     const util = d.util != null ? d.util : null;
     const utilDisplay = util != null ? util + '%' : '—';
     const utilWidth = util != null ? Math.min(util, 100) : 0;
+
+    // YTD pace badge
+    const trend = calcYTDTrend(p);
+    const ytdRow = trend ? `
+      <div class="pcard-ytd-row">
+        <span class="ytd-trend-badge ${trend.cls}">${trend.label}</span>
+        <span class="pcard-ytd-proj">Proj. year-end: ${trend.projectedPct}% of goal</span>
+      </div>` : '';
+
     return `
       <div class="pcard" onclick="openModal(${globalIdx})">
         <div class="pcard-click-hint">View 1:1 Review ↗</div>
@@ -1009,6 +1045,7 @@ function renderProviders() {
           <div class="pstat"><div class="pstat-lbl">Service</div><div class="pstat-val">${cur(d.service || 0)}</div></div>
           <div class="pstat"><div class="pstat-lbl">Product</div><div class="pstat-val">${cur(d.retail || 0)}</div></div>
         </div>
+        ${ytdRow}
       </div>`;
   }).join('');
 }
@@ -1262,40 +1299,20 @@ function refreshModal() {
   $('ytd-rev-fill').className    = 'big-gfill ' + goalClass(ytdPct);
 
   // ── YTD TREND / PACE ──────────────────────────────────────
-  if (ytdGoal > 0) {
-    // Sum the prorated goals for all months we have data on (the tracked period)
-    let periodGoal = 0;
-    ALL_MONTHS_ORDER.forEach(mk => {
-      const mkWeeks = getWeeksForMonth(mk);
-      if (!mkWeeks.length) return;
-      const firstWi = WEEKS.indexOf(mkWeeks[0]);
-      if (firstWi > weekIdx) return;
-      const weeksWithData = mkWeeks.filter(w => WEEKS.indexOf(w) <= weekIdx).length;
-      const mkGoalVal = getProviderMonthlyGoal(p, mk);
-      periodGoal += mkGoalVal * (weeksWithData / mkWeeks.length);
-    });
-    const pace = periodGoal > 0 ? ytdData.revenue / periodGoal : 1;
-    const projectedEOY = Math.round(ytdGoal * pace);
-    const projectedPct = pct(projectedEOY, ytdGoal);
-    const gap = projectedEOY - ytdGoal;
-    const gapStr = (gap >= 0 ? '+' : '') + curFull(gap);
-
-    let trendLabel, trendClass;
-    if (pace >= 1.05)       { trendLabel = 'Ahead of Pace';    trendClass = 'trend-ahead'; }
-    else if (pace >= 0.97)  { trendLabel = 'On Track';         trendClass = 'trend-on'; }
-    else if (pace >= 0.88)  { trendLabel = 'Slightly Behind';  trendClass = 'trend-slight'; }
-    else                    { trendLabel = 'Behind Pace';       trendClass = 'trend-behind'; }
-
+  const trend = calcYTDTrend(p);
+  if (trend) {
     const badge = $('ytd-trend-badge');
-    badge.textContent = trendLabel;
-    badge.className   = 'ytd-trend-badge ' + trendClass;
+    badge.textContent = trend.label;
+    badge.className   = 'ytd-trend-badge ' + trend.cls;
+    badge.style.display = '';
+    const dirWord = trend.gap >= 0 ? 'ahead' : 'behind';
     $('ytd-trend-meta').innerHTML =
-      `At current pace — projected year-end: <strong>${curFull(projectedEOY)}</strong> (${projectedPct}% of goal&thinsp;·&thinsp;${gapStr} vs target)`;
+      `At current pace — projected year-end: <strong>${curFull(trend.projectedEOY)}</strong> `+
+      `(${trend.projectedPct}% of annual goal&thinsp;·&thinsp;${trend.gapStr} ${dirWord} of target)`;
     $('ytd-trend-meta').style.display = '';
-    $('ytd-trend-badge').style.display = '';
   } else {
-    $('ytd-trend-meta').style.display  = 'none';
     $('ytd-trend-badge').style.display = 'none';
+    $('ytd-trend-meta').style.display  = 'none';
   }
 
   $('ytdMonthRows').innerHTML = ALL_MONTHS_ORDER.map(mk => {
