@@ -1393,7 +1393,47 @@ function buildPrintDoc() {
   $('pd-notes').textContent = $('notesArea').value || '(No notes added)';
 }
 
-$('modalPrintBtn').addEventListener('click', () => { saveNotes(); buildPrintDoc(); setTimeout(() => window.print(), 100); });
+$('modalPrintBtn').addEventListener('click', () => {
+  saveNotes();
+  buildPrintDoc();
+  const p = PROVIDERS[activeProviderIdx];
+  const printContent = $('printDoc').innerHTML;
+  const win = window.open('', '_blank');
+  if (!win) {
+    alert('Please allow pop-ups for this site, then click Download / Print again.');
+    return;
+  }
+  win.document.write(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${p.name} — 1:1 Review · Pretty Please Aesthetics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; padding: 44px 52px; background: #fff; }
+    .print-doc { display: block !important; }
+    @page { margin: 0.65in; }
+    @media print {
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-doc">${printContent}</div>
+  <script>
+    // Print once fonts finish loading so layout is correct
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function() { window.print(); });
+    } else {
+      setTimeout(function() { window.print(); }, 800);
+    }
+  <\/script>
+</body>
+</html>`);
+  win.document.close();
+  win.focus();
+});
 $('modalBack').addEventListener('click', closeModal);
 $('saveNotesBtn').addEventListener('click', saveNotes);
 $('modalOverlay').addEventListener('click', e => { if (e.target === $('modalOverlay')) closeModal(); });
