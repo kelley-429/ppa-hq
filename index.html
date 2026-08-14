@@ -98,6 +98,15 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 .pbr-pct { font-size: 10px; font-weight: 700; color: #b0a090; text-align: right; }
 .pbr-current .pbr-label { color: var(--maroon); font-weight: 900; }
 .pbr-current .pbr-bar-fill { background: linear-gradient(90deg, var(--maroon), var(--terra)); }
+
+/* YTD TREND BADGE */
+.ytd-header-row { display: flex; align-items: center; justify-content: space-between; }
+.ytd-trend-badge { font-size: 9px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; white-space: nowrap; }
+.ytd-trend-badge.trend-ahead  { background: #e6f4ec; color: #246e3e; }
+.ytd-trend-badge.trend-on     { background: #e6f4ec; color: #246e3e; }
+.ytd-trend-badge.trend-slight { background: #fff4e5; color: #955a00; }
+.ytd-trend-badge.trend-behind { background: #fbeaea; color: #b02020; }
+.ytd-trend-meta { font-size: 10px; color: #a09080; margin-top: 5px; margin-bottom: 10px; line-height: 1.5; }
 .pbr-future { opacity: 0.35; }
 .mtd-sublabel { font-size: 9px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--terra); margin: 14px 0 10px; }
 .big-gtrack { height: 10px; background: rgba(84,26,9,0.07); border-radius: 100px; overflow: hidden; margin-bottom: 6px; }
@@ -270,9 +279,9 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
       <span class="week-label-display" id="weekLabelDisplay">Jul 26</span>
       <button class="week-nav-btn" id="weekNext" disabled>&#8250;</button>
     </div>
-    <!-- Monthly: month tabs (hidden by default) -->
+    <!-- Monthly: month tabs (hidden by default; active tab set dynamically on load) -->
     <div class="nav-group" id="monthSelector" style="display:none">
-      <button class="ntab active" data-f="month" data-v="June 2026">June 2026</button>
+      <button class="ntab" data-f="month" data-v="June 2026">June 2026</button>
       <button class="ntab" data-f="month" data-v="July 2026">July 2026</button>
       <button class="ntab" data-f="month" data-v="August 2026">August 2026</button>
     </div>
@@ -431,8 +440,15 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
         <div class="modal-section-title">Year to Date — 2026</div>
         <div class="mgcard">
           <div class="goal-row" style="margin-bottom:18px">
-            <div class="goal-top"><span class="goal-name">Total Revenue (YTD)</span><span class="goal-pct" id="ytd-rev-pct">—</span></div>
+            <div class="ytd-header-row">
+              <span class="goal-name">Total Revenue (YTD)</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="ytd-trend-badge" id="ytd-trend-badge"></span>
+                <span class="goal-pct" id="ytd-rev-pct">—</span>
+              </div>
+            </div>
             <div class="goal-vals" id="ytd-rev-vals">—</div>
+            <div class="ytd-trend-meta" id="ytd-trend-meta"></div>
             <div class="big-gtrack"><div class="big-gfill hit" id="ytd-rev-fill" style="width:0%"></div></div>
           </div>
           <div class="mtd-sublabel">By Month</div>
@@ -490,19 +506,37 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 
 <script>
 // ============================================================
-// MARKETING FOCUS — update monthly
+// MARKETING FOCUS — add an entry per month; dashboard auto-selects current month
 // ============================================================
-const MARKETING_FOCUS = {
-  month: 'July 2026',
-  theme: 'Hyperpigmentation & Melasma Awareness Month',
-  products: [
-    { name: 'Revision C+ Correcting Lotion', promo: 'Featured Brightener of the Month', price: 110,
-      pitch: 'Ask every client: "Are you protecting your results at home? Our Revision C+ is our featured brightener right now — 30% THD Ascorbate, the most stable form of vitamin C, targeting the hyperpigmentation we\'re treating in-office."' },
-    { name: 'Alastin A-Luminate Brightening Serum', promo: 'Featured Brightener of the Month', price: 150,
-      pitch: '"We\'re spotlighting A-Luminate this month — tranexamic acid and niacinamide together work beautifully to fade hyperpigmentation between treatments."' }
-  ],
-  note: 'July: Hyperpigmentation & Melasma Awareness. Sun spots, uneven tone, melasma — every client is a Brightener conversation. Tox Parties: $11/unit Dysport or Xeomin (40u min) + 15% off skincare. Member special: Curated Complexion Series (Aerolase + Mesoneedling x3, $2,400).'
+const MARKETING_FOCUS_BY_MONTH = {
+  'July 2026': {
+    theme: 'Hyperpigmentation & Melasma Awareness Month',
+    products: [
+      { name: 'Revision C+ Correcting Lotion', promo: 'Featured Brightener of the Month', price: 110,
+        pitch: 'Ask every client: "Are you protecting your results at home? Our Revision C+ is our featured brightener right now — 30% THD Ascorbate, the most stable form of vitamin C, targeting the hyperpigmentation we\'re treating in-office."' },
+      { name: 'Alastin A-Luminate Brightening Serum', promo: 'Featured Brightener of the Month', price: 150,
+        pitch: '"We\'re spotlighting A-Luminate this month — tranexamic acid and niacinamide together work beautifully to fade hyperpigmentation between treatments."' }
+    ],
+    note: 'July: Hyperpigmentation & Melasma Awareness. Sun spots, uneven tone, melasma — every client is a Brightener conversation. Tox Parties: $11/unit Dysport or Xeomin (40u min) + 15% off skincare. Member special: Curated Complexion Series (Aerolase + Mesoneedling x3, $2,400).'
+  },
+  'August 2026': {
+    theme: 'National Wellness Month · Injectable Specials & Antioxidant Skincare',
+    products: [
+      { name: 'ZO Daily Power Defense', promo: 'Featured Antioxidant of the Month', price: 0,
+        pitch: '"We are spotlighting antioxidants this month for National Wellness Month — ZO Daily Power Defense is a broad-spectrum antioxidant serum with a redness-reducing complex, botanical anti-aging ingredients, and hyaluronic acid. It is one of the best things you can do for your results at home."' },
+      { name: 'Revision DEJ Boosting Serum', promo: 'Featured Antioxidant of the Month', price: 0,
+        pitch: '"If you want an extra boost, Revision DEJ is formulated with patented technology that supports skin cell mitochondrial activity — brightening peptides, postbiotics, and a hydration complex. It pairs beautifully with what we just did today."' }
+    ],
+    note: 'August: National Wellness Month — every appointment is an antioxidant conversation. Injectable specials: Filler + Free Tox (3 Restylane + 50u Dysport, $2,250 members / $2,550 all clients). Member Exclusive: 3 Radiesse + Belotero + 100u Xeomin, $3,100 (value $4,890). Regenerative Undereye Series (3x PRF + Mesoneedling with PDGF): $2,700 members / $3,200 all clients. Shannon workversary 08/09 — great time to let clients know she returns from maternity leave the week of 09/22.'
+  }
 };
+function getMarketingFocus() {
+  const cur = MARKETING_FOCUS_BY_MONTH[monthKey];
+  if (cur) return cur;
+  // Fall back to the most recent month that has content
+  const keys = Object.keys(MARKETING_FOCUS_BY_MONTH);
+  return MARKETING_FOCUS_BY_MONTH[keys[keys.length - 1]] || {};
+}
 
 // ============================================================
 // GOALS — update these to match your actual targets
@@ -696,7 +730,8 @@ const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':
 // ============================================================
 let viewMode  = 'weekly';
 let weekIdx   = WEEKS.length - 1;
-let monthKey  = 'July 2026';
+// Auto-derive current month from the most recent week of data
+let monthKey  = WEEK_MONTH[WEEKS[WEEKS.length - 1].key] || 'August 2026';
 let locFilter = 'all';
 // mModalPeriod removed — modal always shows weekly data + MTD + YTD sections
 let activeProviderIdx = 0;
@@ -1053,8 +1088,8 @@ function generateRecs(p, d, isMonth) {
   if (revPct >= 100) {
     recs.push({ type: 'success', icon: '🌟', text: `Goal achieved at ${revPct}% — outstanding. Can you close at ${Math.round(revPct * 1.05)}%? That's ${curFull(Math.round(rev * 1.05 - rev))} more.` });
   } else if (revenueGap > 0 && revenueGap <= g * 0.25) {
-    const feat = MARKETING_FOCUS.products[0];
-    const tip = feat ? ` ${feat.name} is this month's featured product at $${feat.price} — recommending it to ${Math.ceil(revenueGap / feat.price)} more client(s) could close the gap.` : '';
+    const feat = getMarketingFocus().products?.[0];
+    const tip = feat && feat.name ? ` ${feat.name} is this month's featured product at $${feat.price} — recommending it to ${Math.ceil(revenueGap / feat.price)} more client(s) could close the gap.` : '';
     recs.push({ type: 'tip', icon: '💡', text: `${curFull(Math.round(revenueGap))} away from ${lbl} goal.${tip}` });
   } else if (revPct < 75 && rev > 0) {
     recs.push({ type: 'alert', icon: '📋', text: `Revenue at ${revPct}% of goal. Reach out to 3–5 lapsed clients with a personal check-in — reactivated clients book fast.` });
@@ -1063,8 +1098,8 @@ function generateRecs(p, d, isMonth) {
   }
 
   if (retailGap > 0 && (d.retail || 0) >= 0) {
-    const feat = MARKETING_FOCUS.products[0];
-    if (feat && d.appts > 0) {
+    const feat = getMarketingFocus().products?.[0];
+    if (feat && feat.name && d.appts > 0) {
       const units = Math.max(1, Math.ceil(retailGap / feat.price));
       recs.push({ type: 'retail', icon: '🛍', text: `Product sales ${curFull(Math.round(retailGap))} from goal. ${feat.pitch} Closing ${units} sale(s) at $${feat.price} hits the target.` });
     }
@@ -1076,8 +1111,9 @@ function generateRecs(p, d, isMonth) {
     recs.push({ type: 'tip', icon: '📅', text: `Appointments (${d.appts}) are below pace for the ${lbl}. One or two add-on bookings or re-activations would help close the gap.` });
   }
 
-  if (MARKETING_FOCUS.note) {
-    recs.push({ type: 'tip', icon: '📌', text: `This Month: ${MARKETING_FOCUS.note}` });
+  const mfNote = getMarketingFocus().note;
+  if (mfNote) {
+    recs.push({ type: 'tip', icon: '📌', text: `This Month: ${mfNote}` });
   }
   return recs;
 }
@@ -1221,9 +1257,46 @@ function refreshModal() {
   const ytdGoal = getYTDGoal(p.name);
   const ytdPct  = pct(ytdData.revenue, ytdGoal);
   $('ytd-rev-pct').textContent   = ytdGoal > 0 ? ytdPct + '%' : '—';
-  $('ytd-rev-vals').textContent  = curFull(ytdData.revenue) + (ytdGoal > 0 ? ' of ' + curFull(ytdGoal) + ' YTD goal' : ' YTD (no annual goal set)');
+  $('ytd-rev-vals').textContent  = curFull(ytdData.revenue) + (ytdGoal > 0 ? ' of ' + curFull(ytdGoal) + ' annual goal' : ' YTD (no annual goal set)');
   $('ytd-rev-fill').style.width  = ytdGoal > 0 ? Math.min(ytdPct, 100) + '%' : '0%';
   $('ytd-rev-fill').className    = 'big-gfill ' + goalClass(ytdPct);
+
+  // ── YTD TREND / PACE ──────────────────────────────────────
+  if (ytdGoal > 0) {
+    // Sum the prorated goals for all months we have data on (the tracked period)
+    let periodGoal = 0;
+    ALL_MONTHS_ORDER.forEach(mk => {
+      const mkWeeks = getWeeksForMonth(mk);
+      if (!mkWeeks.length) return;
+      const firstWi = WEEKS.indexOf(mkWeeks[0]);
+      if (firstWi > weekIdx) return;
+      const weeksWithData = mkWeeks.filter(w => WEEKS.indexOf(w) <= weekIdx).length;
+      const mkGoalVal = getProviderMonthlyGoal(p, mk);
+      periodGoal += mkGoalVal * (weeksWithData / mkWeeks.length);
+    });
+    const pace = periodGoal > 0 ? ytdData.revenue / periodGoal : 1;
+    const projectedEOY = Math.round(ytdGoal * pace);
+    const projectedPct = pct(projectedEOY, ytdGoal);
+    const gap = projectedEOY - ytdGoal;
+    const gapStr = (gap >= 0 ? '+' : '') + curFull(gap);
+
+    let trendLabel, trendClass;
+    if (pace >= 1.05)       { trendLabel = 'Ahead of Pace';    trendClass = 'trend-ahead'; }
+    else if (pace >= 0.97)  { trendLabel = 'On Track';         trendClass = 'trend-on'; }
+    else if (pace >= 0.88)  { trendLabel = 'Slightly Behind';  trendClass = 'trend-slight'; }
+    else                    { trendLabel = 'Behind Pace';       trendClass = 'trend-behind'; }
+
+    const badge = $('ytd-trend-badge');
+    badge.textContent = trendLabel;
+    badge.className   = 'ytd-trend-badge ' + trendClass;
+    $('ytd-trend-meta').innerHTML =
+      `At current pace — projected year-end: <strong>${curFull(projectedEOY)}</strong> (${projectedPct}% of goal&thinsp;·&thinsp;${gapStr} vs target)`;
+    $('ytd-trend-meta').style.display = '';
+    $('ytd-trend-badge').style.display = '';
+  } else {
+    $('ytd-trend-meta').style.display  = 'none';
+    $('ytd-trend-badge').style.display = 'none';
+  }
 
   $('ytdMonthRows').innerHTML = ALL_MONTHS_ORDER.map(mk => {
     const mkWeeks = getWeeksForMonth(mk);
@@ -1278,7 +1351,7 @@ function buildPrintDoc() {
   $('pd-date').textContent  = now;
   $('pd-name').textContent  = p.name + ' — 1:1 Performance Review';
   $('pd-sub').textContent   = locLabel + '  ·  ' + label;
-  $('pd-stamp').textContent = 'Generated ' + now + '  ·  ' + MARKETING_FOCUS.month;
+  $('pd-stamp').textContent = 'Generated ' + now + '  ·  ' + monthKey;
 
   $('pd-grid').innerHTML = [
     { lbl: 'Revenue',      val: curFull(d.revenue || 0), sub: gp => gp + '% of goal' },
@@ -1339,15 +1412,24 @@ function updateWeekNav() {
   $('weekNext').disabled = weekIdx === WEEKS.length - 1;
 }
 
-// Month selector
-$$('[data-f="month"]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    monthKey = btn.dataset.v;
-    $$('[data-f="month"]').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    refresh();
+// Month selector — set active tab to match auto-derived monthKey on load
+(function syncMonthTab() {
+  let matched = false;
+  $$('[data-f="month"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      monthKey = btn.dataset.v;
+      $$('[data-f="month"]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      refresh();
+    });
+    if (btn.dataset.v === monthKey) { btn.classList.add('active'); matched = true; }
   });
-});
+  // If no tab matched (e.g. a future month), activate the last tab
+  if (!matched) {
+    const tabs = $$('[data-f="month"]');
+    if (tabs.length) tabs[tabs.length - 1].classList.add('active');
+  }
+})();
 
 // Location filter
 $$('[data-f="loc"]').forEach(btn => {
