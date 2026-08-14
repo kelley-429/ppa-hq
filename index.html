@@ -1352,76 +1352,121 @@ let noteTimer;
 $('notesArea').addEventListener('input', () => { clearTimeout(noteTimer); noteTimer = setTimeout(saveNotes, 1200); });
 
 // ============================================================
-// PRINT
+// PRINT / DOWNLOAD
 // ============================================================
-function buildPrintDoc() {
-  const p = PROVIDERS[activeProviderIdx];
-  // Modal always shows weekly data
-  const isMonth = false;
-  const d       = WEEKS[weekIdx].providers[p.name] || {};
-  const label   = WEEKS[weekIdx].weekEnding;
-  const g  = getProviderGoal(p, isMonth);
-  const rg = getProviderRetailGoal(p, isMonth);
-  const ag = getProviderApptGoal(p, isMonth);
-  const avgInv = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
-  const locLabel = p.loc === 'ES' ? 'East Sacramento' : 'Roseville';
-  const now = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-  const recs = generateRecs(p, d, isMonth);
-
-  $('pd-date').textContent  = now;
-  $('pd-name').textContent  = p.name + ' — 1:1 Performance Review';
-  $('pd-sub').textContent   = locLabel + '  ·  ' + label;
-  $('pd-stamp').textContent = 'Generated ' + now + '  ·  ' + monthKey;
-
-  $('pd-grid').innerHTML = [
-    { lbl: 'Revenue',      val: curFull(d.revenue || 0), sub: gp => gp + '% of goal' },
-    { lbl: 'Goal',         val: curFull(g),               sub: () => isMonth ? 'Monthly target' : 'Weekly target' },
-    { lbl: 'Appointments', val: String(d.appts || 0),     sub: () => 'Goal: ' + ag },
-    { lbl: 'Avg Invoice',  val: avgInv > 0 ? curFull(avgInv) : '—', sub: () => '' },
-    { lbl: 'Service Sales',val: curFull(d.service || 0),  sub: () => '' },
-    { lbl: 'Product Sales',val: curFull(d.retail || 0),   sub: () => pct(d.retail || 0, rg) + '% of ' + curFull(rg) + ' goal' }
-  ].map(k => `<div class="pd-kcard"><div class="pd-klbl">${k.lbl}</div><div class="pd-kval">${k.val}</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">${typeof k.sub === 'function' ? k.sub(pct(d.revenue || 0, g)) : ''}</div></div>`).join('');
-
-  $('pd-bars').innerHTML = [
-    { name: 'Total Revenue', a: d.revenue || 0, g: g, s: '' },
-    { name: 'Product Sales', a: d.retail || 0, g: rg, s: '' },
-    { name: 'Appointments',  a: d.appts || 0, g: ag, s: '' }
-  ].map(b => {
-    const p2 = Math.min(pct(b.a, b.g), 100);
-    const disp = b.s ? b.a + b.s + ' of ' + b.g + b.s : curFull(b.a) + ' of ' + curFull(b.g);
-    return `<div class="pd-bar-row"><div class="pd-bar-top"><span>${b.name}</span><span>${pct(b.a, b.g)}% (${disp})</span></div><div class="pd-bar-track"><div class="pd-bar-fill" style="width:${p2}%"></div></div></div>`;
-  }).join('');
-
-  $('pd-recs').innerHTML = recs.map(r => `<div class="pd-rec">${r.icon}  ${r.text}</div>`).join('');
-  $('pd-notes').textContent = $('notesArea').value || '(No notes added)';
-}
-
 $('modalPrintBtn').addEventListener('click', () => {
-  saveNotes();
-  buildPrintDoc();
+  try {
+    saveNotes();
+    const p        = PROVIDERS[activeProviderIdx];
+    const d        = WEEKS[weekIdx].providers[p.name] || {};
+    const g        = getProviderGoal(p, false);
+    const rg       = getProviderRetailGoal(p, false);
+    const ag       = getProviderApptGoal(p, false);
+    const revPct   = pct(d.revenue || 0, g);
+    const retPct   = pct(d.retail  || 0, rg);
+    const aptPct   = pct(d.appts   || 0, ag);
+    const avgInv   = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
+    const locLabel = p.loc === 'ES' ? 'East Sacramento' : 'Roseville';
+    const now      = new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+    const label    = WEEKS[weekIdx].weekEnding;
+    const notes    = ($('notesArea') && $('notesArea').value) ? $('notesArea').value : '(No notes added)';
+    const recs     = generateRecs(p, d, false);
+    const trend    = calcYTDTrend(p);
 
-  // Hide everything except the print doc, print, then restore
-  const overlay  = $('modalOverlay');
-  const printDoc = $('printDoc');
-  const body     = document.body;
+    // Helper: colored bar row
+    function barRow(name, actual, goal, display) {
+      const w = Math.min(pct(actual, goal), 100);
+      const col = w >= 90 ? '#af492c' : w >= 72 ? '#541a09' : '#b02020';
+      return `<div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:4px">
+          <span>${name}</span><span>${pct(actual,goal)}% &nbsp;(${display})</span>
+        </div>
+        <div style="height:6px;background:#f0e0cc;border-radius:100px">
+          <div style="height:100%;width:${w}%;background:${col};border-radius:100px"></div>
+        </div>
+      </div>`;
+    }
 
-  overlay.style.display  = 'none';
-  printDoc.style.display = 'block';
-  body.style.overflow    = '';
+    const trendHtml = trend ? `
+      <div style="margin-top:14px;padding:10px 14px;background:#fdf8f5;border-left:3px solid #af492c;border-radius:0 6px 6px 0;font-size:11px;font-weight:700">
+        <span style="background:${trend.cls==='trend-ahead'||trend.cls==='trend-on'?'#e6f4ec':trend.cls==='trend-slight'?'#fff4e5':'#fbeaea'};color:${trend.cls==='trend-ahead'||trend.cls==='trend-on'?'#246e3e':trend.cls==='trend-slight'?'#955a00':'#b02020'};padding:2px 9px;border-radius:100px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:800">${trend.label}</span>
+        &nbsp; YTD pace → projected year-end: <strong>${curFull(trend.projectedEOY)}</strong> (${trend.projectedPct}% of annual goal)
+      </div>` : '';
 
-  // Restore after print dialog closes (works in all browsers)
-  function restore() {
-    overlay.style.display  = '';
-    printDoc.style.display = '';
-    body.style.overflow    = 'hidden';
-    window.removeEventListener('afterprint', restore);
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>${p.name} — 1:1 Review</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito',Arial,sans-serif;color:#080808;padding:44px 52px;max-width:820px;margin:auto;background:#fff}
+  h1{font-size:22px;font-weight:900;color:#541a09;margin-bottom:3px}
+  .sub{font-size:12px;color:#af492c;font-weight:700;margin-bottom:20px}
+  .section{font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#af492c;margin:20px 0 8px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
+  .kcard{border:1px solid #e8d8c4;border-radius:8px;padding:10px 13px}
+  .klbl{font-size:8px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#af492c;margin-bottom:4px}
+  .kval{font-size:20px;font-weight:900;color:#541a09}
+  .ksub{font-size:10px;color:#aaa;font-weight:700;margin-top:2px}
+  .rec{background:#fdf8f5;border-left:3px solid #af492c;padding:8px 12px;margin-bottom:7px;font-size:11px;font-weight:600;line-height:1.5;border-radius:0 6px 6px 0}
+  .notes{border:1px solid #e8d8c4;border-radius:8px;padding:12px;min-height:70px;font-size:12px;font-weight:600;white-space:pre-wrap;line-height:1.6;color:#444}
+  .footer{margin-top:28px;padding-top:10px;border-top:1px solid #e8d8c4;font-size:9px;color:#bbb;font-weight:700;display:flex;justify-content:space-between}
+  .header{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #541a09;padding-bottom:12px;margin-bottom:20px}
+  .brand{font-size:15px;font-weight:900;color:#541a09;letter-spacing:.04em;text-transform:uppercase}
+  @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{padding:0}}
+  @page{margin:.65in}
+</style>
+</head>
+<body>
+<div class="header"><div class="brand">Pretty Please Aesthetics</div><div style="font-size:11px;color:#888;font-weight:600">${now}</div></div>
+<h1>${p.name} — 1:1 Performance Review</h1>
+<div class="sub">${locLabel} &nbsp;·&nbsp; ${label}</div>
+
+<div class="section">Performance Snapshot</div>
+<div class="grid">
+  <div class="kcard"><div class="klbl">Revenue</div><div class="kval">${curFull(d.revenue||0)}</div><div class="ksub">${revPct}% of goal</div></div>
+  <div class="kcard"><div class="klbl">Goal</div><div class="kval">${curFull(g)}</div><div class="ksub">Weekly target</div></div>
+  <div class="kcard"><div class="klbl">Appointments</div><div class="kval">${d.appts||0}</div><div class="ksub">Goal: ${ag}</div></div>
+  <div class="kcard"><div class="klbl">Avg Invoice</div><div class="kval">${avgInv>0?curFull(avgInv):'—'}</div><div class="ksub">&nbsp;</div></div>
+  <div class="kcard"><div class="klbl">Service Sales</div><div class="kval">${curFull(d.service||0)}</div><div class="ksub">&nbsp;</div></div>
+  <div class="kcard"><div class="klbl">Product Sales</div><div class="kval">${curFull(d.retail||0)}</div><div class="ksub">${retPct}% of ${curFull(rg)} goal</div></div>
+</div>
+${trendHtml}
+
+<div class="section">Goal Progress</div>
+${barRow('Total Revenue', d.revenue||0, g, curFull(d.revenue||0)+' of '+curFull(g))}
+${barRow('Product Sales', d.retail||0, rg, curFull(d.retail||0)+' of '+curFull(rg))}
+${barRow('Appointments',  d.appts||0,  ag, (d.appts||0)+' of '+ag)}
+
+<div class="section">Recommendations</div>
+${recs.map(r=>`<div class="rec">${r.icon}&nbsp; ${r.text}</div>`).join('')}
+
+<div class="section">Manager Notes</div>
+<div class="notes">${notes.replace(/</g,'&lt;')}</div>
+
+<div class="footer">
+  <span>Confidential · Pretty Please Aesthetics</span>
+  <span>Generated ${now} · ${monthKey}</span>
+</div>
+</body>
+</html>`;
+
+    // Download as .html file — no popups required
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = p.name.replace(/[^a-z0-9]/gi, '_') + '_1on1_Review.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+
+  } catch(err) {
+    alert('Could not generate report: ' + err.message);
   }
-  window.addEventListener('afterprint', restore);
-
-  window.print();
-
-  // Fallback restore in case afterprint doesn't fire (older browsers)
-  setTimeout(restore, 2000);
 });
 $('modalBack').addEventListener('click', closeModal);
 $('saveNotesBtn').addEventListener('click', saveNotes);
