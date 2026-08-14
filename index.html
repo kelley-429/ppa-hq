@@ -1356,7 +1356,10 @@ $('notesArea').addEventListener('input', () => { clearTimeout(noteTimer); noteTi
 // ============================================================
 function buildPrintDoc() {
   const p = PROVIDERS[activeProviderIdx];
-  const { data: d, isMonth, label } = getModalData();
+  // Modal always shows weekly data
+  const isMonth = false;
+  const d       = WEEKS[weekIdx].providers[p.name] || {};
+  const label   = WEEKS[weekIdx].weekEnding;
   const g  = getProviderGoal(p, isMonth);
   const rg = getProviderRetailGoal(p, isMonth);
   const ag = getProviderApptGoal(p, isMonth);
