@@ -1090,6 +1090,7 @@ function renderProviders() {
     const revHrPct = (revHr != null && revHrGoal) ? pct(revHr, revHrGoal) : null;
     const revHrDisplay = revHr != null ? curFull(revHr) + '/hr' : '—';
     const revHrPctColor = revHrPct == null ? '#bbb' : revHrPct >= 90 ? '#246e3e' : revHrPct >= 72 ? '#b8860b' : '#b02020';
+    const revHrBarBg = revHrPct == null ? 'linear-gradient(90deg,#cfc3b5,#e0d6c8)' : revHrPct >= 90 ? 'linear-gradient(90deg,#af492c,#d2894e)' : revHrPct >= 72 ? 'linear-gradient(90deg,#541a09,#af492c)' : 'linear-gradient(90deg,#b02020,#d43a3a)';
 
     // YTD pace badge
     const trend = calcYTDTrend(p);
@@ -1107,18 +1108,18 @@ function renderProviders() {
           <div class="pinfo"><div class="pname" title="${p.name}">${p.name}</div><div class="ploc">${locLabel}</div></div>
           <div class="prank ${rClass}">#${i + 1}</div>
         </div>
-        <div class="prev">${curFull(d.revenue || 0)}</div>
-        <div class="pgoal-line"><strong style="color:${pctColor}">${gp}%</strong> of ${curFull(g)} weekly goal</div>
-        <div class="pbar"><div class="pbar-fill" style="width:${Math.min(gp, 100)}%;background:${barBg}"></div></div>
+        <div class="prev">${revHrDisplay}</div>
+        <div class="pgoal-line"><strong style="color:${revHrPctColor}">${revHrPct != null ? revHrPct + '%' : '—'}</strong> of ${revHrGoal ? curFull(revHrGoal) + '/hr' : '—'} Rev/Hr goal</div>
+        <div class="pbar"><div class="pbar-fill" style="width:${revHrPct != null ? Math.min(revHrPct, 100) : 0}%;background:${revHrBarBg}"></div></div>
         <div class="putil-row">
           <span class="putil-label">Utilization</span>
           <div class="putil-track"><div class="putil-fill" style="width:${utilWidth}%"></div></div>
           <span class="putil-val">${utilDisplay}</span>
         </div>
         <div class="prevhr-row">
-          <span class="putil-label">Rev/Hr</span>
-          <span class="prevhr-val">${revHrDisplay}</span>
-          <span class="prevhr-goal" style="color:${revHrPctColor}">${revHrPct != null ? revHrPct + '% of ' + curFull(revHrGoal) + '/hr goal' : 'no scheduled hours'}</span>
+          <span class="putil-label">Weekly Goal</span>
+          <span class="prevhr-val">${curFull(d.revenue || 0)}</span>
+          <span class="prevhr-goal" style="color:${pctColor}">${gp}% of ${curFull(g)}</span>
         </div>
         <hr class="pcard-divider">
         <div class="pstats">
