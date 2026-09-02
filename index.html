@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
 :root {
   --maroon: #541a09; --terra: #af492c; --rose: #e28078;
@@ -135,6 +134,9 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 .pbar { height: 5px; background: rgba(84,26,9,0.07); border-radius: 100px; overflow: hidden; margin-bottom: 11px; }
 .pbar-fill { height: 100%; border-radius: 100px; }
 .putil-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.prevhr-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px; }
+.prevhr-val { font-size: 12px; font-weight: 800; color: var(--maroon); }
+.prevhr-goal { font-size: 10px; font-weight: 700; }
 .putil-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terra); }
 .putil-val { font-size: 13px; font-weight: 800; color: var(--maroon); }
 .putil-track { flex: 1; height: 4px; background: rgba(84,26,9,0.07); border-radius: 100px; overflow: hidden; margin: 0 10px; }
@@ -292,75 +294,8 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 
 <main class="main">
   <div class="note-banner" id="noteBanner">
-    ⚡ <strong>Live data loaded</strong> — Jun 7 through Aug 9, 2026 (10 weeks). Shannon Wyly is excluded from provider rankings (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected.
+    ⚡ <strong>Live data loaded</strong> — Jun 7 through Aug 23, 2026 (12 weeks). Shannon Wyly is excluded from provider rankings (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected.
   </div>
-
-  <div class="slabel">Key Performance Indicators</div>
-  <div class="kpi-row">
-    <div class="kcard"><div class="kcard-lbl">Total Revenue</div><div class="kcard-val" id="kRevenue">—</div><div><span class="kbadge flat" id="kRevChange">—</span></div></div>
-    <div class="kcard"><div class="kcard-lbl">East Sacramento</div><div class="kcard-val" id="kES">—</div><div class="kcard-sub" id="kESSub">—</div></div>
-    <div class="kcard"><div class="kcard-lbl">Roseville</div><div class="kcard-val" id="kRV">—</div><div class="kcard-sub" id="kRVSub">—</div></div>
-    <div class="kcard"><div class="kcard-lbl">Product Sales</div><div class="kcard-val" id="kRetail">—</div><div><span class="kbadge flat" id="kRetailBadge">—</span></div></div>
-    <div class="kcard"><div class="kcard-lbl">Avg Invoice</div><div class="kcard-val" id="kAvgInvoice">—</div><div class="kcard-sub" id="kAvgSub">—</div></div>
-  </div>
-
-  <div class="slabel" style="margin-top:24px">Revenue Trends</div>
-  <div class="charts-row">
-    <div class="chart-card">
-      <div class="chart-title" id="trendTitle">8-Week Revenue Trend</div>
-      <div class="chart-sub">Monday–Sunday reporting weeks · East Sacramento vs. Roseville</div>
-      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Location Breakdown</div>
-      <div class="chart-sub">Service revenue vs. product sales by location</div>
-      <div class="chart-wrap"><canvas id="locChart"></canvas></div>
-    </div>
-  </div>
-
-  <div class="slabel">Goal Progress</div>
-  <div class="goals-row">
-    <div class="gcard">
-      <div class="gcard-title">Revenue Goals</div>
-      <div class="goal-row"><div class="goal-top"><span class="goal-name">Total Revenue</span><span class="goal-pct" id="gpTotalPct">—</span></div><div class="goal-vals" id="gpTotalVals">—</div><div class="gtrack"><div class="gfill near" id="gpTotalFill" style="width:0%"></div></div></div>
-      <div class="goal-row"><div class="goal-top"><span class="goal-name">East Sacramento</span><span class="goal-pct" id="gpESPct">—</span></div><div class="goal-vals" id="gpESVals">—</div><div class="gtrack"><div class="gfill hit" id="gpESFill" style="width:0%"></div></div></div>
-      <div class="goal-row"><div class="goal-top"><span class="goal-name">Roseville</span><span class="goal-pct" id="gpRVPct">—</span></div><div class="goal-vals" id="gpRVVals">—</div><div class="gtrack"><div class="gfill near" id="gpRVFill" style="width:0%"></div></div></div>
-    </div>
-    <div class="gcard">
-      <div class="gcard-title">Sales Goals</div>
-      <div class="goal-row"><div class="goal-top"><span class="goal-name">Product Sales</span><span class="goal-pct" id="gpRetailPct">—</span></div><div class="goal-vals" id="gpRetailVals">—</div><div class="gtrack"><div class="gfill near" id="gpRetailFill" style="width:0%"></div></div></div>
-      <div class="goal-row"><div class="goal-top"><span class="goal-name">Service Revenue</span><span class="goal-pct" id="gpServicePct">—</span></div><div class="goal-vals" id="gpServiceVals">—</div><div class="gtrack"><div class="gfill near" id="gpServiceFill" style="width:0%"></div></div></div>
-      <div class="goal-row"><div class="goal-top"><span class="goal-name">Appointments</span><span class="goal-pct" id="gpApptsPct">—</span></div><div class="goal-vals" id="gpApptsVals">—</div><div class="gtrack"><div class="gfill near" id="gpApptsFill" style="width:0%"></div></div></div>
-    </div>
-  </div>
-
-  <!-- Monthly comparison (only shown in monthly view) -->
-  <div id="monthCompare" style="display:none">
-    <div class="slabel">Month-over-Month Comparison</div>
-    <div class="month-compare">
-      <div class="mcompare-card">
-        <div class="mcompare-title">June 2026</div>
-        <div class="mstat-row"><span class="mstat-label">Total Revenue</span><span class="mstat-val" id="mc-june-rev">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">East Sacramento</span><span class="mstat-val" id="mc-june-es">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">Roseville</span><span class="mstat-val" id="mc-june-rv">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">Product Sales</span><span class="mstat-val" id="mc-june-retail">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">Total Appointments</span><span class="mstat-val" id="mc-june-appts">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">Avg Invoice</span><span class="mstat-val" id="mc-june-avg">—</span></div>
-      </div>
-      <div class="mcompare-card">
-        <div class="mcompare-title">July 2026 <span style="font-size:11px;font-weight:600;color:#888">(4 weeks to date)</span></div>
-        <div class="mstat-row"><span class="mstat-label">Total Revenue</span><span class="mstat-val" id="mc-july-rev">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">East Sacramento</span><span class="mstat-val" id="mc-july-es">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">Roseville</span><span class="mstat-val" id="mc-july-rv">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">Product Sales</span><span class="mstat-val" id="mc-july-retail">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">Total Appointments</span><span class="mstat-val" id="mc-july-appts">—</span></div>
-        <div class="mstat-row"><span class="mstat-label">Avg Invoice</span><span class="mstat-val" id="mc-july-avg">—</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="slabel">Provider Scorecards <span style="font-weight:400;opacity:.6;letter-spacing:0">— click any card to open 1:1 review</span></div>
-  <div class="providers-grid" id="providerGrid"></div>
 
   <div class="slabel">Provider Leaderboard</div>
   <div class="lb-card">
@@ -372,6 +307,8 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
         <th data-col="location">Location</th>
         <th data-col="revenue">Revenue</th>
         <th data-col="goalPct">Goal %</th>
+        <th data-col="revHour">Rev/Hr</th>
+        <th data-col="revHourGoalPct">Rev/Hr Goal %</th>
         <th data-col="avgInvoice">Avg Invoice</th>
         <th data-col="appts">Appts</th>
         <th data-col="service">Service</th>
@@ -380,6 +317,9 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
       <tbody id="lbBody"></tbody>
     </table>
   </div>
+
+  <div class="slabel" style="margin-top:24px">Provider Scorecards <span style="font-weight:400;opacity:.6;letter-spacing:0">— click any card to open 1:1 review</span></div>
+  <div class="providers-grid" id="providerGrid"></div>
 </main>
 
 <footer class="footer">
@@ -412,6 +352,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
         <div class="mkcard"><div class="mkcard-lbl">Avg Invoice</div><div class="mkcard-val" id="mk-avginvoice">—</div><div class="mkcard-sub" id="mk-avginvoice-sub">—</div></div>
         <div class="mkcard"><div class="mkcard-lbl">Service Sales</div><div class="mkcard-val" id="mk-service">—</div><div class="mkcard-sub" id="mk-service-sub">—</div></div>
         <div class="mkcard"><div class="mkcard-lbl">Product Sales</div><div class="mkcard-val" id="mk-retail">—</div><div class="mkcard-sub" id="mk-retail-sub">—</div></div>
+        <div class="mkcard"><div class="mkcard-lbl">Rev/Hr</div><div class="mkcard-val" id="mk-revhr">—</div><div class="mkcard-sub" id="mk-revhr-sub">—</div></div>
         <div class="mkcard" style="grid-column:1/-1"><div class="mkcard-lbl">Utilization</div><div style="display:flex;align-items:center;gap:12px;margin-top:6px"><div class="mkcard-val" id="mk-util">—</div><div style="flex:1;height:6px;background:rgba(84,26,9,0.07);border-radius:100px;overflow:hidden"><div id="mk-util-fill" style="height:100%;border-radius:100px;background:linear-gradient(90deg,#af492c,#d2894e);width:0%;transition:width .9s"></div></div></div><div class="mkcard-sub" id="mk-util-sub">—</div></div>
       </div>
       <div class="modal-goals">
@@ -595,6 +536,56 @@ const PROVIDERS = [
   { name: 'Taylor Raney',     initials: 'TR', loc: 'ES', apptGoal: 10 }
 ];
 
+// ============================================================
+// REV/HR GOALS — from 2026 Goals Worksheet, SPH/Goals tab
+// Tier used = SPH 4 for everyone, EXCEPT:
+//   Brittany Winblad — SPH 2 ($180/hr) through Nov 2026, then SPH 3 ($240/hr) from Dec 2026
+//   Taylor Raney     — SPH 3 ($240/hr) through Dec 2026, then SPH 4 ($350/hr) from Jan 2027
+// This is the metric used to rank providers (scorecards + leaderboard "top 3")
+// ============================================================
+const REV_HOUR_GOAL_SPH4 = {
+  'Arlene Milam': 900,
+  "Emma O'Malley": 900,
+  'Kate Cunningham': 1200,
+  'Melanie Lolmaugh': 900,
+  'Jackie Garcia': 350,
+  'Reanna Mich': 1200,
+  'Brittany Winblad': 240,  // SPH3 rate, used from Dec 2026 onward
+  'Taylor Raney': 350       // SPH4 rate, used from Jan 2027 onward
+};
+function monthSortKey(mkey) {
+  const MI = { January:1, February:2, March:3, April:4, May:5, June:6, July:7, August:8, September:9, October:10, November:11, December:12 };
+  const parts = (mkey || '').split(' ');
+  if (parts.length !== 2) return 0;
+  const mi = MI[parts[0]], yr = parseInt(parts[1], 10);
+  return (mi && yr) ? yr * 12 + mi : 0;
+}
+function getRevHourGoal(p, mkey) {
+  if (p.name === 'Brittany Winblad') {
+    return monthSortKey(mkey) >= monthSortKey('December 2026') ? 240 : 180;
+  }
+  if (p.name === 'Taylor Raney') {
+    return monthSortKey(mkey) >= monthSortKey('January 2027') ? 350 : 240;
+  }
+  return REV_HOUR_GOAL_SPH4[p.name] || null;
+}
+function getCurrentRevHourGoal(p, isMonth) {
+  const mkey = isMonth ? monthKey : (WEEK_MONTH[WEEKS[weekIdx].key] || monthKey);
+  return getRevHourGoal(p, mkey);
+}
+// Actual $/hr for a provider from a given data record { revenue, schedHours }
+function calcRevHour(d) {
+  const hrs = d.schedHours || 0;
+  return hrs > 0 ? (d.revenue || 0) / hrs : null;
+}
+function getProviderRevHourGoalPct(p, isMonth) {
+  const d = getCurrentProviderData(p.name);
+  const actual = calcRevHour(d);
+  const goal = getCurrentRevHourGoal(p, isMonth);
+  if (actual == null || !goal) return -1; // no data — sorts last
+  return pct(actual, goal);
+}
+
 // Monthly goals per provider from 2026 Goal Sheet (set by Kate Cunningham)
 // Weekly goal = monthly / 4
 // Monthly revenue goals per provider — from 2026 Goals Worksheet (set by Kate Cunningham)
@@ -660,6 +651,7 @@ const WEEK_MONTH = {
   '8/2':  'August 2026',
   '8/9':  'August 2026',
   '8/16': 'August 2026',
+  '8/23': 'August 2026',
 };
 
 // ============================================================
@@ -668,37 +660,40 @@ const WEEK_MONTH = {
 const WEEKS = [
   { key:'6/7',  label:'Jun 7',  weekEnding:'Sunday, June 7, 2026',
     summary:{ total:75680, es:65260, rv:10420, service:59471, retail:5801, appts:120 },
-    providers:{ 'Arlene Milam':{revenue:8283,service:7254,retail:1030,appts:11}, "Emma O'Malley":{revenue:0,service:0,retail:0,appts:0}, 'Shannon Wyly':{revenue:1075,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:35463,service:34364,retail:649,appts:59}, 'Melanie Lolmaugh':{revenue:0,service:0,retail:0,appts:0}, 'Jackie Garcia':{revenue:6113,service:3018,retail:2945,appts:16}, 'Reanna Mich':{revenue:21136,service:20176,retail:60,appts:21}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0}, 'Taylor Raney':{revenue:3610,service:2492,retail:1118,appts:13} }},
+    providers:{ 'Arlene Milam':{revenue:8283,service:7254,retail:1030,appts:11,schedHours:13.0}, "Emma O'Malley":{revenue:0,service:0,retail:0,appts:0,schedHours:0.0}, 'Shannon Wyly':{revenue:1075,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:35463,service:34364,retail:649,appts:59,schedHours:41.5}, 'Melanie Lolmaugh':{revenue:0,service:0,retail:0,appts:0,schedHours:0.0}, 'Jackie Garcia':{revenue:6113,service:3018,retail:2945,appts:16,schedHours:24.08}, 'Reanna Mich':{revenue:21136,service:20176,retail:60,appts:21,schedHours:12.0}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,schedHours:11.0}, 'Taylor Raney':{revenue:3610,service:2492,retail:1118,appts:13,schedHours:30.0} }},
   { key:'6/14', label:'Jun 14', weekEnding:'Sunday, June 14, 2026',
     summary:{ total:67376, es:59412, rv:7964, service:57366, retail:2885, appts:118 },
-    providers:{ 'Arlene Milam':{revenue:6454,service:4601,retail:68,appts:8}, "Emma O'Malley":{revenue:2836,service:2836,retail:0,appts:6}, 'Shannon Wyly':{revenue:325,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:34718,service:33403,retail:1165,appts:55}, 'Melanie Lolmaugh':{revenue:0,service:0,retail:0,appts:0}, 'Jackie Garcia':{revenue:4847,service:3286,retail:1086,appts:18}, 'Reanna Mich':{revenue:15952,service:13244,retail:348,appts:21}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0}, 'Taylor Raney':{revenue:2244,service:2028,retail:217,appts:10} }},
+    providers:{ 'Arlene Milam':{revenue:6454,service:4601,retail:68,appts:8,schedHours:19.0}, "Emma O'Malley":{revenue:2836,service:2836,retail:0,appts:6,schedHours:8.5}, 'Shannon Wyly':{revenue:325,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:34718,service:33403,retail:1165,appts:55,schedHours:32.0}, 'Melanie Lolmaugh':{revenue:0,service:0,retail:0,appts:0,schedHours:0.0}, 'Jackie Garcia':{revenue:4847,service:3286,retail:1086,appts:18,schedHours:24.25}, 'Reanna Mich':{revenue:15952,service:13244,retail:348,appts:21,schedHours:13.0}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,schedHours:6.0}, 'Taylor Raney':{revenue:2244,service:2028,retail:217,appts:10,schedHours:34.0} }},
   { key:'6/21', label:'Jun 21', weekEnding:'Sunday, June 21, 2026',
     summary:{ total:55465, es:40603, rv:14862, service:48365, retail:2464, appts:100 },
-    providers:{ 'Arlene Milam':{revenue:12803,service:12338,retail:136,appts:18}, "Emma O'Malley":{revenue:6711,service:6711,retail:0,appts:9}, 'Shannon Wyly':{revenue:1400,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:5544,service:3070,retail:104,appts:11}, 'Melanie Lolmaugh':{revenue:10812,service:10793,retail:19,appts:16}, 'Jackie Garcia':{revenue:5199,service:3955,retail:1094,appts:18}, 'Reanna Mich':{revenue:10155,service:9705,retail:0,appts:16}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:2}, 'Taylor Raney':{revenue:2841,service:1730,retail:1110,appts:10} }},
+    providers:{ 'Arlene Milam':{revenue:12803,service:12338,retail:136,appts:18,schedHours:24.0}, "Emma O'Malley":{revenue:6711,service:6711,retail:0,appts:9,schedHours:8.5}, 'Shannon Wyly':{revenue:1400,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:5544,service:3070,retail:104,appts:11,schedHours:7.5}, 'Melanie Lolmaugh':{revenue:10812,service:10793,retail:19,appts:16,schedHours:13.5}, 'Jackie Garcia':{revenue:5199,service:3955,retail:1094,appts:18,schedHours:24.25}, 'Reanna Mich':{revenue:10155,service:9705,retail:0,appts:16,schedHours:12.0}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:2,schedHours:11.0}, 'Taylor Raney':{revenue:2841,service:1730,retail:1110,appts:10,schedHours:34.0} }},
   { key:'6/28', label:'Jun 28', weekEnding:'Sunday, June 28, 2026',
     summary:{ total:70975, es:65765, rv:5209, service:62085, retail:3222, appts:92 },
-    providers:{ 'Arlene Milam':{revenue:4130,service:3590,retail:290,appts:6}, "Emma O'Malley":{revenue:417,service:417,retail:0,appts:4}, 'Shannon Wyly':{revenue:600,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:45865,service:44860,retail:365,appts:41}, 'Melanie Lolmaugh':{revenue:150,service:0,retail:0,appts:0}, 'Jackie Garcia':{revenue:3556,service:2630,retail:911,appts:13}, 'Reanna Mich':{revenue:12730,service:11191,retail:364,appts:20}, 'Brittany Winblad':{revenue:285,service:225,retail:60,appts:1}, 'Taylor Raney':{revenue:3241,service:2010,retail:1232,appts:7} }},
+    providers:{ 'Arlene Milam':{revenue:4130,service:3590,retail:290,appts:6,schedHours:6.0}, "Emma O'Malley":{revenue:417,service:417,retail:0,appts:4,schedHours:8.5}, 'Shannon Wyly':{revenue:600,service:0,retail:0,appts:0}, 'Kate Cunningham':{revenue:45865,service:44860,retail:365,appts:41,schedHours:23.5}, 'Melanie Lolmaugh':{revenue:150,service:0,retail:0,appts:0,schedHours:0.0}, 'Jackie Garcia':{revenue:3556,service:2630,retail:911,appts:13,schedHours:15.25}, 'Reanna Mich':{revenue:12730,service:11191,retail:364,appts:20,schedHours:13.0}, 'Brittany Winblad':{revenue:285,service:225,retail:60,appts:1,schedHours:6.0}, 'Taylor Raney':{revenue:3241,service:2010,retail:1232,appts:7,schedHours:30.0} }},
   { key:'7/5',  label:'Jul 5',  weekEnding:'Sunday, July 5, 2026',
     summary:{ total:75324, es:57168, rv:18156, service:65911, retail:2963, appts:123 },
-    providers:{ 'Arlene Milam':{revenue:8392,service:7562,retail:405,appts:12,util:38.2}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:47.1}, 'Shannon Wyly':{revenue:1050,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:41820,service:37766,retail:829,appts:57,util:74.3}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:3,util:16.7}, 'Jackie Garcia':{revenue:4230,service:2846,retail:1234,appts:17,util:75.9}, 'Reanna Mich':{revenue:12334,service:11446,retail:288,appts:15,util:60.7}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0}, 'Taylor Raney':{revenue:1566,service:1372,retail:195,appts:7,util:14.6} }},
+    providers:{ 'Arlene Milam':{revenue:8392,service:7562,retail:405,appts:12,util:38.2,schedHours:19.0}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:47.1,schedHours:8.5}, 'Shannon Wyly':{revenue:1050,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:41820,service:37766,retail:829,appts:57,util:74.3,schedHours:34.5}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:3,util:16.7,schedHours:7.5}, 'Jackie Garcia':{revenue:4230,service:2846,retail:1234,appts:17,util:75.9,schedHours:19.75}, 'Reanna Mich':{revenue:12334,service:11446,retail:288,appts:15,util:60.7,schedHours:14.0}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0,schedHours:6.0}, 'Taylor Raney':{revenue:1566,service:1372,retail:195,appts:7,util:14.6,schedHours:32.5} }},
   { key:'7/12', label:'Jul 12', weekEnding:'Sunday, July 12, 2026',
     summary:{ total:43854, es:41423, rv:2431, service:32247, retail:3046, appts:76 },
-    providers:{ 'Arlene Milam':{revenue:325,service:0,retail:0,appts:0,util:null}, "Emma O'Malley":{revenue:0,service:0,retail:0,appts:0,util:0.0}, 'Shannon Wyly':{revenue:800,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:10818,service:9075,retail:593,appts:30,util:41.1}, 'Melanie Lolmaugh':{revenue:12294,service:7894,retail:0,appts:9,util:48.1}, 'Jackie Garcia':{revenue:4923,service:3078,retail:1160,appts:15,util:64.6}, 'Reanna Mich':{revenue:11848,service:10469,retail:178,appts:14,util:65.4}, 'Brittany Winblad':{revenue:125,service:125,retail:0,appts:1,util:4.5}, 'Taylor Raney':{revenue:2721,service:1606,retail:1115,appts:7,util:20.1} }},
+    providers:{ 'Arlene Milam':{revenue:325,service:0,retail:0,appts:0,util:null,schedHours:0.0}, "Emma O'Malley":{revenue:0,service:0,retail:0,appts:0,util:0.0,schedHours:8.5}, 'Shannon Wyly':{revenue:800,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:10818,service:9075,retail:593,appts:30,util:41.1,schedHours:22.5}, 'Melanie Lolmaugh':{revenue:12294,service:7894,retail:0,appts:9,util:48.1,schedHours:13.5}, 'Jackie Garcia':{revenue:4923,service:3078,retail:1160,appts:15,util:64.6,schedHours:23.75}, 'Reanna Mich':{revenue:11848,service:10469,retail:178,appts:14,util:65.4,schedHours:13.0}, 'Brittany Winblad':{revenue:125,service:125,retail:0,appts:1,util:4.5,schedHours:11.0}, 'Taylor Raney':{revenue:2721,service:1606,retail:1115,appts:7,util:20.1,schedHours:34.0} }},
   { key:'7/19', label:'Jul 19', weekEnding:'Sunday, July 19, 2026',
     summary:{ total:80722, es:60581, rv:20141, service:70200, retail:2246, appts:109 },
-    providers:{ 'Arlene Milam':{revenue:325,service:0,retail:0,appts:0,util:null}, "Emma O'Malley":{revenue:5656,service:5656,retail:0,appts:8,util:50.0}, 'Shannon Wyly':{revenue:925,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:44882,service:43514,retail:68,appts:49,util:56.8}, 'Melanie Lolmaugh':{revenue:10451,service:7804,retail:147,appts:13,util:83.3}, 'Jackie Garcia':{revenue:4754,service:3168,retail:961,appts:15,util:61.4}, 'Reanna Mich':{revenue:10684,service:10065,retail:19,appts:13,util:54.2}, 'Brittany Winblad':{revenue:440,service:440,retail:0,appts:2,util:33.3}, 'Taylor Raney':{revenue:2604,service:1553,retail:1051,appts:9,util:25.7} }},
+    providers:{ 'Arlene Milam':{revenue:325,service:0,retail:0,appts:0,util:null,schedHours:0.0}, "Emma O'Malley":{revenue:5656,service:5656,retail:0,appts:8,util:50.0,schedHours:8.5}, 'Shannon Wyly':{revenue:925,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:44882,service:43514,retail:68,appts:49,util:56.8,schedHours:40.5}, 'Melanie Lolmaugh':{revenue:10451,service:7804,retail:147,appts:13,util:83.3,schedHours:13.5}, 'Jackie Garcia':{revenue:4754,service:3168,retail:961,appts:15,util:61.4,schedHours:22.25}, 'Reanna Mich':{revenue:10684,service:10065,retail:19,appts:13,util:54.2,schedHours:12.0}, 'Brittany Winblad':{revenue:440,service:440,retail:0,appts:2,util:33.3,schedHours:6.0}, 'Taylor Raney':{revenue:2604,service:1553,retail:1051,appts:9,util:25.7,schedHours:34.0} }},
   { key:'7/26', label:'Jul 26', weekEnding:'Sunday, July 26, 2026',
     summary:{ total:63381, es:40799, rv:22582, service:52853, retail:4151, appts:106 },
-    providers:{ 'Arlene Milam':{revenue:19835,service:15215,retail:1395,appts:17,util:61.1}, "Emma O'Malley":{revenue:6043,service:6043,retail:0,appts:7,util:64.7}, 'Shannon Wyly':{revenue:775,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:15989,service:15074,retail:445,appts:29,util:47.8}, 'Melanie Lolmaugh':{revenue:2004,service:1957,retail:47,appts:4,util:16.7}, 'Jackie Garcia':{revenue:4742,service:3597,retail:1144,appts:15,util:56.4}, 'Reanna Mich':{revenue:8991,service:7706,retail:60,appts:19,util:55.8}, 'Brittany Winblad':{revenue:331,service:331,retail:0,appts:2,util:18.2}, 'Taylor Raney':{revenue:4671,service:2927,retail:1060,appts:13,util:42.2} }},
+    providers:{ 'Arlene Milam':{revenue:19835,service:15215,retail:1395,appts:17,util:61.1,schedHours:24.0}, "Emma O'Malley":{revenue:6043,service:6043,retail:0,appts:7,util:64.7,schedHours:8.5}, 'Shannon Wyly':{revenue:775,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:15989,service:15074,retail:445,appts:29,util:47.8,schedHours:22.5}, 'Melanie Lolmaugh':{revenue:2004,service:1957,retail:47,appts:4,util:16.7,schedHours:13.5}, 'Jackie Garcia':{revenue:4742,service:3597,retail:1144,appts:15,util:56.4,schedHours:23.5}, 'Reanna Mich':{revenue:8991,service:7706,retail:60,appts:19,util:55.8,schedHours:13.0}, 'Brittany Winblad':{revenue:331,service:331,retail:0,appts:2,util:18.2,schedHours:11.0}, 'Taylor Raney':{revenue:4671,service:2927,retail:1060,appts:13,util:42.2,schedHours:34.0} }},
   { key:'8/2',  label:'Aug 2',  weekEnding:'Sunday, August 2, 2026',
     summary:{ total:74250, es:64709, rv:9541, service:65954, retail:2846, appts:140 },
-    providers:{ 'Arlene Milam':{revenue:8392,service:7562,retail:405,appts:15,util:59.6}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:2.9}, 'Shannon Wyly':{revenue:1050,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:41820,service:37766,retail:829,appts:68,util:59.4}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:4,util:70.4}, 'Jackie Garcia':{revenue:4231,service:2847,retail:1234,appts:21,util:63.6}, 'Reanna Mich':{revenue:12334,service:11446,retail:288,appts:18,util:29.2}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0}, 'Taylor Raney':{revenue:492,service:414,retail:78,appts:2,util:7.6} }},
+    providers:{ 'Arlene Milam':{revenue:8392,service:7562,retail:405,appts:15,util:59.6,schedHours:13.0}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:2.9,schedHours:8.5}, 'Shannon Wyly':{revenue:1050,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:41820,service:37766,retail:829,appts:68,util:59.4,schedHours:34.5}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:4,util:70.4,schedHours:13.5}, 'Jackie Garcia':{revenue:4231,service:2847,retail:1234,appts:21,util:63.6,schedHours:24.75}, 'Reanna Mich':{revenue:12334,service:11446,retail:288,appts:18,util:29.2,schedHours:12.0}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0,schedHours:6.0}, 'Taylor Raney':{revenue:492,service:414,retail:78,appts:2,util:7.6,schedHours:34.0} }},
   { key:'8/9',  label:'Aug 9',  weekEnding:'Sunday, August 9, 2026',
     summary:{ total:75484, es:55073, rv:20411, service:66819, retail:5090, appts:117 },
-    providers:{ 'Arlene Milam':{revenue:18196,service:17953,retail:243,appts:22,util:66.7}, "Emma O'Malley":{revenue:1961,service:1748,retail:213,appts:3,util:20.6}, 'Shannon Wyly':{revenue:1318,service:0,retail:393,appts:0,util:null}, 'Kate Cunningham':{revenue:32131,service:29488,retail:1193,appts:39,util:64.6}, 'Melanie Lolmaugh':{revenue:1418,service:1418,retail:0,appts:5,util:25.0}, 'Jackie Garcia':{revenue:5809,service:3972,retail:1687,appts:16,util:71.0}, 'Reanna Mich':{revenue:10841,service:9588,retail:203,appts:19,util:85.7}, 'Brittany Winblad':{revenue:774,service:696,retail:78,appts:3,util:28.0}, 'Taylor Raney':{revenue:3036,service:1956,retail:1080,appts:10,util:38.9} }},
+    providers:{ 'Arlene Milam':{revenue:18196,service:17953,retail:243,appts:22,util:66.7,schedHours:24.0}, "Emma O'Malley":{revenue:1961,service:1748,retail:213,appts:3,util:20.6,schedHours:8.5}, 'Shannon Wyly':{revenue:1318,service:0,retail:393,appts:0,util:null}, 'Kate Cunningham':{revenue:32131,service:29488,retail:1193,appts:39,util:64.6,schedHours:32.5}, 'Melanie Lolmaugh':{revenue:1418,service:1418,retail:0,appts:5,util:25.0,schedHours:6.0}, 'Jackie Garcia':{revenue:5809,service:3972,retail:1687,appts:16,util:71.0,schedHours:23.25}, 'Reanna Mich':{revenue:10841,service:9588,retail:203,appts:19,util:85.7,schedHours:14.0}, 'Brittany Winblad':{revenue:774,service:696,retail:78,appts:3,util:28.0,schedHours:11.0}, 'Taylor Raney':{revenue:3036,service:1956,retail:1080,appts:10,util:38.9,schedHours:30.0} }},
   { key:'8/16', label:'Aug 16', weekEnding:'Sunday, August 16, 2026',
     summary:{ total:68800, es:52761, rv:16039, service:65954, retail:2846, appts:127 },
-    providers:{ 'Arlene Milam':{revenue:7967,service:7562,retail:405,appts:15,util:53.8}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:44.1}, 'Shannon Wyly':{revenue:0,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:38595,service:37766,retail:829,appts:61,util:59.0}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:3,util:21.6}, 'Jackie Garcia':{revenue:4081,service:2847,retail:1234,appts:19,util:51.4}, 'Reanna Mich':{revenue:11734,service:11446,retail:288,appts:15,util:41.1}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0}, 'Taylor Raney':{revenue:492,service:414,retail:78,appts:2,util:29.2} }}
+    providers:{ 'Arlene Milam':{revenue:7967,service:7562,retail:405,appts:15,util:53.8,schedHours:13.0}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:44.1,schedHours:8.5}, 'Shannon Wyly':{revenue:0,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:38595,service:37766,retail:829,appts:61,util:59.0,schedHours:41.5}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:3,util:21.6,schedHours:13.5}, 'Jackie Garcia':{revenue:4081,service:2847,retail:1234,appts:19,util:51.4,schedHours:18.5}, 'Reanna Mich':{revenue:11734,service:11446,retail:288,appts:15,util:41.1,schedHours:14.0}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0,schedHours:6.0}, 'Taylor Raney':{revenue:492,service:414,retail:78,appts:2,util:29.2,schedHours:32.0} }},
+  { key:'8/23', label:'Aug 23', weekEnding:'Sunday, August 23, 2026',
+    summary:{ total:68659, es:37885, rv:30774, service:57618, retail:2466, appts:106 },
+    providers:{ 'Arlene Milam':{revenue:19186,service:12405,retail:906,appts:13,util:101.9,schedHours:13.0}, "Emma O'Malley":{revenue:2988,service:2988,retail:0,appts:7,util:44.1,schedHours:8.5}, 'Shannon Wyly':{revenue:450,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:25691,service:24436,retail:355,appts:41,util:49.3,schedHours:35.5}, 'Melanie Lolmaugh':{revenue:5077,service:5077,retail:0,appts:11,util:48.1,schedHours:13.5}, 'Jackie Garcia':{revenue:2630,service:2100,retail:380,appts:11,util:33.3,schedHours:23.75}, 'Reanna Mich':{revenue:9912,service:8862,retail:0,appts:12,util:37.5,schedHours:14.0}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0.0}, 'Taylor Raney':{revenue:2576,service:1751,retail:825,appts:11,util:40.6,schedHours:24.0} }}
 ];
 
 const MONTHS = {
@@ -711,21 +706,22 @@ const MONTHS = {
     providers: {}
   },
   'August 2026': {
-    summary: { total:218534, es:172543, rv:45991, service:198727, retail:10782, appts:384 },
+    summary: { total:287193, es:210428, rv:76765, service:256345, retail:13248, appts:490 },
     providers: {}
   }
 };
 // Build monthly provider aggregates
-const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,11] };
+const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,12] };
 ['June 2026','July 2026','August 2026'].forEach(mkey => {
   const [s,e] = MONTH_WEEK_RANGES[mkey];
   const wks = WEEKS.slice(s,e);
   PROVIDERS.forEach(p => {
-    const agg = { revenue:0, service:0, retail:0, appts:0 };
+    const agg = { revenue:0, service:0, retail:0, appts:0, schedHours:0 };
     wks.forEach(w => {
       const d = w.providers[p.name] || {};
       agg.revenue += d.revenue||0; agg.service += d.service||0;
       agg.retail  += d.retail||0;  agg.appts   += d.appts||0;
+      agg.schedHours += d.schedHours||0;
     });
     MONTHS[mkey].providers[p.name] = agg;
   });
@@ -742,7 +738,6 @@ let locFilter = 'all';
 // mModalPeriod removed — modal always shows weekly data + MTD + YTD sections
 let activeProviderIdx = 0;
 let sortCol = 'rank', sortAsc = true;
-let trendChart, locChart;
 
 // ============================================================
 // UTILS
@@ -790,13 +785,17 @@ function filteredProviders() {
   if (locFilter === 'all') return PROVIDERS;
   return PROVIDERS.filter(p => p.loc === locFilter);
 }
+function getWeeklyRevHourGoalPct(p) {
+  const d = WEEKS[weekIdx].providers[p.name] || {};
+  const actual = calcRevHour(d);
+  const goal = getCurrentRevHourGoal(p, false);
+  if (actual == null || !goal) return -1; // no data — sorts last
+  return pct(actual, goal);
+}
 function rankedProviders() {
+  // Scorecards always reflect the selected week (see renderProviders), so rank on that basis
   const fps = filteredProviders();
-  return [...fps].sort((a, b) => {
-    const ra = getCurrentProviderData(a.name).revenue || 0;
-    const rb = getCurrentProviderData(b.name).revenue || 0;
-    return rb - ra;
-  });
+  return [...fps].sort((a, b) => getWeeklyRevHourGoalPct(b) - getWeeklyRevHourGoalPct(a));
 }
 
 // ============================================================
@@ -810,168 +809,6 @@ function updateMeta() {
     $('metaLabel').textContent = 'Viewing';
     $('metaValue').textContent = monthKey;
   }
-}
-
-// ============================================================
-// KPI CARDS
-// ============================================================
-function updateCards() {
-  const s = getCurrentData();
-  const g = getCurrentGoals();
-  const rev = locFilter === 'ES' ? s.es : locFilter === 'RV' ? s.rv : s.total;
-  const revGoal = locFilter === 'ES' ? g.es : locFilter === 'RV' ? g.rv : g.total;
-
-  $('kRevenue').textContent = curFull(rev);
-  $('kES').textContent = curFull(s.es);
-  $('kESSub').textContent = pct(s.es, g.es) + '% of ' + cur(g.es) + ' goal';
-  $('kRV').textContent = curFull(s.rv);
-  $('kRVSub').textContent = pct(s.rv, g.rv) + '% of ' + cur(g.rv) + ' goal';
-  $('kRetail').textContent = curFull(s.retail);
-  const rtp = pct(s.retail, g.retail);
-  $('kRetailBadge').textContent = rtp + '% of ' + cur(g.retail) + ' goal';
-  $('kRetailBadge').className = 'kbadge ' + (rtp >= 90 ? 'up' : rtp >= 70 ? 'flat' : 'down');
-
-  const avgInv = s.appts > 0 ? Math.round(rev / s.appts) : 0;
-  $('kAvgInvoice').textContent = curFull(avgInv);
-  $('kAvgSub').textContent = s.appts + ' appointments';
-
-  // Week-on-week change
-  if (viewMode === 'weekly' && weekIdx > 0) {
-    const prev = WEEKS[weekIdx - 1].summary;
-    const prevRev = locFilter === 'ES' ? prev.es : locFilter === 'RV' ? prev.rv : prev.total;
-    const chg = prevRev > 0 ? Math.round(((rev - prevRev) / prevRev) * 1000) / 10 : 0;
-    $('kRevChange').innerHTML = (chg >= 0 ? '&#8593; ' : '&#8595; ') + Math.abs(chg) + '% vs prev week';
-    $('kRevChange').className = 'kbadge ' + (chg >= 0 ? 'up' : 'down');
-  } else if (viewMode === 'monthly') {
-    const rp = pct(rev, revGoal);
-    $('kRevChange').textContent = rp + '% of goal';
-    $('kRevChange').className = 'kbadge ' + (rp >= 90 ? 'up' : rp >= 70 ? 'flat' : 'down');
-  } else {
-    $('kRevChange').textContent = 'First week on record';
-    $('kRevChange').className = 'kbadge flat';
-  }
-}
-
-// ============================================================
-// GOAL BARS
-// ============================================================
-function setBar(pctId, valsId, fillId, actual, goal, suffix) {
-  const p = pct(actual, goal);
-  $(pctId).textContent = p + '%';
-  $(valsId).textContent = (suffix ? actual + suffix : curFull(actual)) + ' of ' + (suffix ? goal + suffix : curFull(goal)) + ' goal';
-  $(fillId).style.width = Math.min(p, 100) + '%';
-  $(fillId).className = 'gfill ' + goalClass(p);
-}
-function updateGoalBars() {
-  const s = getCurrentData();
-  const g = getCurrentGoals();
-  const rev = locFilter === 'ES' ? s.es : locFilter === 'RV' ? s.rv : s.total;
-  const revGoal = locFilter === 'ES' ? g.es : locFilter === 'RV' ? g.rv : g.total;
-  setBar('gpTotalPct', 'gpTotalVals', 'gpTotalFill', rev, revGoal, '');
-  setBar('gpESPct', 'gpESVals', 'gpESFill', s.es, g.es, '');
-  setBar('gpRVPct', 'gpRVVals', 'gpRVFill', s.rv, g.rv, '');
-  setBar('gpRetailPct', 'gpRetailVals', 'gpRetailFill', s.retail, g.retail, '');
-  setBar('gpServicePct', 'gpServiceVals', 'gpServiceFill', s.service, g.service, '');
-  setBar('gpApptsPct', 'gpApptsVals', 'gpApptsFill', s.appts, g.appts, '');
-}
-
-// ============================================================
-// CHARTS
-// ============================================================
-const CC = { maroon: '#541a09', terra: '#af492c', amber: '#d2894e' };
-const chartFont = { family: 'Nunito', size: 11, weight: '700' };
-
-function initCharts() {
-  trendChart = new Chart($('trendChart').getContext('2d'), {
-    type: 'line',
-    data: {
-      labels: WEEKS.map(w => w.label),
-      datasets: [
-        { label: 'East Sac', data: WEEKS.map(w => w.summary.es), borderColor: CC.maroon, borderWidth: 2.5, pointBackgroundColor: CC.maroon, pointRadius: 4, pointHoverRadius: 7, tension: 0.35, fill: false },
-        { label: 'Roseville', data: WEEKS.map(w => w.summary.rv), borderColor: CC.terra, borderWidth: 2.5, pointBackgroundColor: CC.terra, pointRadius: 4, pointHoverRadius: 7, tension: 0.35, fill: false }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'top', align: 'end', labels: { font: chartFont, color: CC.maroon, usePointStyle: true, pointStyleWidth: 10, boxHeight: 8 } },
-        tooltip: { backgroundColor: CC.maroon, bodyFont: chartFont, titleFont: { family: 'Nunito', size: 13, weight: '800' }, callbacks: { label: c => ' ' + c.dataset.label + ': ' + curFull(c.parsed.y) } }
-      },
-      scales: {
-        x: { grid: { color: 'rgba(84,26,9,0.06)' }, ticks: { font: chartFont, color: '#c0a898' } },
-        y: { grid: { color: 'rgba(84,26,9,0.06)' }, ticks: { font: chartFont, color: '#c0a898', callback: v => '$' + (v / 1000).toFixed(0) + 'K' } }
-      }
-    }
-  });
-  locChart = new Chart($('locChart').getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: ['Service', 'Product', 'Total'],
-      datasets: [
-        { label: 'East Sac', data: [0, 0, 0], backgroundColor: CC.maroon, borderRadius: 6 },
-        { label: 'Roseville', data: [0, 0, 0], backgroundColor: CC.terra, borderRadius: 6 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'top', align: 'end', labels: { font: chartFont, color: CC.maroon, usePointStyle: true, pointStyleWidth: 10, boxHeight: 8 } },
-        tooltip: { backgroundColor: CC.maroon, bodyFont: chartFont, callbacks: { label: c => ' ' + c.dataset.label + ': ' + curFull(c.parsed.y) } }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: chartFont, color: '#c0a898' } },
-        y: { grid: { color: 'rgba(84,26,9,0.06)' }, ticks: { font: chartFont, color: '#c0a898', callback: v => '$' + (v / 1000).toFixed(0) + 'K' } }
-      }
-    }
-  });
-  updateLocChart();
-  highlightCurrentWeek();
-}
-
-function updateLocChart() {
-  const s = getCurrentData();
-  const esP = PROVIDERS.filter(p => p.loc === 'ES');
-  const rvP = PROVIDERS.filter(p => p.loc === 'RV');
-  const sumF = (arr, key) => arr.reduce((t, p) => t + (getCurrentProviderData(p.name)[key] || 0), 0);
-  locChart.data.datasets[0].data = [sumF(esP, 'service'), sumF(esP, 'retail'), s.es];
-  locChart.data.datasets[1].data = [sumF(rvP, 'service'), sumF(rvP, 'retail'), s.rv];
-  locChart.update('active');
-}
-
-function highlightCurrentWeek() {
-  if (!trendChart) return;
-  if (viewMode === 'weekly') {
-    trendChart.data.datasets[0].pointRadius = WEEKS.map((_, i) => i === weekIdx ? 8 : 4);
-    trendChart.data.datasets[1].pointRadius = WEEKS.map((_, i) => i === weekIdx ? 8 : 4);
-    trendChart.data.datasets[0].pointBackgroundColor = WEEKS.map((_, i) => i === weekIdx ? CC.amber : CC.maroon);
-    trendChart.data.datasets[1].pointBackgroundColor = WEEKS.map((_, i) => i === weekIdx ? CC.amber : CC.terra);
-  } else {
-    trendChart.data.datasets[0].pointRadius = WEEKS.map(() => 4);
-    trendChart.data.datasets[1].pointRadius = WEEKS.map(() => 4);
-    trendChart.data.datasets[0].pointBackgroundColor = WEEKS.map(() => CC.maroon);
-    trendChart.data.datasets[1].pointBackgroundColor = WEEKS.map(() => CC.terra);
-  }
-  trendChart.update('active');
-}
-
-// ============================================================
-// MONTH COMPARISON
-// ============================================================
-function updateMonthCompare() {
-  const jun = MONTHS['June 2026'].summary;
-  const jul = MONTHS['July 2026'].summary;
-  $('mc-june-rev').textContent = curFull(jun.total);
-  $('mc-june-es').textContent  = curFull(jun.es);
-  $('mc-june-rv').textContent  = curFull(jun.rv);
-  $('mc-june-retail').textContent = curFull(jun.retail);
-  $('mc-june-appts').textContent = jun.appts;
-  $('mc-june-avg').textContent = jun.appts > 0 ? curFull(Math.round(jun.total / jun.appts)) : '—';
-  $('mc-july-rev').textContent = curFull(jul.total);
-  $('mc-july-es').textContent  = curFull(jul.es);
-  $('mc-july-rv').textContent  = curFull(jul.rv);
-  $('mc-july-retail').textContent = curFull(jul.retail);
-  $('mc-july-appts').textContent = jul.appts;
-  $('mc-july-avg').textContent = jul.appts > 0 ? curFull(Math.round(jul.total / jul.appts)) : '—';
 }
 
 // ============================================================
@@ -1019,6 +856,14 @@ function renderProviders() {
     const utilDisplay = util != null ? util + '%' : '—';
     const utilWidth = util != null ? Math.min(util, 100) : 0;
 
+    // Rev/Hr — the metric used to rank providers
+    const revHr = calcRevHour(d);
+    const revHrGoal = getCurrentRevHourGoal(p, false);
+    const revHrPct = (revHr != null && revHrGoal) ? pct(revHr, revHrGoal) : null;
+    const revHrDisplay = revHr != null ? curFull(revHr) + '/hr' : '—';
+    const revHrPctColor = revHrPct == null ? '#bbb' : revHrPct >= 90 ? '#246e3e' : revHrPct >= 72 ? '#b8860b' : '#b02020';
+    const revHrBarBg = revHrPct == null ? 'linear-gradient(90deg,#cfc3b5,#e0d6c8)' : revHrPct >= 90 ? 'linear-gradient(90deg,#af492c,#d2894e)' : revHrPct >= 72 ? 'linear-gradient(90deg,#541a09,#af492c)' : 'linear-gradient(90deg,#b02020,#d43a3a)';
+
     // YTD pace badge
     const trend = calcYTDTrend(p);
     const ytdRow = trend ? `
@@ -1035,13 +880,18 @@ function renderProviders() {
           <div class="pinfo"><div class="pname" title="${p.name}">${p.name}</div><div class="ploc">${locLabel}</div></div>
           <div class="prank ${rClass}">#${i + 1}</div>
         </div>
-        <div class="prev">${curFull(d.revenue || 0)}</div>
-        <div class="pgoal-line"><strong style="color:${pctColor}">${gp}%</strong> of ${curFull(g)} weekly goal</div>
-        <div class="pbar"><div class="pbar-fill" style="width:${Math.min(gp, 100)}%;background:${barBg}"></div></div>
+        <div class="prev">${revHrDisplay}</div>
+        <div class="pgoal-line"><strong style="color:${revHrPctColor}">${revHrPct != null ? revHrPct + '%' : '—'}</strong> of ${revHrGoal ? curFull(revHrGoal) + '/hr' : '—'} Rev/Hr goal</div>
+        <div class="pbar"><div class="pbar-fill" style="width:${revHrPct != null ? Math.min(revHrPct, 100) : 0}%;background:${revHrBarBg}"></div></div>
         <div class="putil-row">
           <span class="putil-label">Utilization</span>
           <div class="putil-track"><div class="putil-fill" style="width:${utilWidth}%"></div></div>
           <span class="putil-val">${utilDisplay}</span>
+        </div>
+        <div class="prevhr-row">
+          <span class="putil-label">Weekly Goal</span>
+          <span class="prevhr-val">${curFull(d.revenue || 0)}</span>
+          <span class="prevhr-goal" style="color:${pctColor}">${gp}% of ${curFull(g)}</span>
         </div>
         <hr class="pcard-divider">
         <div class="pstats">
@@ -1064,13 +914,15 @@ function renderLeaderboard() {
     const db = getCurrentProviderData(b.name);
     const isMonth = viewMode === 'monthly';
     const v = (p, d) => {
-      if (sortCol === 'rank' || sortCol === 'revenue') return d.revenue || 0;
+      if (sortCol === 'rank' || sortCol === 'revHourGoalPct') return getProviderRevHourGoalPct(p, isMonth);
+      if (sortCol === 'revHour') return calcRevHour(d) ?? -1;
+      if (sortCol === 'revenue') return d.revenue || 0;
       if (sortCol === 'goalPct') return pct(d.revenue || 0, getProviderGoal(p, isMonth));
       if (sortCol === 'avgInvoice') return (d.appts || 0) > 0 ? (d.revenue || 0) / d.appts : 0;
       if (sortCol === 'appts')   return d.appts || 0;
       if (sortCol === 'service') return d.service || 0;
       if (sortCol === 'retail')  return d.retail || 0;
-      return d.revenue || 0;
+      return getProviderRevHourGoalPct(p, isMonth);
     };
     if (sortCol === 'name')     return sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     if (sortCol === 'location') return sortAsc ? a.loc.localeCompare(b.loc) : b.loc.localeCompare(a.loc);
@@ -1084,12 +936,16 @@ function renderLeaderboard() {
     const avgInv = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
     const rClass = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
     const globalIdx = PROVIDERS.indexOf(p);
+    const revHr = calcRevHour(d);
+    const revHrGoalPct = getProviderRevHourGoalPct(p, isMonth);
     return `<tr onclick="openModal(${globalIdx})" style="cursor:pointer">
       <td><span class="rbadge ${rClass}">${i + 1}</span></td>
       <td><strong>${p.name}</strong></td>
       <td><span class="loc-tag loc-${p.loc.toLowerCase()}">${p.loc}</span></td>
       <td><strong>${curFull(d.revenue || 0)}</strong></td>
       <td><span class="gpill ${gpillClass(gp)}">${gp}%</span></td>
+      <td>${revHr != null ? curFull(revHr) + '/hr' : '—'}</td>
+      <td>${revHrGoalPct >= 0 ? '<span class="gpill ' + gpillClass(revHrGoalPct) + '">' + revHrGoalPct + '%</span>' : '—'}</td>
       <td>${avgInv > 0 ? curFull(avgInv) : '—'}</td>
       <td>${d.appts || 0}</td>
       <td>${curFull(d.service || 0)}</td>
@@ -1222,7 +1078,7 @@ function refreshModal() {
   const avgInv = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
   const locLabel = p.loc === 'ES' ? 'East Sacramento' : 'Roseville';
 
-  const allP = [...PROVIDERS].sort((a, b) => (WEEKS[weekIdx].providers[b.name]?.revenue || 0) - (WEEKS[weekIdx].providers[a.name]?.revenue || 0));
+  const allP = [...PROVIDERS].sort((a, b) => getWeeklyRevHourGoalPct(b) - getWeeklyRevHourGoalPct(a));
   const rank = allP.findIndex(pr => pr.name === p.name) + 1;
   const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
 
@@ -1244,6 +1100,10 @@ function refreshModal() {
   $('mk-service-sub').textContent  = pct(d.service || 0, (d.revenue || 0) * 0.9) + '% of revenue';
   $('mk-retail').textContent       = curFull(d.retail || 0);
   $('mk-retail-sub').textContent   = pct(d.retail || 0, rg) + '% of ' + curFull(rg) + ' goal';
+  const revHr = calcRevHour(d);
+  const revHrGoal = getCurrentRevHourGoal(p, false);
+  $('mk-revhr').textContent     = revHr != null ? curFull(revHr) + '/hr' : '—';
+  $('mk-revhr-sub').textContent = (revHr != null && revHrGoal) ? pct(revHr, revHrGoal) + '% of ' + curFull(revHrGoal) + '/hr goal' : 'no scheduled hours this period';
   const util = d.util != null ? d.util : null;
   $('mk-util').textContent     = util != null ? util + '%' : '—';
   $('mk-util-fill').style.width = util != null ? Math.min(util, 100) + '%' : '0%';
@@ -1373,6 +1233,9 @@ $('modalPrintBtn').addEventListener('click', () => {
     const locLabel = p.loc === 'ES' ? 'East Sacramento' : 'Roseville';
     const now      = new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
     const label    = WEEKS[weekIdx].weekEnding;
+    const revHr     = calcRevHour(d);
+    const revHrGoal = getCurrentRevHourGoal(p, false);
+    const revHrPct  = (revHr != null && revHrGoal) ? pct(revHr, revHrGoal) : null;
     const notes    = ($('notesArea') && $('notesArea').value) ? $('notesArea').value : '(No notes added)';
     const recs     = generateRecs(p, d, false);
     const trend    = calcYTDTrend(p);
@@ -1436,6 +1299,7 @@ $('modalPrintBtn').addEventListener('click', () => {
   <div class="kcard"><div class="klbl">Avg Invoice</div><div class="kval">${avgInv>0?curFull(avgInv):'—'}</div><div class="ksub">&nbsp;</div></div>
   <div class="kcard"><div class="klbl">Service Sales</div><div class="kval">${curFull(d.service||0)}</div><div class="ksub">&nbsp;</div></div>
   <div class="kcard"><div class="klbl">Product Sales</div><div class="kval">${curFull(d.retail||0)}</div><div class="ksub">${retPct}% of ${curFull(rg)} goal</div></div>
+  <div class="kcard"><div class="klbl">Rev/Hr</div><div class="kval">${revHr!=null?curFull(revHr)+'/hr':'—'}</div><div class="ksub">${revHrPct!=null?revHrPct+'% of '+curFull(revHrGoal)+'/hr goal':'no scheduled hours'}</div></div>
 </div>
 ${trendHtml}
 
@@ -1486,7 +1350,6 @@ function setViewMode(mode) {
   $('weekSelector').style.display  = mode === 'weekly'  ? 'flex' : 'none';
   $('monthSelector').style.display = mode === 'monthly' ? 'flex' : 'none';
   $('monthCompare').style.display  = mode === 'monthly' ? 'block' : 'none';
-  if (mode === 'monthly') updateMonthCompare();
   refresh();
 }
 
@@ -1541,10 +1404,6 @@ $$('[data-f="loc"]').forEach(btn => {
 // ============================================================
 function refresh() {
   updateMeta();
-  updateCards();
-  updateGoalBars();
-  updateLocChart();
-  highlightCurrentWeek();
   renderProviders();
   renderLeaderboard();
 }
@@ -1556,7 +1415,6 @@ document.addEventListener('DOMContentLoaded', () => {
   $('genStamp').textContent = 'Updated ' + new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   updateWeekNav();
   initLeaderboardSort();
-  initCharts();
   refresh();
 });
 </script>
