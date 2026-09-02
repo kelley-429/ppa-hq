@@ -652,6 +652,7 @@ const WEEK_MONTH = {
   '8/9':  'August 2026',
   '8/16': 'August 2026',
   '8/23': 'August 2026',
+  '8/30': 'August 2026',
 };
 
 // ============================================================
@@ -693,7 +694,10 @@ const WEEKS = [
     providers:{ 'Arlene Milam':{revenue:7967,service:7562,retail:405,appts:15,util:53.8,schedHours:13.0}, "Emma O'Malley":{revenue:5820,service:5820,retail:0,appts:11,util:44.1,schedHours:8.5}, 'Shannon Wyly':{revenue:0,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:38595,service:37766,retail:829,appts:61,util:59.0,schedHours:41.5}, 'Melanie Lolmaugh':{revenue:12,service:0,retail:12,appts:3,util:21.6,schedHours:13.5}, 'Jackie Garcia':{revenue:4081,service:2847,retail:1234,appts:19,util:51.4,schedHours:18.5}, 'Reanna Mich':{revenue:11734,service:11446,retail:288,appts:15,util:41.1,schedHours:14.0}, 'Brittany Winblad':{revenue:99,service:99,retail:0,appts:1,util:0.0,schedHours:6.0}, 'Taylor Raney':{revenue:492,service:414,retail:78,appts:2,util:29.2,schedHours:32.0} }},
   { key:'8/23', label:'Aug 23', weekEnding:'Sunday, August 23, 2026',
     summary:{ total:68659, es:37885, rv:30774, service:57618, retail:2466, appts:106 },
-    providers:{ 'Arlene Milam':{revenue:19186,service:12405,retail:906,appts:13,util:101.9,schedHours:13.0}, "Emma O'Malley":{revenue:2988,service:2988,retail:0,appts:7,util:44.1,schedHours:8.5}, 'Shannon Wyly':{revenue:450,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:25691,service:24436,retail:355,appts:41,util:49.3,schedHours:35.5}, 'Melanie Lolmaugh':{revenue:5077,service:5077,retail:0,appts:11,util:48.1,schedHours:13.5}, 'Jackie Garcia':{revenue:2630,service:2100,retail:380,appts:11,util:33.3,schedHours:23.75}, 'Reanna Mich':{revenue:9912,service:8862,retail:0,appts:12,util:37.5,schedHours:14.0}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0.0}, 'Taylor Raney':{revenue:2576,service:1751,retail:825,appts:11,util:40.6,schedHours:24.0} }}
+    providers:{ 'Arlene Milam':{revenue:19186,service:12405,retail:906,appts:13,util:101.9,schedHours:13.0}, "Emma O'Malley":{revenue:2988,service:2988,retail:0,appts:7,util:44.1,schedHours:8.5}, 'Shannon Wyly':{revenue:450,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:25691,service:24436,retail:355,appts:41,util:49.3,schedHours:35.5}, 'Melanie Lolmaugh':{revenue:5077,service:5077,retail:0,appts:11,util:48.1,schedHours:13.5}, 'Jackie Garcia':{revenue:2630,service:2100,retail:380,appts:11,util:33.3,schedHours:23.75}, 'Reanna Mich':{revenue:9912,service:8862,retail:0,appts:12,util:37.5,schedHours:14.0}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0.0}, 'Taylor Raney':{revenue:2576,service:1751,retail:825,appts:11,util:40.6,schedHours:24.0} }},
+  { key:'8/30', label:'Aug 30', weekEnding:'Sunday, August 30, 2026',
+    summary:{ total:60289, es:50351, rv:9938, service:57904, retail:2385, appts:112 },
+    providers:{ 'Arlene Milam':{revenue:5633,service:5253,retail:230,appts:8,util:48.1,schedHours:13.0}, "Emma O'Malley":{revenue:5396,service:5396,retail:0,appts:13,util:64.7,schedHours:8.5}, 'Shannon Wyly':{revenue:900,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:30750,service:29580,retail:95,appts:37,util:73.5,schedHours:25.5}, 'Melanie Lolmaugh':{revenue:4122,service:3649,retail:323,appts:10,util:37.0,schedHours:13.5}, 'Jackie Garcia':{revenue:5008,service:3977,retail:1032,appts:19,util:71.4,schedHours:23.0}, 'Reanna Mich':{revenue:5599,service:4858,retail:116,appts:13,util:32.1,schedHours:14.0}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0.0}, 'Taylor Raney':{revenue:2881,service:2291,retail:590,appts:12,util:41.1,schedHours:30.0} }}
 ];
 
 const MONTHS = {
@@ -706,12 +710,12 @@ const MONTHS = {
     providers: {}
   },
   'August 2026': {
-    summary: { total:287193, es:210428, rv:76765, service:256345, retail:13248, appts:490 },
+    summary: { total:347482, es:260779, rv:86703, service:314249, retail:15633, appts:602 },
     providers: {}
   }
 };
 // Build monthly provider aggregates
-const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,12] };
+const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,13] };
 ['June 2026','July 2026','August 2026'].forEach(mkey => {
   const [s,e] = MONTH_WEEK_RANGES[mkey];
   const wks = WEEKS.slice(s,e);
