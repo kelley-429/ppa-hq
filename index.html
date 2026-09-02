@@ -282,6 +282,18 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 .pin-cancel { font-size: 11px; font-weight: 700; color: #b0a090; background: none; border: none; cursor: pointer; padding: 8px; text-decoration: underline; }
 .pcard-lock-hint { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(84,26,9,0.3); position: absolute; top: 10px; right: 12px; display: flex; align-items: center; gap: 3px; }
 .pcard-lock-hint svg { width: 9px; height: 9px; }
+/* Service type breakdown */
+.mkcard-svc { cursor: pointer; transition: border-color .15s; }
+.mkcard-svc:hover { border-color: var(--terra); }
+.svc-breakdown { display: none; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+.svc-breakdown.open { display: block; }
+.svc-cat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+.svc-cat-row:last-child { margin-bottom: 0; }
+.svc-cat-label { font-size: 10px; font-weight: 600; color: #888; }
+.svc-cat-count { font-size: 11px; font-weight: 800; color: var(--maroon); }
+.svc-cat-bar-wrap { flex: 1; height: 4px; background: rgba(84,26,9,0.07); border-radius: 100px; overflow: hidden; margin: 0 8px; }
+.svc-cat-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--terra), var(--amber)); transition: width .7s cubic-bezier(.4,0,.2,1); }
+.svc-no-data { font-size: 10px; color: #b0a090; font-style: italic; }
 
 /* RESPONSIVE */
 @media (max-width: 1200px) { .kpi-row { grid-template-columns: repeat(3,1fr); } .charts-row { grid-template-columns: 1fr; } }
@@ -434,7 +446,13 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
         <div class="mkcard"><div class="mkcard-lbl">Goal %</div><div class="mkcard-val" id="mk-goalpct">—</div><div class="mkcard-sub" id="mk-goal-sub">—</div></div>
         <div class="mkcard"><div class="mkcard-lbl">Appointments</div><div class="mkcard-val" id="mk-appts">—</div><div class="mkcard-sub" id="mk-appts-sub">—</div></div>
         <div class="mkcard"><div class="mkcard-lbl">Avg Invoice</div><div class="mkcard-val" id="mk-avginvoice">—</div><div class="mkcard-sub" id="mk-avginvoice-sub">—</div></div>
-        <div class="mkcard"><div class="mkcard-lbl">Service Sales</div><div class="mkcard-val" id="mk-service">—</div><div class="mkcard-sub" id="mk-service-sub">—</div></div>
+        <div class="mkcard mkcard-svc" onclick="toggleSvcBreakdown()" id="mk-service-card">
+          <div class="mkcard-lbl">Service Sales</div>
+          <div class="mkcard-val" id="mk-service">—</div>
+          <div class="mkcard-sub" id="mk-service-sub">—</div>
+          <div class="mkcard-rev-hint" id="mk-svc-hint"><span class="hint-chevron">▾</span> By Category</div>
+          <div class="svc-breakdown" id="mk-svc-breakdown"></div>
+        </div>
         <div class="mkcard"><div class="mkcard-lbl">Product Sales</div><div class="mkcard-val" id="mk-retail">—</div><div class="mkcard-sub" id="mk-retail-sub">—</div></div>
         <div class="mkcard"><div class="mkcard-lbl">Rev/Hr</div><div class="mkcard-val" id="mk-revhr">—</div><div class="mkcard-sub" id="mk-revhr-sub">—</div></div>
         <div class="mkcard" style="grid-column:1/-1"><div class="mkcard-lbl">Utilization</div><div style="display:flex;align-items:center;gap:12px;margin-top:6px"><div class="mkcard-val" id="mk-util">—</div><div style="flex:1;height:6px;background:rgba(84,26,9,0.07);border-radius:100px;overflow:hidden"><div id="mk-util-fill" style="height:100%;border-radius:100px;background:linear-gradient(90deg,#af492c,#d2894e);width:0%;transition:width .9s"></div></div></div><div class="mkcard-sub" id="mk-util-sub">—</div></div>
@@ -608,6 +626,159 @@ const GOALS = {
 // ============================================================
 // PROVIDER CONFIG
 // ============================================================
+// ── SERVICE CATEGORY MAPPING ────────────────────────────────────
+const SERVICE_CATS = ['Neurotoxin','Filler & Biostimulator','Microneedling','PRF Treatment','Facial & Skin','Laser & Device','Ultherapy','PDO Threads','Weight Management','Functional Health','New Client Consult','Wellness & Other'];
+const SERVICE_CAT_MAP = {
+  'Botox®/Xeomin®/ Dysport® Current Patient':'Neurotoxin',
+  'Botox®/Xeomin®/ Dysport® New Patient':'Neurotoxin',
+  'Dysport':'Neurotoxin','Dysport Refinement':'Neurotoxin',
+  'Xeomin':'Neurotoxin','Xeomin Refinement':'Neurotoxin',
+  'Refinement/Tweakment Visit':'Neurotoxin','Lip Flip':'Neurotoxin',
+  'Lip Enhancement':'Filler & Biostimulator','Restylane Kysse':'Filler & Biostimulator',
+  'Restylane Defyne':'Filler & Biostimulator','Dermal Filler Treatment':'Filler & Biostimulator',
+  'Sculptra Treatment':'Filler & Biostimulator','BioStimulator Treatment':'Filler & Biostimulator',
+  'AQUAGOLD® Micro-Channeling':'Microneedling','PRF Gel Treatment':'PRF Treatment',
+  'August Filler + Free Tox  Promo':'Filler & Biostimulator','Luminous Lift':'Filler & Biostimulator',
+  "Kate's Birthday Biostim Special":'Filler & Biostimulator',
+  'Hydrafacial - Essential':'Facial & Skin','Hydrafacial - Deluxe':'Facial & Skin',
+  'Hydrafacial - Platinum':'Facial & Skin','Custom Facial':'Facial & Skin',
+  'Dermaplane Facial':'Facial & Skin','Add Dermaplane':'Facial & Skin',
+  'Glo2 Deluxe Facial':'Facial & Skin','VI Peel':'Facial & Skin',
+  'ZO SkinHealth Stimulator Peel':'Facial & Skin','Microneedling':'Microneedling',
+  'Mesoneedling Skin Infusion':'Microneedling','Add Restorative HA Mask + massage':'Facial & Skin',
+  'Add Custom Mask':'Facial & Skin','Brow Wax':'Facial & Skin','Add Brow Wax':'Facial & Skin',
+  'Add Upper Lip Wax':'Facial & Skin','Brazilian Wax':'Facial & Skin','Hair Reduction (30 min appt)':'Facial & Skin',
+  'NeoSkin by Aerolase® Melasma and Hyperpigmentation':'Laser & Device',
+  'NeoSkin by Aerolase® Rejuvenation and Tightening':'Laser & Device','Aerolase Model':'Laser & Device',
+  'Fractional Erbium Skin Resurfacing - Face':'Laser & Device','Add Fractional Erbium YAG Neck':'Laser & Device',
+  'IPL + Fractional Erbium':'Laser & Device','Ultherapy Décolletage':'Ultherapy',
+  'Ultherapy Full Neck':'Ultherapy','PDO Smooth Threads (price per pack)':'PDO Threads',
+  'Semaglutide/TIRZEP Weekly Appt for Package':'Weight Management',
+  'Semaglutide Injection ONLY appt':'Weight Management','.25 Semaglutide':'Weight Management',
+  'B12 shot':'Wellness & Other','Add B12 shot':'Wellness & Other','NAD+ Injection':'Wellness & Other',
+  'Kenalog Injection':'Wellness & Other','Hylenex':'Wellness & Other','Numbing':'Wellness & Other',
+  'Good Faith Medical Clearance Exam':'Wellness & Other','New Client Consultation':'New Client Consult',
+  'Treatment Consultation (Existing Clients)':'Wellness & Other','Chemical Peel Consultation':'Wellness & Other',
+  'PRF Consultation':'Wellness & Other','Visia Skin Analysis':'Wellness & Other',
+  'Functional Health Discovery Call':'Functional Health','Treatment Plan Refresh':'Wellness & Other',
+  'SkinCare Consult and Custom Regimen':'Wellness & Other',
+  // Additional neurotoxin
+  'Botox':'Neurotoxin','Botox Refinement':'Neurotoxin','Add Neurotoxin Treatment':'Neurotoxin',
+  'Dysport Promotion':'Neurotoxin','Xeomin Promotion':'Neurotoxin',
+  // Additional filler & biostimulator
+  'Add Belotero':'Filler & Biostimulator','Belotero Balance+':'Filler & Biostimulator',
+  'Add Dermal Filler Treatment':'Filler & Biostimulator','Dermal Filler Correction':'Filler & Biostimulator',
+  'Complimentary Syringe':'Filler & Biostimulator','Radiesse+':'Filler & Biostimulator',
+  'HD Radiesse':'Filler & Biostimulator','Restylane Contour':'Filler & Biostimulator',
+  'Restylane L':'Filler & Biostimulator','Restylane Lyft':'Filler & Biostimulator',
+  'Restylane Refyne':'Filler & Biostimulator','Versa':'Filler & Biostimulator',
+  'Sculptra':'Filler & Biostimulator','Sculptra Add-On':'Filler & Biostimulator',
+  'Kybella':'Filler & Biostimulator','PRF Undereye Treatment':'PRF Treatment',
+  'Add PDGF 1/2 Vial':'Filler & Biostimulator','The 8-Point Lift':'Filler & Biostimulator',
+  'The Gold Protocol for Neck Rejuvenation':'Filler & Biostimulator','The Mini Lift':'Filler & Biostimulator',
+  'August Member Exclusive Biostim + Filler + Free Tox':'Filler & Biostimulator',
+  // Additional facial & skin
+  'Add 15min Massage':'Facial & Skin','Add Custom ZO Skin Health Accelerator Treatment':'Facial & Skin',
+  'Add Epicutis Lipid Mask + Massage':'Facial & Skin','Add Facial Lymphatic Treatment':'Facial & Skin',
+  'Add HydraFacial Eye Perk':'Facial & Skin','Add Rejuran Turnover Mask + Massage':'Facial & Skin',
+  'Add VI Peel Body':'Facial & Skin','Add-on Moisture Infusion Mask':'Facial & Skin',
+  'Add-on Neck and Decolletage':'Facial & Skin','AnteAge P.E.A.R.L. Microneedling':'Microneedling',
+  'Clarifying Acne Facial':'Facial & Skin','Teen Facial':'Facial & Skin',
+  'Glo2 Essential Facial':'Facial & Skin','HydroGlass':'Facial & Skin',
+  'Hydrafacial Arm Treatment':'Facial & Skin','Hydrafacial Clarifying Back Facial':'Facial & Skin',
+  'Hydrafacial Neck and Décolletage Treatment':'Facial & Skin',
+  'CO2 Lift Mask Applications':'Facial & Skin','CO2Lift Carboxy':'Facial & Skin',
+  'Smooth Summer Skin':'Facial & Skin','Brow Tint':'Facial & Skin','Brow Tinting':'Facial & Skin',
+  'Lash Tint':'Facial & Skin','Skin Tag Removal/ Milia Extraction':'Facial & Skin',
+  // Additional laser & device
+  'Aerolase Bruise Treatment':'Laser & Device','BBL - Medium':'Laser & Device',
+  'IPL Photofacial':'Laser & Device','Laser Vein and Angioma Removal':'Laser & Device',
+  'PDO Thread Face Lift':'PDO Threads','Subnovii for Sebaceous Hyperplasia':'Laser & Device',
+  'Ultherapy Additional Lines':'Ultherapy','Ultherapy Brow Lift':'Ultherapy',
+  'Ultherapy Full Face':'Ultherapy','Ultherapy Lower Face':'Ultherapy',
+  'Ultherapy Precision Lift':'Ultherapy','Double Chin Treatment':'Laser & Device',
+  // Additional weight management
+  'Tirzepatide':'Weight Management','Weight Management Consult':'Weight Management',
+};
+// ───────────────────────────────────────────────────────────────
+// Service type breakdowns by week (from Appointments report)
+// Keyed by week end date → provider name → category → appt count
+const PROVIDER_SVC_TYPES = {
+  '7/5': {
+    'Arlene Milam':    {'Neurotoxin':20,'Filler & Biostimulator':2,'Laser & Device':1,'Wellness & Other':6},
+    "Emma O'Malley":   {'Neurotoxin':13,'Wellness & Other':2},
+    'Kate Cunningham': {'Neurotoxin':49,'Filler & Biostimulator':3,'Weight Management':2,'Wellness & Other':1},
+    'Melanie Lolmaugh':{'Neurotoxin':2,'Weight Management':1},
+    'Jackie Garcia':   {'Facial & Skin':6},
+    'Reanna Mich':     {'Neurotoxin':17,'Filler & Biostimulator':1,'Laser & Device':1,'Wellness & Other':3},
+    'Taylor Raney':    {'Facial & Skin':8},
+  },
+  '7/12': {
+    'Kate Cunningham': {'Neurotoxin':46,'Filler & Biostimulator':1,'Weight Management':3,'Wellness & Other':2},
+    'Melanie Lolmaugh':{'Neurotoxin':7,'Filler & Biostimulator':4,'Weight Management':1,'Wellness & Other':1},
+    'Jackie Garcia':   {'Facial & Skin':18},
+    'Reanna Mich':     {'Neurotoxin':17,'Laser & Device':2,'Wellness & Other':1},
+    'Taylor Raney':    {'Facial & Skin':6,'Wellness & Other':1},
+  },
+  '7/19': {
+    "Emma O'Malley":   {'Neurotoxin':8,'Wellness & Other':3},
+    'Kate Cunningham': {'Neurotoxin':64,'Filler & Biostimulator':9,'Facial & Skin':1,'Weight Management':4,'Wellness & Other':4},
+    'Melanie Lolmaugh':{'Neurotoxin':13,'Filler & Biostimulator':2,'Facial & Skin':2,'Weight Management':2,'Wellness & Other':4},
+    'Jackie Garcia':   {'Facial & Skin':19},
+    'Reanna Mich':     {'Neurotoxin':19,'Facial & Skin':3,'Wellness & Other':1},
+    'Brittany Winblad':{'Facial & Skin':2},
+    'Taylor Raney':    {'Facial & Skin':10},
+  },
+  '7/26': {
+    'Arlene Milam':    {'Neurotoxin':20,'Filler & Biostimulator':2,'Laser & Device':3,'Wellness & Other':6},
+    "Emma O'Malley":   {'Neurotoxin':8,'Laser & Device':2,'Wellness & Other':2},
+    'Kate Cunningham': {'Neurotoxin':40,'Filler & Biostimulator':5,'Laser & Device':1,'Weight Management':2},
+    'Melanie Lolmaugh':{'Neurotoxin':2,'Filler & Biostimulator':1,'Wellness & Other':1},
+    'Jackie Garcia':   {'Facial & Skin':18},
+    'Reanna Mich':     {'Neurotoxin':24,'Laser & Device':1,'Weight Management':2,'Wellness & Other':1},
+    'Brittany Winblad':{'Facial & Skin':2},
+    'Taylor Raney':    {'Facial & Skin':16},
+  },
+  '8/2': {
+    'Arlene Milam':    {'Neurotoxin':19,'Filler & Biostimulator':1,'Laser & Device':2,'Wellness & Other':4},
+    "Emma O'Malley":   {'Neurotoxin':2},
+    'Kate Cunningham': {'Neurotoxin':55,'Filler & Biostimulator':4,'Laser & Device':1,'Weight Management':4,'Wellness & Other':5},
+    'Melanie Lolmaugh':{'Neurotoxin':15,'Filler & Biostimulator':5,'Weight Management':2,'Wellness & Other':2},
+    'Jackie Garcia':   {'Facial & Skin':22},
+    'Reanna Mich':     {'Neurotoxin':20,'Filler & Biostimulator':1},
+    'Taylor Raney':    {'Facial & Skin':12,'Filler & Biostimulator':1},
+  },
+  '8/9': {
+    'Arlene Milam':    {'Neurotoxin':34,'Filler & Biostimulator':4,'Wellness & Other':4},
+    "Emma O'Malley":   {'Neurotoxin':6,'Facial & Skin':1},
+    'Kate Cunningham': {'Neurotoxin':56,'Filler & Biostimulator':5,'Facial & Skin':1,'Weight Management':4,'Wellness & Other':2},
+    'Melanie Lolmaugh':{'Neurotoxin':9},
+    'Jackie Garcia':   {'Facial & Skin':16},
+    'Reanna Mich':     {'Neurotoxin':23,'Filler & Biostimulator':2,'Laser & Device':1,'Wellness & Other':6},
+    'Brittany Winblad':{'Facial & Skin':5},
+    'Taylor Raney':    {'Facial & Skin':10,'Filler & Biostimulator':1,'Wellness & Other':1},
+  },
+  '8/16': {
+    'Arlene Milam':    {'Neurotoxin':17,'Filler & Biostimulator':2,'Wellness & Other':7},
+    "Emma O'Malley":   {'Neurotoxin':14,'Wellness & Other':6},
+    'Kate Cunningham': {'Neurotoxin':84,'Filler & Biostimulator':8,'Weight Management':4,'Wellness & Other':4},
+    'Melanie Lolmaugh':{'Neurotoxin':13,'Weight Management':2,'Wellness & Other':2},
+    'Jackie Garcia':   {'Facial & Skin':10},
+    'Reanna Mich':     {'Neurotoxin':18,'Facial & Skin':2,'Wellness & Other':2},
+    'Taylor Raney':    {'Facial & Skin':11},
+  },
+  '8/30': {
+    'Arlene Milam':    {'Neurotoxin':2,'Filler & Biostimulator':1,'Laser & Device':2},
+    "Emma O'Malley":   {'Neurotoxin':12,'Laser & Device':3,'Wellness & Other':4},
+    'Kate Cunningham': {'Neurotoxin':23,'Filler & Biostimulator':3,'Wellness & Other':2},
+    'Melanie Lolmaugh':{'Neurotoxin':6,'Filler & Biostimulator':4,'Facial & Skin':1,'Weight Management':4,'Wellness & Other':1},
+    'Jackie Garcia':   {'Facial & Skin':8},
+    'Reanna Mich':     {'Neurotoxin':11,'Filler & Biostimulator':1},
+    'Taylor Raney':    {'Facial & Skin':8,'Filler & Biostimulator':2},
+  },
+};
+// ───────────────────────────────────────────────────────────────
+
 const PROVIDERS = [
   { name: 'Arlene Milam',     initials: 'AM', loc: 'RV', apptGoal: 14 },
   { name: "Emma O'Malley",    initials: 'EO', loc: 'ES', apptGoal: 12 },
@@ -781,7 +952,17 @@ const WEEKS = [
     providers:{ 'Arlene Milam':{revenue:19186,service:12405,retail:906,appts:13,util:101.9,schedHours:13.0}, "Emma O'Malley":{revenue:2988,service:2988,retail:0,appts:7,util:44.1,schedHours:8.5}, 'Shannon Wyly':{revenue:450,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:25691,service:24436,retail:355,appts:41,util:49.3,schedHours:35.5}, 'Melanie Lolmaugh':{revenue:5077,service:5077,retail:0,appts:11,util:48.1,schedHours:13.5}, 'Jackie Garcia':{revenue:2630,service:2100,retail:380,appts:11,util:33.3,schedHours:23.75}, 'Reanna Mich':{revenue:9912,service:8862,retail:0,appts:12,util:37.5,schedHours:14.0}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0.0}, 'Taylor Raney':{revenue:2576,service:1751,retail:825,appts:11,util:40.6,schedHours:24.0} }},
   { key:'8/30', label:'Aug 30', weekEnding:'Sunday, August 30, 2026',
     summary:{ total:60289, es:50351, rv:9938, service:57904, retail:2385, appts:112 },
-    providers:{ 'Arlene Milam':{revenue:5633,service:5253,retail:230,appts:8,util:48.1,schedHours:13.0}, "Emma O'Malley":{revenue:5396,service:5396,retail:0,appts:13,util:64.7,schedHours:8.5}, 'Shannon Wyly':{revenue:900,service:0,retail:0,appts:0,util:null}, 'Kate Cunningham':{revenue:30750,service:29580,retail:95,appts:37,util:73.5,schedHours:25.5}, 'Melanie Lolmaugh':{revenue:4122,service:3649,retail:323,appts:10,util:37.0,schedHours:13.5}, 'Jackie Garcia':{revenue:5008,service:3977,retail:1032,appts:19,util:71.4,schedHours:23.0}, 'Reanna Mich':{revenue:5599,service:4858,retail:116,appts:13,util:32.1,schedHours:14.0}, 'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0.0}, 'Taylor Raney':{revenue:2881,service:2291,retail:590,appts:12,util:41.1,schedHours:30.0} }}
+    providers:{
+      'Arlene Milam':{revenue:5633,service:5253,retail:230,appts:8,util:48.1,schedHours:13.0,svcTypes:{'Neurotoxin':2,'Filler & Biostimulator':1,'Laser & Device':2}},
+      "Emma O'Malley":{revenue:5396,service:5396,retail:0,appts:13,util:64.7,schedHours:8.5,svcTypes:{'Neurotoxin':12,'Laser & Device':3,'Wellness & Other':4}},
+      'Shannon Wyly':{revenue:900,service:0,retail:0,appts:0,util:null,svcTypes:{}},
+      'Kate Cunningham':{revenue:30750,service:29580,retail:95,appts:37,util:73.5,schedHours:25.5,svcTypes:{'Neurotoxin':24,'Filler & Biostimulator':2,'Wellness & Other':2}},
+      'Melanie Lolmaugh':{revenue:4122,service:3649,retail:323,appts:10,util:37.0,schedHours:13.5,svcTypes:{'Neurotoxin':6,'Filler & Biostimulator':4,'Facial & Skin':1,'Weight Management':4,'Wellness & Other':1}},
+      'Jackie Garcia':{revenue:5008,service:3977,retail:1032,appts:19,util:71.4,schedHours:23.0,svcTypes:{'Facial & Skin':8}},
+      'Reanna Mich':{revenue:5599,service:4858,retail:116,appts:13,util:32.1,schedHours:14.0,svcTypes:{'Neurotoxin':11,'Filler & Biostimulator':1}},
+      'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0.0,svcTypes:{}},
+      'Taylor Raney':{revenue:2881,service:2291,retail:590,appts:12,util:41.1,schedHours:30.0,svcTypes:{'Facial & Skin':10}}
+    }}
 ];
 
 const MONTHS = {
@@ -1181,6 +1362,13 @@ function generateRecs(p, d, isMonth) {
 // ============================================================
 // MODAL
 // ============================================================
+function toggleSvcBreakdown() {
+  const bd = $('mk-svc-breakdown');
+  const hint = $('mk-svc-hint');
+  const open = bd.classList.toggle('open');
+  hint.classList.toggle('open', open);
+}
+
 function toggleRevBreakdown() {
   const bd = $('mk-rev-breakdown');
   const hint = $('mk-rev-hint');
@@ -1297,6 +1485,31 @@ function refreshModal() {
   $('mk-service-sub').textContent  = pct(d.service || 0, (d.revenue || 0) * 0.9) + '% of revenue';
   $('mk-retail').textContent       = curFull(d.retail || 0);
   $('mk-retail-sub').textContent   = pct(d.retail || 0, rg) + '% of ' + curFull(rg) + ' goal';
+  // Service type breakdown — prefer PROVIDER_SVC_TYPES lookup over inline d.svcTypes
+  const weekKey = WEEKS[weekIdx].key;
+  const svcTypes = (PROVIDER_SVC_TYPES[weekKey] && PROVIDER_SVC_TYPES[weekKey][p.name])
+    || d.svcTypes || {};
+  const svcTotal = Object.values(svcTypes).reduce((a, b) => a + b, 0);
+  const svcBd = $('mk-svc-breakdown');
+  if (svcTotal === 0) {
+    svcBd.innerHTML = '<div class="svc-no-data">Service category data not yet available for this week</div>';
+  } else {
+    const maxCount = Math.max(...Object.values(svcTypes));
+    svcBd.innerHTML = SERVICE_CATS
+      .filter(cat => svcTypes[cat])
+      .map(cat => {
+        const count = svcTypes[cat];
+        const barW = Math.round(count / maxCount * 100);
+        return `<div class="svc-cat-row">
+          <span class="svc-cat-label">${cat}</span>
+          <div class="svc-cat-bar-wrap"><div class="svc-cat-bar-fill" style="width:${barW}%"></div></div>
+          <span class="svc-cat-count">${count}</span>
+        </div>`;
+      }).join('');
+  }
+  // Reset breakdown state on new modal open
+  $('mk-svc-breakdown').classList.remove('open');
+  $('mk-svc-hint').classList.remove('open');
   const revHr = calcRevHour(d);
   const revHrGoal = getCurrentRevHourGoal(p, false);
   $('mk-revhr').textContent     = revHr != null ? curFull(revHr) + '/hr' : '—';
