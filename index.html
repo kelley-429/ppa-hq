@@ -666,7 +666,7 @@ const SERVICE_CAT_MAP = {
   'Botox':'Neurotoxin','Botox Refinement':'Neurotoxin','Add Neurotoxin Treatment':'Neurotoxin',
   'Dysport Promotion':'Neurotoxin','Xeomin Promotion':'Neurotoxin',
   // Additional filler & biostimulator
-  'Add Belotero':'Filler & Biostimulator','Belotero Balance+':'Filler & Biostimulator',
+  'Add Belotero':'Filler & Biostimulator','Belotero Balance+':'Filler & Biostimulator','Belotero Volume+':'Filler & Biostimulator',
   'Add Dermal Filler Treatment':'Filler & Biostimulator','Dermal Filler Correction':'Filler & Biostimulator',
   'Complimentary Syringe':'Filler & Biostimulator','Radiesse+':'Filler & Biostimulator',
   'HD Radiesse':'Filler & Biostimulator','Restylane Contour':'Filler & Biostimulator',
@@ -766,6 +766,15 @@ const PROVIDER_SVC_TYPES = {
     'Jackie Garcia':   {'Facial & Skin':10},
     'Reanna Mich':     {'Neurotoxin':18,'Facial & Skin':2,'Wellness & Other':2},
     'Taylor Raney':    {'Facial & Skin':11},
+  },
+  '9/6': {
+    'Arlene Milam':    {'Neurotoxin':11,'Laser & Device':3,'Filler & Biostimulator':1,'Wellness & Other':3},
+    "Emma O'Malley":   {'Neurotoxin':9,'Laser & Device':1,'Wellness & Other':3},
+    'Kate Cunningham': {'Neurotoxin':35,'Filler & Biostimulator':2,'Weight Management':3,'PRF Treatment':1,'New Client Consult':1},
+    'Melanie Lolmaugh':{'Neurotoxin':14,'Filler & Biostimulator':4,'Microneedling':2,'Facial & Skin':1,'Laser & Device':2,'Weight Management':2,'Wellness & Other':2},
+    'Jackie Garcia':   {'Facial & Skin':27,'Wellness & Other':1},
+    'Reanna Mich':     {'Neurotoxin':20,'Facial & Skin':1,'Laser & Device':1,'New Client Consult':1,'Wellness & Other':1},
+    'Taylor Raney':    {'Facial & Skin':8,'Wellness & Other':1},
   },
   '8/30': {
     'Arlene Milam':    {'Neurotoxin':2,'Filler & Biostimulator':1,'Laser & Device':2},
@@ -908,6 +917,7 @@ const WEEK_MONTH = {
   '8/16': 'August 2026',
   '8/23': 'August 2026',
   '8/30': 'August 2026',
+  '9/6':  'September 2026',
 };
 
 // ============================================================
@@ -962,6 +972,19 @@ const WEEKS = [
       'Reanna Mich':{revenue:5599,service:4858,retail:116,appts:13,util:32.1,schedHours:14.0,svcTypes:{'Neurotoxin':11,'Filler & Biostimulator':1}},
       'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0.0,svcTypes:{}},
       'Taylor Raney':{revenue:2881,service:2291,retail:590,appts:12,util:41.1,schedHours:30.0,svcTypes:{'Facial & Skin':10}}
+    }},
+  { key:'9/6', label:'Sep 6', weekEnding:'Sunday, September 6, 2026',
+    summary:{ total:40673, es:35025, rv:5648, service:35513, retail:2311, appts:92 },
+    providers:{
+      'Arlene Milam':    {revenue:4448,service:4003,retail:120,appts:9, util:24.5,schedHours:25.5},
+      "Emma O'Malley":   {revenue:2699,service:2699,retail:0,  appts:6, util:44.1,schedHours:8.5},
+      'Shannon Wyly':    {revenue:925, service:0,   retail:0,  appts:0, util:null, schedHours:0},
+      'Kate Cunningham': {revenue:11303,service:10853,retail:0,appts:24,util:40.7,schedHours:21.5},
+      'Melanie Lolmaugh':{revenue:6836,service:6514,retail:323,appts:15,util:61.1,schedHours:13.5},
+      'Jackie Garcia':   {revenue:3819,service:3052,retail:617,appts:17,util:58.7,schedHours:23.0},
+      'Reanna Mich':     {revenue:8468,service:7097,retail:371,appts:13,util:39.3,schedHours:14.0},
+      'Brittany Winblad':{revenue:0,   service:0,   retail:0,  appts:0, util:null, schedHours:0},
+      'Taylor Raney':    {revenue:2175,service:1295,retail:880,appts:8, util:34.0,schedHours:26.5},
     }}
 ];
 
@@ -977,11 +1000,15 @@ const MONTHS = {
   'August 2026': {
     summary: { total:347482, es:260779, rv:86703, service:314249, retail:15633, appts:602 },
     providers: {}
+  },
+  'September 2026': {
+    summary: { total:40673, es:35025, rv:5648, service:35513, retail:2311, appts:92 },
+    providers: {}
   }
 };
 // Build monthly provider aggregates
-const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,13] };
-['June 2026','July 2026','August 2026'].forEach(mkey => {
+const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,13], 'September 2026':[13,14] };
+['June 2026','July 2026','August 2026','September 2026'].forEach(mkey => {
   const [s,e] = MONTH_WEEK_RANGES[mkey];
   const wks = WEEKS.slice(s,e);
   PROVIDERS.forEach(p => {
