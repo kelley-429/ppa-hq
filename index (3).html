@@ -338,7 +338,6 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
       <button class="ntab" data-f="month" data-v="June 2026">June 2026</button>
       <button class="ntab" data-f="month" data-v="July 2026">July 2026</button>
       <button class="ntab" data-f="month" data-v="August 2026">August 2026</button>
-      <button class="ntab" data-f="month" data-v="September 2026">September 2026</button>
     </div>
     <button class="mgr-lock-btn" id="mgrLockBtn" onclick="handleLockBtn()">
       <svg id="mgrLockIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
@@ -380,7 +379,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 
 <main class="main">
   <div class="note-banner" id="noteBanner">
-    ⚡ <strong>Live data loaded</strong> — Jun 7 through Sep 13, 2026 (15 weeks). Shannon Wyly is excluded from provider rankings (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected.
+    ⚡ <strong>Live data loaded</strong> — Jun 7 through Aug 30, 2026 (13 weeks). Shannon Wyly is excluded from provider rankings (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected.
   </div>
 
   <div class="slabel">Provider Leaderboard</div>
@@ -700,7 +699,6 @@ const SERVICE_CAT_MAP = {
   'Ultherapy Precision Lift':'Ultherapy','Double Chin Treatment':'Laser & Device',
   // Additional weight management
   'Tirzepatide':'Weight Management','Weight Management Consult':'Weight Management',
-  'Flawless Finish':'Facial & Skin','Non-Surgical Brazilian Butt Lift (BBL)':'Filler & Biostimulator','Injector Fee':'Wellness & Other',
 };
 // ───────────────────────────────────────────────────────────────
 // Service type breakdowns by week (from Appointments report)
@@ -786,15 +784,6 @@ const PROVIDER_SVC_TYPES = {
     'Jackie Garcia':   {'Facial & Skin':8},
     'Reanna Mich':     {'Neurotoxin':11,'Filler & Biostimulator':1},
     'Taylor Raney':    {'Facial & Skin':8,'Filler & Biostimulator':2},
-  },
-  '9/13': {
-    'Arlene Milam':    {'Neurotoxin':10,'Filler & Biostimulator':1,'Facial & Skin':1,'Wellness & Other':1},
-    "Emma O'Malley":   {'Neurotoxin':2,'Ultherapy':2,'Weight Management':1,'Wellness & Other':2},
-    'Kate Cunningham': {'Neurotoxin':80,'Filler & Biostimulator':30,'Laser & Device':1,'New Client Consult':2,'PDO Threads':1,'Weight Management':8,'Wellness & Other':3},
-    'Melanie Lolmaugh':{'Neurotoxin':2,'New Client Consult':2},
-    'Jackie Garcia':   {'Facial & Skin':12},
-    'Reanna Mich':     {'Neurotoxin':27,'Filler & Biostimulator':6,'Weight Management':2},
-    'Taylor Raney':    {'Facial & Skin':7},
   },
 };
 // ───────────────────────────────────────────────────────────────
@@ -929,12 +918,16 @@ const WEEK_MONTH = {
   '8/23': 'August 2026',
   '8/30': 'August 2026',
   '9/6':  'September 2026',
-  '9/13': 'September 2026',
 };
 
 // ============================================================
 // REAL DATA — parsed from Zenoti exports Jun 7 – Jul 26, 2026
 // ============================================================
+// Set this to today's date every time new weekly reports are added to WEEKS below —
+// this is what the "Updated ..." stamp in the footer shows, so it reflects when the
+// DATA was last refreshed, not just when someone happens to view the page.
+const DATA_LAST_UPDATED = 'September 14, 2026';
+
 const WEEKS = [
   { key:'6/7',  label:'Jun 7',  weekEnding:'Sunday, June 7, 2026',
     summary:{ total:75680, es:65260, rv:10420, service:59471, retail:5801, appts:120 },
@@ -997,19 +990,6 @@ const WEEKS = [
       'Reanna Mich':     {revenue:8468,service:7097,retail:371,appts:13,util:39.3,schedHours:14.0},
       'Brittany Winblad':{revenue:0,   service:0,   retail:0,  appts:0, util:null, schedHours:0},
       'Taylor Raney':    {revenue:2175,service:1295,retail:880,appts:8, util:34.0,schedHours:26.5},
-    }},
-  { key:'9/13', label:'Sep 13', weekEnding:'Sunday, September 13, 2026',
-    summary:{ total:79744, es:64810, rv:14934, service:67575, retail:3495, appts:98 },
-    providers:{
-      'Arlene Milam':    {revenue:5568, service:5305, retail:-62,appts:6, util:30.8,schedHours:13.0},
-      "Emma O'Malley":   {revenue:7895, service:3895, retail:0,  appts:3, util:47.1,schedHours:8.5},
-      'Shannon Wyly':    {revenue:700,  service:0,    retail:375,appts:0, util:null, schedHours:0},
-      'Kate Cunningham': {revenue:48045,service:45232,retail:2063,appts:55,util:68.4,schedHours:34.0},
-      'Melanie Lolmaugh':{revenue:615,  service:615,  retail:0,  appts:3, util:26.7,schedHours:7.5},
-      'Jackie Garcia':   {revenue:2967, service:1885, retail:607,appts:8, util:41.5,schedHours:16.25},
-      'Reanna Mich':     {revenue:12526,service:9570, retail:156,appts:17,util:55.4,schedHours:14.0},
-      'Brittany Winblad':{revenue:0,    service:0,    retail:0,  appts:0, util:0.0,schedHours:6.0},
-      'Taylor Raney':    {revenue:1429, service:1073, retail:356,appts:6, util:21.9,schedHours:30.0},
     }}
 ];
 
@@ -1027,12 +1007,12 @@ const MONTHS = {
     providers: {}
   },
   'September 2026': {
-    summary: { total:120418, es:99835, rv:20582, service:103088, retail:5806, appts:190 },
+    summary: { total:40673, es:35025, rv:5648, service:35513, retail:2311, appts:92 },
     providers: {}
   }
 };
 // Build monthly provider aggregates
-const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,13], 'September 2026':[13,15] };
+const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,13], 'September 2026':[13,14] };
 ['June 2026','July 2026','August 2026','September 2026'].forEach(mkey => {
   const [s,e] = MONTH_WEEK_RANGES[mkey];
   const wks = WEEKS.slice(s,e);
@@ -1188,10 +1168,16 @@ function getWeeklyRevHourGoalPct(p) {
   if (actual == null || !goal) return -1; // no data — sorts last
   return pct(actual, goal);
 }
+function getWeeklyRevHour(p) {
+  const d = WEEKS[weekIdx].providers[p.name] || {};
+  const actual = calcRevHour(d);
+  return actual == null ? -1 : actual; // no data — sorts last
+}
 function rankedProviders() {
-  // Scorecards always reflect the selected week (see renderProviders), so rank on that basis
+  // Scorecards always reflect the selected week (see renderProviders), so rank on that basis.
+  // Ranking is by raw Rev/Hr dollar amount, not % of each provider's individual goal.
   const fps = filteredProviders();
-  return [...fps].sort((a, b) => getWeeklyRevHourGoalPct(b) - getWeeklyRevHourGoalPct(a));
+  return [...fps].sort((a, b) => getWeeklyRevHour(b) - getWeeklyRevHour(a));
 }
 
 // ============================================================
@@ -1310,15 +1296,15 @@ function renderLeaderboard() {
     const db = getCurrentProviderData(b.name);
     const isMonth = viewMode === 'monthly';
     const v = (p, d) => {
-      if (sortCol === 'rank' || sortCol === 'revHourGoalPct') return getProviderRevHourGoalPct(p, isMonth);
-      if (sortCol === 'revHour') return calcRevHour(d) ?? -1;
+      if (sortCol === 'rank' || sortCol === 'revHour') return calcRevHour(d) ?? -1;
+      if (sortCol === 'revHourGoalPct') return getProviderRevHourGoalPct(p, isMonth);
       if (sortCol === 'revenue') return d.revenue || 0;
       if (sortCol === 'goalPct') return pct(d.revenue || 0, getProviderGoal(p, isMonth));
       if (sortCol === 'avgInvoice') return (d.appts || 0) > 0 ? (d.revenue || 0) / d.appts : 0;
       if (sortCol === 'appts')   return d.appts || 0;
       if (sortCol === 'service') return d.service || 0;
       if (sortCol === 'retail')  return d.retail || 0;
-      return getProviderRevHourGoalPct(p, isMonth);
+      return calcRevHour(d) ?? -1;
     };
     if (sortCol === 'name')     return sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     if (sortCol === 'location') return sortAsc ? a.loc.localeCompare(b.loc) : b.loc.localeCompare(a.loc);
@@ -1493,7 +1479,7 @@ function refreshModal() {
   const avgInv = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
   const locLabel = p.loc === 'ES' ? 'East Sacramento' : 'Roseville';
 
-  const allP = [...PROVIDERS].sort((a, b) => getWeeklyRevHourGoalPct(b) - getWeeklyRevHourGoalPct(a));
+  const allP = [...PROVIDERS].sort((a, b) => getWeeklyRevHour(b) - getWeeklyRevHour(a));
   const rank = allP.findIndex(pr => pr.name === p.name) + 1;
   const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
 
@@ -1874,7 +1860,7 @@ function refresh() {
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  $('genStamp').textContent = 'Updated ' + new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  $('genStamp').textContent = 'Updated ' + new Date(DATA_LAST_UPDATED).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   updateWeekNav();
   initLeaderboardSort();
   refresh();
