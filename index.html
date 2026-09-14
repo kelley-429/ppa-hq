@@ -923,6 +923,11 @@ const WEEK_MONTH = {
 // ============================================================
 // REAL DATA — parsed from Zenoti exports Jun 7 – Jul 26, 2026
 // ============================================================
+// Set this to today's date every time new weekly reports are added to WEEKS below —
+// this is what the "Updated ..." stamp in the footer shows, so it reflects when the
+// DATA was last refreshed, not just when someone happens to view the page.
+const DATA_LAST_UPDATED = 'September 14, 2026';
+
 const WEEKS = [
   { key:'6/7',  label:'Jun 7',  weekEnding:'Sunday, June 7, 2026',
     summary:{ total:75680, es:65260, rv:10420, service:59471, retail:5801, appts:120 },
@@ -1163,10 +1168,16 @@ function getWeeklyRevHourGoalPct(p) {
   if (actual == null || !goal) return -1; // no data — sorts last
   return pct(actual, goal);
 }
+function getWeeklyRevHour(p) {
+  const d = WEEKS[weekIdx].providers[p.name] || {};
+  const actual = calcRevHour(d);
+  return actual == null ? -1 : actual; // no data — sorts last
+}
 function rankedProviders() {
-  // Scorecards always reflect the selected week (see renderProviders), so rank on that basis
+  // Scorecards always reflect the selected week (see renderProviders), so rank on that basis.
+  // Ranking is by raw Rev/Hr dollar amount, not % of each provider's individual goal.
   const fps = filteredProviders();
-  return [...fps].sort((a, b) => getWeeklyRevHourGoalPct(b) - getWeeklyRevHourGoalPct(a));
+  return [...fps].sort((a, b) => getWeeklyRevHour(b) - getWeeklyRevHour(a));
 }
 
 // ============================================================
@@ -1285,15 +1296,15 @@ function renderLeaderboard() {
     const db = getCurrentProviderData(b.name);
     const isMonth = viewMode === 'monthly';
     const v = (p, d) => {
-      if (sortCol === 'rank' || sortCol === 'revHourGoalPct') return getProviderRevHourGoalPct(p, isMonth);
-      if (sortCol === 'revHour') return calcRevHour(d) ?? -1;
+      if (sortCol === 'rank' || sortCol === 'revHour') return calcRevHour(d) ?? -1;
+      if (sortCol === 'revHourGoalPct') return getProviderRevHourGoalPct(p, isMonth);
       if (sortCol === 'revenue') return d.revenue || 0;
       if (sortCol === 'goalPct') return pct(d.revenue || 0, getProviderGoal(p, isMonth));
       if (sortCol === 'avgInvoice') return (d.appts || 0) > 0 ? (d.revenue || 0) / d.appts : 0;
       if (sortCol === 'appts')   return d.appts || 0;
       if (sortCol === 'service') return d.service || 0;
       if (sortCol === 'retail')  return d.retail || 0;
-      return getProviderRevHourGoalPct(p, isMonth);
+      return calcRevHour(d) ?? -1;
     };
     if (sortCol === 'name')     return sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     if (sortCol === 'location') return sortAsc ? a.loc.localeCompare(b.loc) : b.loc.localeCompare(a.loc);
@@ -1468,7 +1479,7 @@ function refreshModal() {
   const avgInv = (d.appts || 0) > 0 ? Math.round((d.revenue || 0) / d.appts) : 0;
   const locLabel = p.loc === 'ES' ? 'East Sacramento' : 'Roseville';
 
-  const allP = [...PROVIDERS].sort((a, b) => getWeeklyRevHourGoalPct(b) - getWeeklyRevHourGoalPct(a));
+  const allP = [...PROVIDERS].sort((a, b) => getWeeklyRevHour(b) - getWeeklyRevHour(a));
   const rank = allP.findIndex(pr => pr.name === p.name) + 1;
   const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
 
@@ -1849,7 +1860,7 @@ function refresh() {
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  $('genStamp').textContent = 'Updated ' + new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  $('genStamp').textContent = 'Updated ' + new Date(DATA_LAST_UPDATED).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   updateWeekNav();
   initLeaderboardSort();
   refresh();
