@@ -338,6 +338,8 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
       <button class="ntab" data-f="month" data-v="June 2026">June 2026</button>
       <button class="ntab" data-f="month" data-v="July 2026">July 2026</button>
       <button class="ntab" data-f="month" data-v="August 2026">August 2026</button>
+      <button class="ntab" data-f="month" data-v="September 2026">September 2026</button>
+      <button class="ntab" data-f="month" data-v="October 2026">October 2026</button>
     </div>
     <button class="mgr-lock-btn" id="mgrLockBtn" onclick="handleLockBtn()">
       <svg id="mgrLockIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
@@ -379,7 +381,7 @@ body { font-family: 'Nunito', system-ui, sans-serif; background: var(--cream); c
 
 <main class="main">
   <div class="note-banner" id="noteBanner">
-    ⚡ <strong>Live data loaded</strong> — Jun 7 through Aug 30, 2026 (13 weeks). Shannon Wyly is excluded from provider rankings (maternity leave through September). Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected.
+    ⚡ <strong>Live data loaded</strong> — Jun 7 through Oct 11, 2026 (18 weeks). Shannon Wyly has returned from leave (active again since the week of Sep 20) but is not yet included in provider rankings or scorecards — her Rev/Hr goal and SPH tier still need to be set. Kate Cunningham's high numbers reflect her Medical Director role and largest client base on the team — expected.
   </div>
 
   <div class="slabel">Provider Leaderboard</div>
@@ -699,6 +701,15 @@ const SERVICE_CAT_MAP = {
   'Ultherapy Precision Lift':'Ultherapy','Double Chin Treatment':'Laser & Device',
   // Additional weight management
   'Tirzepatide':'Weight Management','Weight Management Consult':'Weight Management',
+  // Additional — added Oct 2026
+  'Injector Fee':'Wellness & Other','Shipping Fee':'Wellness & Other',
+  'NeoClear by Aerolase® Acne Treatment':'Laser & Device',
+  'Ariessence Pure PDGF+':'Filler & Biostimulator',
+  'Add Skin Tag Removal/ Milia Extraction':'Facial & Skin',
+  'Regenerative Infusion Facial':'Facial & Skin',
+  'Functional Health Foundation Visit':'Functional Health',
+  'Add PRF':'PRF Treatment','MINT FINE':'PDO Threads',
+  'Botox® for Migraines':'Neurotoxin',
 };
 // ───────────────────────────────────────────────────────────────
 // Service type breakdowns by week (from Appointments report)
@@ -791,7 +802,10 @@ const PROVIDER_SVC_TYPES = {
 const PROVIDERS = [
   { name: 'Arlene Milam',     initials: 'AM', loc: 'RV', apptGoal: 14 },
   { name: "Emma O'Malley",    initials: 'EO', loc: 'ES', apptGoal: 12 },
-  // Shannon Wyly — maternity leave through September 2026; re-add when she returns
+  // Shannon Wyly — back from leave as of the week of Sep 20, 2026. Not yet re-added here:
+  // her Rev/Hr goal (SPH tier) and appointment goal need to be set by Kate before she
+  // appears in scorecards/rankings. Her actual revenue/appts/hours ARE being tracked in
+  // WEEKS below so no data is lost — add an entry here to bring her into the rankings.
   { name: 'Kate Cunningham',  initials: 'KC', loc: 'ES', apptGoal: 40 },
   { name: 'Melanie Lolmaugh', initials: 'ML', loc: 'ES', apptGoal: 14 },
   { name: 'Jackie Garcia',    initials: 'JG', loc: 'ES', apptGoal: 16 },
@@ -918,6 +932,10 @@ const WEEK_MONTH = {
   '8/23': 'August 2026',
   '8/30': 'August 2026',
   '9/6':  'September 2026',
+  '9/20': 'September 2026',
+  '9/27': 'September 2026',
+  '10/4': 'October 2026',
+  '10/11':'October 2026',
 };
 
 // ============================================================
@@ -926,7 +944,7 @@ const WEEK_MONTH = {
 // Set this to today's date every time new weekly reports are added to WEEKS below —
 // this is what the "Updated ..." stamp in the footer shows, so it reflects when the
 // DATA was last refreshed, not just when someone happens to view the page.
-const DATA_LAST_UPDATED = 'September 14, 2026';
+const DATA_LAST_UPDATED = 'October 12, 2026';
 
 const WEEKS = [
   { key:'6/7',  label:'Jun 7',  weekEnding:'Sunday, June 7, 2026',
@@ -990,6 +1008,58 @@ const WEEKS = [
       'Reanna Mich':     {revenue:8468,service:7097,retail:371,appts:13,util:39.3,schedHours:14.0},
       'Brittany Winblad':{revenue:0,   service:0,   retail:0,  appts:0, util:null, schedHours:0},
       'Taylor Raney':    {revenue:2175,service:1295,retail:880,appts:8, util:34.0,schedHours:26.5},
+    }},
+  { key:'9/20', label:'Sep 20', weekEnding:'Sunday, September 20, 2026',
+    summary:{ total:40054, es:32001, rv:8053, service:28211, retail:4843, appts:135 },
+    providers:{
+      'Arlene Milam':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0,svcTypes:{}},
+      "Emma O'Malley":{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0,svcTypes:{}},
+      'Shannon Wyly':    {revenue:776, service:0,   retail:776,  appts:0, util:null, schedHours:0},
+      'Kate Cunningham':{revenue:15710,service:14996,retail:714,appts:28,util:51.7,schedHours:14.5,svcTypes:{'Filler & Biostimulator':9,'Wellness & Other':2,'Neurotoxin':15,'Laser & Device':1,'Microneedling':1}},
+      'Melanie Lolmaugh':{revenue:4977,service:4684,retail:234,appts:22,util:44.4,schedHours:13.5,svcTypes:{'New Client Consult':1,'Neurotoxin':14,'Weight Management':3,'Laser & Device':1,'PRF Treatment':1,'Filler & Biostimulator':2}},
+      'Jackie Garcia':{revenue:5481,service:3587,retail:1894,appts:30,util:65.3,schedHours:24,svcTypes:{'Facial & Skin':30}},
+      'Reanna Mich':{revenue:17019,service:8842,retail:688,appts:31,util:67.9,schedHours:14,svcTypes:{'Neurotoxin':21,'Laser & Device':3,'New Client Consult':1,'Ultherapy':1,'Microneedling':1,'Wellness & Other':1,'Filler & Biostimulator':3}},
+      'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:0,schedHours:6,svcTypes:{}},
+      'Taylor Raney':{revenue:4402,service:3274,retail:1128,appts:24,util:60.6,schedHours:30,svcTypes:{'Facial & Skin':24}},
+    }},
+  { key:'9/27', label:'Sep 27', weekEnding:'Sunday, September 27, 2026',
+    summary:{ total:86452, es:54356, rv:32096, service:69831, retail:4147, appts:279 },
+    providers:{
+      'Arlene Milam':{revenue:13639,service:9449,retail:0,appts:29,util:78.6,schedHours:14,svcTypes:{'Neurotoxin':18,'Wellness & Other':2,'New Client Consult':3,'Laser & Device':2,'Filler & Biostimulator':2,'PDO Threads':1,'Microneedling':1}},
+      "Emma O'Malley":{revenue:2492,service:1892,retail:0,appts:15,util:20.6,schedHours:8.5,svcTypes:{'Neurotoxin':11,'Wellness & Other':3,'Weight Management':1}},
+      'Shannon Wyly':    {revenue:22030, service:16627,   retail:447,  appts:53, util:69.6, schedHours:14},
+      'Kate Cunningham':{revenue:26993,service:25614,retail:619,appts:88,util:62.5,schedHours:26,svcTypes:{'Neurotoxin':71,'Filler & Biostimulator':7,'Weight Management':6,'Wellness & Other':2,'Functional Health':1,'Microneedling':1}},
+      'Melanie Lolmaugh':{revenue:4977,service:4684,retail:234,appts:23,util:40.7,schedHours:13.5,svcTypes:{'Wellness & Other':3,'Neurotoxin':13,'Microneedling':1,'Weight Management':3,'New Client Consult':3}},
+      'Jackie Garcia':{revenue:5877,service:3396,retail:1621,appts:24,util:63.1,schedHours:23.25,svcTypes:{'Facial & Skin':24}},
+      'Reanna Mich':{revenue:20114,service:17619,retail:248,appts:34,util:95.9,schedHours:18.5,svcTypes:{'Neurotoxin':18,'Filler & Biostimulator':7,'Microneedling':2,'Laser & Device':3,'Ultherapy':3,'Wellness & Other':1}},
+      'Brittany Winblad':{revenue:158,service:0,retail:158,appts:0,util:0,schedHours:6,svcTypes:{}},
+      'Taylor Raney':{revenue:3393,service:2083,retail:1309,appts:13,util:42.8,schedHours:30,svcTypes:{'Facial & Skin':13}},
+    }},
+  { key:'10/4', label:'Oct 4', weekEnding:'Sunday, October 4, 2026',
+    summary:{ total:54906, es:49414, rv:5492, service:43634, retail:3112, appts:153 },
+    providers:{
+      'Arlene Milam':{revenue:5467,service:5467,retail:0,appts:17,util:32.3,schedHours:24,svcTypes:{'PRF Treatment':2,'Filler & Biostimulator':1,'Ultherapy':1,'Neurotoxin':7,'Wellness & Other':2,'PDO Threads':1,'New Client Consult':2,'Microneedling':1}},
+      "Emma O'Malley":{revenue:1477,service:1316,retail:160,appts:8,util:8.8,schedHours:8.5,svcTypes:{'Neurotoxin':7,'Wellness & Other':1}},
+      'Shannon Wyly':    {revenue:12992, service:9547,   retail:1025,  appts:18, util:37.5, schedHours:14},
+      'Kate Cunningham':{revenue:24756,service:20149,retail:334,appts:52,util:57.8,schedHours:22.5,svcTypes:{'Filler & Biostimulator':10,'Neurotoxin':35,'Wellness & Other':2,'New Client Consult':2,'Weight Management':2,'Functional Health':1}},
+      'Melanie Lolmaugh':{revenue:2765,service:2602,retail:130,appts:7,util:26.7,schedHours:7.5,svcTypes:{'Neurotoxin':4,'Weight Management':2,'Ultherapy':1}},
+      'Jackie Garcia':{revenue:6068,service:3476,retail:594,appts:24,util:80.5,schedHours:17.5,svcTypes:{'Facial & Skin':24}},
+      'Reanna Mich':{revenue:6689,service:6159,retail:370,appts:15,util:64.3,schedHours:7,svcTypes:{'Neurotoxin':10,'Filler & Biostimulator':2,'Laser & Device':2,'Ultherapy':1}},
+      'Brittany Winblad':{revenue:0,service:0,retail:0,appts:0,util:0,schedHours:11,svcTypes:{}},
+      'Taylor Raney':{revenue:3023,service:1906,retail:867,appts:12,util:28.1,schedHours:28.5,svcTypes:{'Facial & Skin':11,'Wellness & Other':1}},
+    }},
+  { key:'10/11', label:'Oct 11', weekEnding:'Sunday, October 11, 2026',
+    summary:{ total:96700, es:72735, rv:23965, service:80780, retail:5870, appts:294 },
+    providers:{
+      'Arlene Milam':{revenue:8979,service:8614,retail:365,appts:17,util:38.2,schedHours:19,svcTypes:{'Neurotoxin':9,'New Client Consult':1,'Wellness & Other':2,'Filler & Biostimulator':3,'Ultherapy':1,'Laser & Device':1}},
+      "Emma O'Malley":{revenue:5161,service:2661,retail:0,appts:16,util:29.4,schedHours:8.5,svcTypes:{'Wellness & Other':2,'Laser & Device':1,'Neurotoxin':13}},
+      'Shannon Wyly':    {revenue:17229, service:15172,   retail:1308,  appts:60, util:73.2, schedHours:14},
+      'Kate Cunningham':{revenue:44284,service:40762,retail:2285,appts:120,util:66.2,schedHours:35.5,svcTypes:{'Neurotoxin':88,'New Client Consult':4,'Microneedling':1,'Functional Health':2,'Filler & Biostimulator':17,'PRF Treatment':1,'Wellness & Other':2,'Facial & Skin':1,'Weight Management':3,'PDO Threads':1}},
+      'Melanie Lolmaugh':{revenue:0,service:0,retail:0,appts:0,util:null,schedHours:0,svcTypes:{}},
+      'Jackie Garcia':{revenue:6002,service:3146,retail:1567,appts:27,util:68.1,schedHours:23.25,svcTypes:{'Facial & Skin':26,'Wellness & Other':1}},
+      'Reanna Mich':{revenue:22393,service:16970,retail:501,appts:43,util:63.2,schedHours:19,svcTypes:{'Neurotoxin':28,'Laser & Device':2,'Wellness & Other':1,'Ultherapy':2,'Weight Management':4,'PRF Treatment':1,'Filler & Biostimulator':4,'PDO Threads':1}},
+      'Brittany Winblad':{revenue:248,service:248,retail:0,appts:1,util:16.7,schedHours:6,svcTypes:{'Facial & Skin':1}},
+      'Taylor Raney':{revenue:1875,service:1447,retail:428,appts:10,util:31.6,schedHours:29.5,svcTypes:{'Filler & Biostimulator':1,'Facial & Skin':9}},
     }}
 ];
 
@@ -1007,13 +1077,17 @@ const MONTHS = {
     providers: {}
   },
   'September 2026': {
-    summary: { total:40673, es:35025, rv:5648, service:35513, retail:2311, appts:92 },
+    summary: { total:167179, es:121382, rv:45797, service:133555, retail:11301, appts:506 },
+    providers: {}
+  },
+  'October 2026': {
+    summary: { total:151606, es:122149, rv:29457, service:124414, retail:8982, appts:447 },
     providers: {}
   }
 };
 // Build monthly provider aggregates
-const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,13], 'September 2026':[13,14] };
-['June 2026','July 2026','August 2026','September 2026'].forEach(mkey => {
+const MONTH_WEEK_RANGES = { 'June 2026':[0,4], 'July 2026':[4,8], 'August 2026':[8,13], 'September 2026':[13,16], 'October 2026':[16,18] };
+['June 2026','July 2026','August 2026','September 2026','October 2026'].forEach(mkey => {
   const [s,e] = MONTH_WEEK_RANGES[mkey];
   const wks = WEEKS.slice(s,e);
   PROVIDERS.forEach(p => {
